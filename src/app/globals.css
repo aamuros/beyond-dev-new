@@ -255,12 +255,18 @@ body {
   position: relative;
   --bg-color: #fff;
   --primary-color: #19171c;
+  --secondary-color: #6e6e73;
+  --primary-color-alt: #fba6ec;
+  --top-bar-offset: 20px;
+  --top-logo-offset: 36px;
+  --top-banner-height: 0px;
 }
 
 @media (min-width: 1025px) {
   body {
     --top-bar-offset: 48px;
     --top-logo-offset: 73px;
+    --top-banner-height: 0px;
   }
 }
 
@@ -324,8 +330,8 @@ body {
 }
 
 .button-primary {
-  background: var(--color-black-100);
-  border-color: var(--color-black-100);
+  background: #202124;
+  border-color: #202124;
   color: var(--color-white-100);
   transition-property: color, background-color, border-color;
   transition-duration: 300ms;
@@ -340,6 +346,33 @@ body {
   background: var(--color-black-200);
   border-color: var(--color-black-200);
   transition-duration: 50ms;
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+    opacity: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+    opacity: 1;
+  }
+  to {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+@theme inline {
+  --animate-accordion-down: accordion-down 200ms ease-out;
+  --animate-accordion-up: accordion-up 200ms ease-out;
 }
 
 @keyframes marquee-scroll {
@@ -409,3 +442,115 @@ body {
 }
 
 
+@layer base {
+  html {
+    scroll-snap-type: y mandatory;
+    overflow-y: auto;
+  }
+
+  .snap-section {
+    scroll-snap-align: start;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .snap-section > section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .snap-section > section:first-child {
+    flex: 1;
+  }
+
+  .snap-section:first-child {
+    justify-content: flex-start;
+  }
+  .snap-section:first-child > section {
+    justify-content: flex-start;
+  }
+
+  .snap-section--auto,
+  .snap-section--footer {
+    min-height: auto;
+    justify-content: flex-start;
+  }
+
+  .snap-section--auto > section,
+  .snap-section--footer > section {
+    justify-content: flex-start;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Global Section – Jitter-style large vertical margins               */
+/* ------------------------------------------------------------------ */
+
+@layer base {
+  .global-section {
+    margin-top: 180px;
+    padding-bottom: 100px;
+    position: relative;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Pill Tag                                                           */
+/* ------------------------------------------------------------------ */
+
+@font-face {
+  font-display: swap;
+  font-family: 'TWK Lausanne';
+  font-style: normal;
+  font-weight: 600;
+  src: url(/fonts/TWKLausanne/TWKLausanne-600.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: 'TWK Lausanne';
+  font-style: normal;
+  font-weight: 800;
+  src: url(/fonts/TWKLausanne/TWKLausanne-800.woff2) format("woff2");
+}
+
+.pill-tag {
+  align-items: center;
+  border-radius: 2.5rem;
+  display: inline-flex;
+  font: normal 600 1.125rem / 1.3333 'TWK Lausanne', sans-serif;
+  letter-spacing: -0.0225rem;
+  padding: 0.375rem 1.3125rem 0.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.pill-tag::before {
+  background-color: #f2f1f3;
+  border-radius: inherit;
+  content: "";
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  width: 100%;
+  z-index: -1;
+}
+
+@media screen and (min-width: 1025px) {
+  .pill-tag {
+    font: normal 600 1.25rem / 1.2 'TWK Lausanne', sans-serif;
+    letter-spacing: -0.025rem;
+  }
+}
+
+@media screen and (min-width: 1441px) {
+  .pill-tag {
+    padding: 0.3125rem 1.3125rem;
+  }
+}

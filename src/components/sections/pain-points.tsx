@@ -55,10 +55,7 @@ const painPoints: {
 
 export default function PainPoints() {
   return (
-    <section
-      id="about"
-      className="py-16 flex flex-col gap-12"
-    >
+    <section id="about" className="global-section flex flex-col gap-12">
       <Container size="sm">
         <SectionHeading
           badge="The Problem"

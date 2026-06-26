@@ -10,6 +10,7 @@ export default function Contact() {
     <section
       id="contact"
       className="bg-white flex flex-col justify-center py-6 md:py-12 overflow-hidden"
+      className="global-section bg-white md:h-screen md:min-h-0 flex flex-col justify-center py-6 md:py-12 overflow-hidden"
     >
       <Container size="lg" className="flex flex-col gap-6 md:gap-8">
         <SectionHeading

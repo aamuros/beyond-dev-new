@@ -567,13 +567,13 @@ export default function FloatingNavbar() {
             <nav
               className={cn(
                 "relative flex items-center",
-                "h-[60px] px-4",
-                "rounded-full",
-                "bg-white/85 backdrop-blur-xl",
-                "border border-[var(--color-white-500)]",
-                "shadow-[0_2px_16px_-4px_rgba(0,0,0,0.08),0_0_0_1px_rgba(0,0,0,0.02)]",
-                "transition-shadow duration-300",
-                activeMenu && "shadow-[0_8px_32px_-8px_rgba(0,0,0,0.12),0_0_0_1px_rgba(0,0,0,0.03)]"
+                "h-[100px] px-4",
+                "rounded-[20px]",
+                "bg-white",
+                "border-b border-[#f2f1f3]",
+                "shadow-[0px_62px_17px_0px_rgba(0,0,0,0),0px_40px_16px_0px_rgba(0,0,0,0.01),0px_22px_13px_0px_rgba(0,0,0,0.02),0px_10px_10px_0px_rgba(0,0,0,0.04),0px_2px_5px_0px_rgba(0,0,0,0.04)]",
+                "transition-[border-radius,box-shadow] duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]",
+                activeMenu && "shadow-[0px_62px_17px_0px_rgba(0,0,0,0),0px_40px_16px_0px_rgba(0,0,0,0.01),0px_22px_13px_0px_rgba(0,0,0,0.02),0px_10px_10px_0px_rgba(0,0,0,0.04),0px_2px_5px_0px_rgba(0,0,0,0.04)]"
               )}
             >
               {/* Desktop nav items — left aligned */}
@@ -582,8 +582,8 @@ export default function FloatingNavbar() {
                 <Link
                   href="/"
                   className={cn(
-                    "px-4 py-2.5 text-[15px] font-medium rounded-full",
-                    "text-[var(--color-black-400)]",
+                    "px-6 py-2.5 text-[16px] font-semibold leading-[24px] -tracking-[0.352px] rounded-full",
+                    "text-[#19171c]",
                     "transition-all duration-200",
                     "hover:text-[var(--color-black-100)] hover:bg-[var(--color-white-300)]"
                   )}
@@ -601,11 +601,11 @@ export default function FloatingNavbar() {
                   >
                     <button
                       className={cn(
-                        "flex items-center gap-1 px-4 py-2.5 text-[15px] font-medium rounded-full",
+                        "flex items-center gap-1 px-6 py-2.5 text-[16px] font-semibold leading-[24px] -tracking-[0.352px] rounded-full",
                         "transition-all duration-200 cursor-pointer",
                         activeMenu === menu.trigger
                           ? "text-[var(--color-black-100)] bg-[var(--color-white-300)]"
-                          : "text-[var(--color-black-400)] hover:text-[var(--color-black-100)] hover:bg-[var(--color-white-300)]"
+                          : "text-[#19171c] hover:text-[var(--color-black-100)] hover:bg-[var(--color-white-300)]"
                       )}
                       onClick={() =>
                         setActiveMenu(activeMenu === menu.trigger ? null : menu.trigger)
@@ -638,8 +638,8 @@ export default function FloatingNavbar() {
                     key={link.href}
                     href={link.href}
                     className={cn(
-                      "px-4 py-2.5 text-[15px] font-medium rounded-full",
-                      "text-[var(--color-black-400)]",
+                      "px-6 py-2.5 text-[16px] font-semibold leading-[24px] -tracking-[0.352px] rounded-full",
+                      "text-[#19171c]",
                       "transition-all duration-200",
                       "hover:text-[var(--color-black-100)] hover:bg-[var(--color-white-300)]"
                     )}
