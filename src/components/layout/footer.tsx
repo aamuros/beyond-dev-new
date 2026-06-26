@@ -24,7 +24,7 @@ export default function Footer() {
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-16 items-start"
+          className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-16 mb-8 items-start"
         >
           <div>
             <a href="#contact" className="inline-block bg-white text-[#09637E] font-semibold text-lg py-4 px-8 rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm">
@@ -48,7 +48,7 @@ export default function Footer() {
           whileInView={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.8 }}
           viewport={{ once: true }}
-          className="pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between text-xs text-slate-400"
+          className="pt-10 border-t border-white/10 flex flex-col md:flex-row justify-between text-xs text-slate-400"
         >
           <p>&copy; 2026 beyond.dev &mdash; A beyond.ink studio company.</p>
           <div className="flex gap-6 mt-3 md:mt-0">
