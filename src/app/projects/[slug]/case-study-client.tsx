@@ -1,11 +1,38 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
+import { motion, useInView } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Footer from "@/components/layout/footer";
 import Container from "@/components/ui/container";
 import { cn } from "@/lib/utils";
 import type { Project } from "@/data/projects";
+
+function FadeIn({
+  children,
+  className,
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0, y: 30 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+      transition={{ duration: 0.6, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 function SectionBlock({
   section,
@@ -16,29 +43,32 @@ function SectionBlock({
 }) {
   return (
     <div className="flex flex-col gap-8 lg:gap-12">
-      <div className="flex flex-col gap-4 max-w-2xl">
-        <span className="text-sm font-semibold text-muted tracking-wide uppercase">
-          {section.label}
-        </span>
-        <h2 className="section-heading-title text-3xl lg:text-4xl min-[1441px]:text-5xl text-foreground">
-          {section.heading}
-        </h2>
-        <p className="text-base lg:text-lg text-muted leading-relaxed font-medium">
-          {section.description}
-        </p>
-      </div>
+      <FadeIn>
+        <div className="flex flex-col gap-4 max-w-2xl">
+          <span className="text-sm font-semibold text-muted tracking-wide uppercase">
+            {section.label}
+          </span>
+          <h2 className="section-heading-title text-3xl lg:text-4xl min-[1441px]:text-5xl text-foreground">
+            {section.heading}
+          </h2>
+          <p className="text-base lg:text-lg text-muted leading-relaxed font-medium">
+            {section.description}
+          </p>
+        </div>
+      </FadeIn>
       <div className="flex flex-col gap-4">
         {section.images.map((img, i) => (
-          <div
-            key={i}
-            className={cn(
-              "relative overflow-hidden rounded-2xl bg-surface aspect-[16/9]"
-            )}
-          >
-            <div className="absolute inset-0 flex items-center justify-center text-muted text-sm">
-              {img.alt}
+          <FadeIn key={i} delay={i * 0.1}>
+            <div
+              className={cn(
+                "relative overflow-hidden rounded-2xl bg-surface aspect-[16/9]"
+              )}
+            >
+              <div className="absolute inset-0 flex items-center justify-center text-muted text-sm">
+                {img.alt}
+              </div>
             </div>
-          </div>
+          </FadeIn>
         ))}
       </div>
     </div>
@@ -59,99 +89,106 @@ export default function CaseStudyClient({
       <main className="relative z-10 bg-white shadow-xl rounded-b-[80px] overflow-hidden">
         {/* Hero */}
         <section className="pt-32 pb-16 lg:pt-40 lg:pb-24">
-        <Container size="xl">
-          <div className="flex flex-col gap-8 lg:gap-12">
-            {/* Back link */}
-            <Link
-              href="/#projects"
-              className="inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-foreground transition-colors w-fit"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back to projects
-            </Link>
-
-            {/* Title + meta */}
-            <div className="flex flex-col gap-3">
-              <h1 className="section-heading-title text-5xl lg:text-7xl min-[1441px]:text-8xl text-foreground">
-                {project.title}
-              </h1>
-              <div className="flex items-center gap-3 text-sm text-muted font-medium">
-                <span>{project.category}</span>
-                <span className="w-1 h-1 rounded-full bg-muted" />
-                <span>{project.year}</span>
-              </div>
-            </div>
-
-            {/* Description */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
-              {project.description.map((p, i) => (
-                <p
-                  key={i}
-                  className="text-base lg:text-lg text-muted leading-relaxed font-medium"
+          <Container size="xl">
+            <div className="flex flex-col gap-8 lg:gap-12">
+              <FadeIn>
+                <Link
+                  href="/#projects"
+                  className="inline-flex items-center gap-2 text-sm font-medium text-muted hover:text-foreground transition-colors w-fit"
                 >
-                  {p}
-                </p>
+                  <ArrowLeft className="w-4 h-4" />
+                  Back to projects
+                </Link>
+              </FadeIn>
+
+              <FadeIn delay={0.1}>
+                <div className="flex flex-col gap-3">
+                  <h1 className="section-heading-title text-5xl lg:text-7xl min-[1441px]:text-8xl text-foreground">
+                    {project.title}
+                  </h1>
+                  <div className="flex items-center gap-3 text-sm text-muted font-medium">
+                    <span>{project.category}</span>
+                    <span className="w-1 h-1 rounded-full bg-muted" />
+                    <span>{project.year}</span>
+                  </div>
+                </div>
+              </FadeIn>
+
+              <FadeIn delay={0.2}>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
+                  {project.description.map((p, i) => (
+                    <p
+                      key={i}
+                      className="text-base lg:text-lg text-muted leading-relaxed font-medium"
+                    >
+                      {p}
+                    </p>
+                  ))}
+                </div>
+              </FadeIn>
+            </div>
+          </Container>
+        </section>
+
+        {/* Hero image */}
+        <section className="pb-16 lg:pb-24">
+          <Container size="xl">
+            <FadeIn>
+              <div className="relative overflow-hidden rounded-2xl bg-surface aspect-[16/9]">
+                <div className="absolute inset-0 flex items-center justify-center text-muted text-sm">
+                  {project.heroImage.alt}
+                </div>
+              </div>
+            </FadeIn>
+          </Container>
+        </section>
+
+        {/* Content sections */}
+        <section className="pb-16 lg:pb-24">
+          <Container size="lg">
+            <div className="flex flex-col gap-24 lg:gap-32">
+              {project.sections.map((section, i) => (
+                <SectionBlock key={section.label} section={section} index={i} />
               ))}
             </div>
-          </div>
-        </Container>
-      </section>
+          </Container>
+        </section>
 
-      {/* Hero image */}
-      <section className="pb-16 lg:pb-24">
-        <Container size="xl">
-          <div className="relative overflow-hidden rounded-2xl bg-surface aspect-[16/9]">
-            <div className="absolute inset-0 flex items-center justify-center text-muted text-sm">
-              {project.heroImage.alt}
+        {/* Next / Previous */}
+        <section className="border-t border-border">
+          <FadeIn>
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+              <Link
+                href={`/projects/${prev.slug}`}
+                className="group flex items-center justify-between gap-4 py-10 lg:py-14 px-6 lg:px-16 border-b lg:border-b-0 lg:border-r border-border hover:bg-surface/50 transition-colors"
+              >
+                <div className="flex flex-col gap-1">
+                  <span className="text-sm text-muted font-medium">
+                    Previous project
+                  </span>
+                  <span className="text-xl lg:text-2xl font-bold text-foreground group-hover:text-foreground/80 transition-colors">
+                    {prev.title}
+                  </span>
+                </div>
+                <ArrowLeft className="w-5 h-5 text-muted group-hover:text-foreground transition-colors" />
+              </Link>
+              <Link
+                href={`/projects/${next.slug}`}
+                className="group flex items-center justify-between gap-4 py-10 lg:py-14 px-6 lg:px-16 hover:bg-surface/50 transition-colors"
+              >
+                <div className="flex flex-col gap-1">
+                  <span className="text-sm text-muted font-medium">
+                    Next project
+                  </span>
+                  <span className="text-xl lg:text-2xl font-bold text-foreground group-hover:text-foreground/80 transition-colors">
+                    {next.title}
+                  </span>
+                </div>
+                <ArrowRight className="w-5 h-5 text-muted group-hover:text-foreground transition-colors" />
+              </Link>
             </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* Content sections */}
-      <section className="pb-16 lg:pb-24">
-        <Container size="lg">
-          <div className="flex flex-col gap-24 lg:gap-32">
-            {project.sections.map((section, i) => (
-              <SectionBlock key={section.label} section={section} index={i} />
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      {/* Next / Previous */}
-      <section className="border-t border-border">
-        <div className="grid grid-cols-1 lg:grid-cols-2">
-          <Link
-            href={`/projects/${prev.slug}`}
-            className="group flex items-center justify-between gap-4 py-10 lg:py-14 px-6 lg:px-16 border-b lg:border-b-0 lg:border-r border-border hover:bg-surface/50 transition-colors"
-          >
-            <div className="flex flex-col gap-1">
-              <span className="text-sm text-muted font-medium">
-                Previous project
-              </span>
-              <span className="text-xl lg:text-2xl font-bold text-foreground group-hover:text-foreground/80 transition-colors">
-                {prev.title}
-              </span>
-            </div>
-            <ArrowLeft className="w-5 h-5 text-muted group-hover:text-foreground transition-colors" />
-          </Link>
-          <Link
-            href={`/projects/${next.slug}`}
-            className="group flex items-center justify-between gap-4 py-10 lg:py-14 px-6 lg:px-16 hover:bg-surface/50 transition-colors"
-          >
-            <div className="flex flex-col gap-1">
-              <span className="text-sm text-muted font-medium">
-                Next project
-              </span>
-              <span className="text-xl lg:text-2xl font-bold text-foreground group-hover:text-foreground/80 transition-colors">
-                {next.title}
-              </span>
-            </div>
-            <ArrowRight className="w-5 h-5 text-muted group-hover:text-foreground transition-colors" />
-          </Link>
-        </div>
-      </section>
+          </FadeIn>
+        </section>
       </main>
 
       <Footer />
