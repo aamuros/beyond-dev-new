@@ -236,6 +236,16 @@ html {
   scroll-behavior: auto;
 }
 
+html.intro-lock,
+body.intro-lock {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+body.intro-lock {
+  touch-action: none;
+}
+
 *, :after, :before, ::backdrop {
   border-color: #E4E7EC;
 }

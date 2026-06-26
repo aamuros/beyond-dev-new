@@ -24,33 +24,6 @@ export default function Hero() {
       <InteractiveTextGrid />
 
       <motion.div
-        className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center"
-        initial={{ opacity: 0, scale: 0.98 }}
-        animate={{ opacity: [0, 1, 1, 0], scale: [0.98, 1, 1, 0.98] }}
-        transition={{
-          duration: 2.8,
-          times: [0, 0.16, 0.78, 1],
-          ease: "easeInOut",
-        }}
-      >
-        <div className="text-3xl font-semibold tracking-[-0.04em] text-white md:text-4xl">
-          beyond.dev
-        </div>
-      </motion.div>
-
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-[9] bg-white/[0.025] backdrop-blur-md"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: [0, 1, 0] }}
-        transition={{
-          delay: 2.55,
-          duration: 0.55,
-          ease: "easeOut",
-        }}
-      />
-
-      <motion.div
         style={{ y: topTextY, opacity: textOpacity }}
         className="pointer-events-none absolute inset-x-0 top-0 z-10 text-white"
       >

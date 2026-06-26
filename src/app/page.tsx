@@ -1,4 +1,5 @@
 import Footer from "@/components/layout/footer";
+import PageIntroOverlay from "@/components/layout/page-intro-overlay";
 import Hero from "@/components/sections/hero";
 import SimpleSystemsSection from "@/components/sections/simple-systems-section";
 import PainPoints from "@/components/sections/pain-points";
@@ -9,6 +10,8 @@ import Contact from "@/components/sections/contact";
 export default function Home() {
   return (
     <div className="relative min-h-screen bg-[#09637E]">
+      <PageIntroOverlay />
+
       {/* 
         True footer back layer.
         It is fixed behind the foreground page.
@@ -24,7 +27,7 @@ export default function Home() {
       */}
       <div className="relative z-10">
         {/* Hero backplate zone */}
-        <section className="relative h-[135vh] bg-black">
+        <section className="relative h-[200vh] bg-black">
           <div className="sticky top-0 h-screen overflow-hidden bg-black">
             <Hero />
           </div>
@@ -36,34 +39,27 @@ export default function Home() {
           Bottom rounded corners reveal fixed teal footer.
           Bottom margin creates reveal space for footer.
         */}
-        <div className="relative">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[60vh] bg-black"
-          />
+        <main className="relative -mt-[100vh] mb-[70vh] overflow-hidden rounded-t-[48px] rounded-b-[80px] bg-white shadow-xl">
+          <section className="snap-section">
+            <SimpleSystemsSection />
+          </section>
 
-          <main className="relative z-10 -mt-[35vh] mb-[70vh] overflow-hidden rounded-t-[48px] rounded-b-[80px] bg-white shadow-xl">
-            <section className="snap-section">
-              <SimpleSystemsSection />
-            </section>
+          <section className="snap-section snap-section--auto">
+            <PainPoints />
+          </section>
 
-            <section className="snap-section snap-section--auto">
-              <PainPoints />
-            </section>
+          <section className="snap-section">
+            <Process />
+          </section>
 
-            <section className="snap-section">
-              <Process />
-            </section>
+          <section className="snap-section snap-section--auto">
+            <Faq />
+          </section>
 
-            <section className="snap-section snap-section--auto">
-              <Faq />
-            </section>
-
-            <section className="snap-section">
-              <Contact />
-            </section>
-          </main>
-        </div>
+          <section className="snap-section">
+            <Contact />
+          </section>
+        </main>
       </div>
     </div>
   );
