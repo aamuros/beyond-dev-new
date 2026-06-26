@@ -21,7 +21,7 @@ function ProjectCard({
     <motion.a
       ref={ref}
       href={project.href}
-      className="group relative flex flex-col overflow-hidden rounded-2xl bg-black/[0.03] aspect-[4/4.5] lg:aspect-[4/3.5]"
+      className="group relative flex flex-col overflow-hidden rounded-2xl bg-black/[0.03] aspect-[4/4.5] lg:aspect-[4/3.5] active:scale-[0.98] transition-transform duration-200"
       initial={{ opacity: 0, y: 40 }}
       animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
       transition={{
@@ -32,7 +32,7 @@ function ProjectCard({
     >
       <div
         className={cn(
-          "absolute inset-0 bg-gradient-to-br transition-transform duration-700 ease-out group-hover:scale-105",
+          "absolute inset-0 bg-gradient-to-br transition-transform duration-700 ease-out active:scale-105 group-hover:scale-105",
           project.gradient
         )}
       />
@@ -65,7 +65,7 @@ function ProjectCard({
       </div>
 
       {/* Corner arrow */}
-      <div className="absolute top-5 right-5 z-10 w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center opacity-0 scale-75 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100">
+      <div className="absolute top-5 right-5 z-10 w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center opacity-100 scale-100 transition-all duration-300 lg:opacity-0 lg:scale-75 lg:group-hover:opacity-100 lg:group-hover:scale-100">
         <ArrowUpRight className="w-4 h-4 text-white" />
       </div>
     </motion.a>
