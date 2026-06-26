@@ -1,3 +1,7 @@
+"use client";
+
+import Cal from "@calcom/embed-react";
+import { Check } from "lucide-react";
 import Container from "@/components/ui/container";
 import SectionHeading from "@/components/ui/section-heading";
 
@@ -18,21 +22,14 @@ export default function Contact() {
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-4">
               <h3 className="text-2xl font-semibold text-foreground">
-                You don't need a "digital transformation."
+                Let's turn your manual processes into automated systems.
               </h3>
               <p className="text-muted font-medium leading-relaxed">
-                You need that one process — the one that eats your time, loses
-                your paperwork, or makes your team groan — to just... work.
-              </p>
-            </div>
-
-            <div className="flex flex-col gap-4">
-              <h3 className="text-2xl font-semibold text-foreground">
-                We build simple, practical systems.
-              </h3>
-              <p className="text-muted font-medium leading-relaxed">
-                Not bloated software. Not a 6-month project. A focused solution
-                for your biggest bottleneck, delivered in 14 days.
+                You don't need bloated software or a 6-month project. You need
+                that one process — the one that eats your time, loses your
+                paperwork, or makes your team groan — to just work. We build
+                focused solutions for your biggest bottleneck, delivered in 14
+                days.
               </p>
             </div>
 
@@ -46,12 +43,31 @@ export default function Contact() {
                 the right fit, we'll say so.
               </p>
             </div>
+
+            <div className="flex flex-col gap-3 mt-2">
+              {[
+                "Free technical assessment",
+                "Clear, non-technical breakdown",
+                "Scheduled in Philippine Standard Time (PST)",
+              ].map((item) => (
+                <div key={item} className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full bg-foreground flex items-center justify-center shrink-0">
+                    <Check className="w-3 h-3 text-white" />
+                  </div>
+                  <span className="text-sm font-medium text-foreground">
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="bg-white rounded-2xl border border-border shadow-sm p-6 min-h-[500px] flex items-center justify-center">
-            <span className="text-muted text-sm font-medium">
-              Scheduling widget loading…
-            </span>
+          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden min-h-[500px]">
+            <Cal
+              calLink="beyond-dev-2wzrnz/15min"
+              style={{ width: "100%", height: "100%", overflow: "scroll" }}
+              config={{ layout: "month_view", theme: "light" }}
+            />
           </div>
         </div>
       </Container>
