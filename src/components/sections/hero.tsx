@@ -1,13 +1,14 @@
 import Link from "next/link";
+import LogoCloud from "@/components/sections/logo-cloud";
 
 export default function Hero() {
   return (
-    <section className="relative block overflow-hidden bg-[#FFFFFF] m-0 pt-[129px] pb-[100px] text-[12px] leading-[1.4] text-[#19171c] font-normal antialiased">
+    <section className="relative block overflow-hidden bg-[#FFFFFF] m-0 pt-[129px] pb-8 text-[12px] leading-[1.4] text-[#19171c] font-normal antialiased lg:pt-[160px] lg:pb-10 min-[1441px]:pt-[200px] min-[1441px]:pb-12">
       <div>
         <div className="headerWrapper">
           <section className="text-center">
             <div>
-              <div className="mx-auto w-full max-w-[1100px] px-6">
+                <div className="mx-auto w-full max-w-[1200px] px-6 min-[1441px]:max-w-[1280px]">
                 <div className="mb-5 flex justify-center">
                   <Link
                     href="#process"
@@ -25,7 +26,7 @@ export default function Hero() {
                   </Link>
                 </div>
 
-                <h1 className="text-[36px] leading-[1.05] font-bold tracking-[-0.02em] text-[#19171c] lg:text-[72px] min-[1441px]:text-[115px] min-[1441px]:leading-[90%] min-[1441px]:tracking-[-3.6px] min-[1441px]:font-extrabold">
+                <h1 className="text-[36px] leading-[1.05] font-extrabold tracking-[-0.02em] text-[#19171c] lg:text-[80px] lg:leading-[95%] lg:tracking-[-0.03em] min-[1441px]:text-[115px] min-[1441px]:leading-[95%] min-[1441px]:tracking-[-3.6px]">
                   Simple systems for
                   <br />
                   your business.
@@ -34,7 +35,7 @@ export default function Hero() {
                 <div className="mt-8 flex justify-center">
                   <Link
                     href="#contact"
-                    className="inline-flex items-center justify-center rounded-[10px] bg-[#7c3aed] px-5 py-2.5 text-[14px] font-semibold leading-[1.4] text-white no-underline transition-colors hover:bg-[#6d28d9]"
+                    className="inline-flex items-center justify-center rounded-[10px] bg-[#202124] px-5 py-2.5 text-[14px] font-semibold leading-[1.4] text-white no-underline transition-colors hover:bg-[#2a2b2e]"
                   >
                     <span className="inline-flex items-center gap-inherit">
                       Book Your Free Checkup
@@ -54,9 +55,7 @@ export default function Hero() {
             </div>
           </section>
 
-          <div className="mx-auto mt-10 max-w-[1100px] px-6 lg:mt-12">
-            <div className="aspect-[2880/1148] w-full rounded-lg bg-black/[0.04]" />
-          </div>
+          <LogoCloud />
         </div>
       </div>
     </section>

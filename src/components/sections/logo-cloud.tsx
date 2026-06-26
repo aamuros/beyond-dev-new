@@ -37,8 +37,8 @@ function LogoRow() {
 
 export default function LogoCloud() {
   return (
-    <section>
-      <div className="grid grid-cols-12 justify-items-center py-25">
+    <section id="systems">
+      <div className="grid grid-cols-12 justify-items-center mt-10 pb-12 lg:mt-12">
         <div className="col-[2/-2] w-full">
           <div className="relative overflow-hidden mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
             <div className="marquee-track flex w-max">

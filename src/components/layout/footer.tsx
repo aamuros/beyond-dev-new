@@ -26,7 +26,7 @@ const footerLinkGroups = [
     links: [
       { label: "Blog", href: "#" },
       { label: "Case Studies", href: "#" },
-      { label: "FAQ", href: "#" },
+      { label: "FAQ", href: "#faq" },
     ],
   },
   {

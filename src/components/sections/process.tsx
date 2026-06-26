@@ -7,35 +7,35 @@ import {
   ArrowDown,
   Cog,
   Shield,
+  LucideIcon,
 } from "lucide-react";
 import Container from "@/components/ui/container";
-import SectionHeading from "@/components/ui/section-heading";
 import { cn } from "@/lib/utils";
 
-const steps = [
+const steps: {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+}[] = [
   {
-    number: "01",
     icon: ClipboardCheck,
     title: "Free Business Process Checkup",
     description:
       "We talk to you, understand how your business currently works, and identify the one messy process causing the most pain.",
   },
   {
-    number: "02",
     icon: FileText,
     title: "System Blueprint",
     description:
       "We create a clear workflow plan showing exactly what the system will do, how it fits your process, and what you'll get.",
   },
   {
-    number: "03",
     icon: Rocket,
     title: "14-Day Starter System",
     description:
       "We build and deliver your working system in 14 days after requirements are approved. No endless waiting.",
   },
   {
-    number: "04",
     icon: HeadphonesIcon,
     title: "Monthly Support",
     description:
@@ -176,42 +176,51 @@ const visuals = [StepVisual01, StepVisual02, StepVisual03, StepVisual04];
 
 export default function Process() {
   return (
-    <section id="process" className="py-16 flex flex-col gap-12 relative overflow-hidden">
-      <Container size="sm">
-        <SectionHeading
-          badge="How it works"
-          badgeVariant="pill"
-          title="From Messy to Managed in 4 Steps"
-          description="Our proven process takes you from paper chaos to a working system — quickly and without the headaches."
-        />
-      </Container>
+    <section id="process" className="global-section">
+      <Container size="xl">
+        <div className="flex flex-col lg:grid lg:grid-cols-[repeat(20,1fr)] lg:gap-8">
+          <div className="flex flex-col items-start gap-12 mb-24 lg:sticky lg:top-[20vh] lg:col-span-8 lg:mb-0">
+            <div className="flex flex-col items-start gap-3">
+               <span className="pill-tag">
+                How it works
+              </span>
+              <h2 className="section-heading-title text-4xl lg:text-[3.5rem] min-[1441px]:text-[5rem] text-foreground text-left">
+                From Messy to Managed in 4 Steps
+              </h2>
+            </div>
+            <p className="text-base lg:text-lg text-muted leading-relaxed font-medium">
+              Our proven process takes you from paper chaos to a working system
+              — quickly and without the headaches.
+            </p>
+          </div>
 
-      <Container size="md">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {steps.map((step, index) => {
-            const Visual = visuals[index];
-            return (
-              <div
-                key={step.number}
-                className="bg-black/[0.03] rounded-xl overflow-hidden"
-              >
-                <div className="h-[200px] relative overflow-hidden p-6 flex items-center justify-center border-b border-border/40">
-                  <Visual />
-                </div>
-                <div className="p-6 flex flex-col items-center justify-start gap-3">
-                  <div className="w-10 h-9 rounded-full bg-white flex items-center justify-center shadow-sm">
-                    <span className="text-lg text-center font-medium text-primary">
-                      {step.number}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-medium text-center text-foreground leading-snug">
-                    {step.title}.{" "}
-                    <span className="text-muted">{step.description}</span>
-                  </h3>
-                </div>
-              </div>
-            );
-          })}
+          <div className="lg:col-span-12 lg:col-start-9">
+            <ul className="flex flex-col gap-5 lg:grid lg:grid-cols-[repeat(8,1fr)] lg:gap-[0.8rem]">
+              {steps.map((step, index) => {
+                const Visual = visuals[index];
+                const Icon = step.icon;
+                return (
+                  <li
+                    key={step.title}
+                    className="group flex flex-col lg:col-span-4"
+                  >
+                    <div className="relative overflow-hidden rounded-xl aspect-[340/425] bg-[#f2f1f3]">
+                      <Visual />
+                    </div>
+                    <div className="flex items-center gap-2 mt-5">
+                      <Icon className="w-6 h-6 text-foreground shrink-0" />
+                      <h3 className="text-base font-semibold text-foreground leading-snug">
+                        {step.title}
+                      </h3>
+                    </div>
+                    <p className="text-sm text-muted leading-relaxed mt-2">
+                      {step.description}
+                    </p>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       </Container>
     </section>

@@ -1,32 +1,32 @@
 import Footer from "@/components/layout/footer";
 import Hero from "@/components/sections/hero";
-import LogoCloud from "@/components/sections/logo-cloud";
 import PainPoints from "@/components/sections/pain-points";
 import Process from "@/components/sections/process";
+import Faq from "@/components/sections/faq";
 import Contact from "@/components/sections/contact";
 
 export default function Home() {
   return (
     <>
       <main>
-        {/* Hero — full viewport, no navbar visible here */}
+        {/* Hero (includes Logo Cloud) */}
         <section className="snap-section">
           <Hero />
         </section>
 
-        {/* Logo Cloud */}
-        <section className="snap-section">
-          <LogoCloud />
-        </section>
-
         {/* Pain Points */}
-        <section className="snap-section">
+        <section className="snap-section snap-section--auto">
           <PainPoints />
         </section>
 
         {/* Process */}
         <section className="snap-section">
           <Process />
+        </section>
+
+        {/* FAQ */}
+        <section className="snap-section snap-section--auto">
+          <Faq />
         </section>
 
         {/* Contact */}

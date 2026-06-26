@@ -34,7 +34,7 @@ export default function SectionHeading({
     >
       {badge &&
         (badgeVariant === "pill" ? (
-          <span className="inline-flex items-center justify-center bg-white-400 text-black-600 font-medium w-fit whitespace-nowrap text-sm px-3 py-1 rounded-full">
+           <span className="pill-tag">
             {badge}
           </span>
         ) : (
