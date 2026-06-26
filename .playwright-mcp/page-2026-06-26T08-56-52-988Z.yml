@@ -1,0 +1,172 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e8]:
+      - 'link "14-Day Starter: Get your first system built Learn more" [ref=e10] [cursor=pointer]':
+        - /url: "#process"
+        - 'heading "14-Day Starter: Get your first system built Learn more" [level=3] [ref=e12]'
+      - heading "Simple systems for your business." [level=1] [ref=e13]:
+        - text: Simple systems for
+        - text: your business.
+      - link "Book Your Free Checkup" [ref=e15] [cursor=pointer]:
+        - /url: "#contact"
+        - generic [ref=e16]: Book Your Free Checkup
+      - paragraph [ref=e18]:
+        - strong [ref=e19]: Over 200 businesses trust us
+        - text: to build their systems and grow online.
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - img "Granola" [ref=e29]
+        - img "Wispr Flow" [ref=e31]
+        - img "Listen Labs" [ref=e33]
+        - img "Obvious" [ref=e35]
+        - img "Modal" [ref=e37]
+        - img "USV" [ref=e39]
+        - img "Replicate" [ref=e41]
+        - img "Railway" [ref=e43]
+        - img "Taskrabbit" [ref=e45]
+        - img "Public" [ref=e47]
+        - img "Wordsmith" [ref=e49]
+        - img "Passionfroot" [ref=e51]
+      - generic [ref=e52]:
+        - img "Granola" [ref=e54]
+        - img "Wispr Flow" [ref=e56]
+        - img "Listen Labs" [ref=e58]
+        - img "Obvious" [ref=e60]
+        - img "Modal" [ref=e62]
+        - img "USV" [ref=e64]
+        - img "Replicate" [ref=e66]
+        - img "Railway" [ref=e68]
+        - img "Taskrabbit" [ref=e70]
+        - img "Public" [ref=e72]
+        - img "Wordsmith" [ref=e74]
+        - img "Passionfroot" [ref=e76]
+    - generic [ref=e77]:
+      - generic [ref=e79]:
+        - generic [ref=e80]: The Problem
+        - heading "Sound Familiar?" [level=2] [ref=e81]
+        - heading "Many local businesses still run on paper, chat, and hope. If this is your daily reality, you're not alone." [level=3] [ref=e83]:
+          - strong [ref=e84]: Many local businesses still run on paper, chat, and hope.
+          - text: If this is your daily reality, you're not alone.
+      - generic [ref=e86]:
+        - generic [ref=e87]:
+          - img [ref=e89]
+          - heading "Paper & Notebooks" [level=3] [ref=e92]
+          - paragraph [ref=e93]: Orders, bookings, and records scattered across notebooks that get lost or damaged.
+        - generic [ref=e94]:
+          - img [ref=e96]
+          - heading "Messy Spreadsheets" [level=3] [ref=e99]
+          - paragraph [ref=e100]: Excel files with broken formulas, duplicate entries, and no one knows which version is correct.
+        - generic [ref=e101]:
+          - img [ref=e103]
+          - heading "Messenger & Facebook" [level=3] [ref=e105]
+          - paragraph [ref=e106]: Customer orders buried in chat threads, impossible to track, search, or hand off to staff.
+        - generic [ref=e107]:
+          - img [ref=e109]
+          - heading "Screenshots as Records" [level=3] [ref=e112]
+          - paragraph [ref=e113]: Photos of receipts, payment confirmations, and inventory counts with no system to organize them.
+        - generic [ref=e114]:
+          - img [ref=e116]
+          - heading "Hours Wasted Daily" [level=3] [ref=e119]
+          - paragraph [ref=e120]: Time that should go toward growing your business instead gets burned on admin work.
+        - generic [ref=e121]:
+          - img [ref=e123]
+          - heading "Costly Mistakes" [level=3] [ref=e125]
+          - paragraph [ref=e126]: Missed orders, double bookings, wrong inventory counts, and lost payments costing you real money.
+    - generic [ref=e127]:
+      - generic [ref=e129]:
+        - generic [ref=e130]: How it works
+        - heading "From Messy to Managed in 4 Steps" [level=2] [ref=e131]
+        - paragraph [ref=e133]: Our proven process takes you from paper chaos to a working system — quickly and without the headaches.
+      - generic [ref=e135]:
+        - generic [ref=e136]:
+          - generic [ref=e139]:
+            - generic [ref=e140]:
+              - img [ref=e142]
+              - generic [ref=e144]: Identify pain points
+            - generic [ref=e145]:
+              - img [ref=e147]
+              - generic [ref=e149]: Map current workflow
+            - generic [ref=e152]: Review documents
+          - generic [ref=e153]:
+            - generic [ref=e155]: "01"
+            - heading "Free Business Process Checkup. We talk to you, understand how your business currently works, and identify the one messy process causing the most pain." [level=3] [ref=e156]
+        - generic [ref=e157]:
+          - img [ref=e170]
+          - generic [ref=e177]:
+            - generic [ref=e179]: "02"
+            - heading "System Blueprint. We create a clear workflow plan showing exactly what the system will do, how it fits your process, and what you'll get." [level=3] [ref=e180]
+        - generic [ref=e181]:
+          - generic [ref=e184]:
+            - img [ref=e186]
+            - generic [ref=e195]:
+              - generic [ref=e196]:
+                - img [ref=e197]
+                - text: Built
+              - generic [ref=e199]:
+                - img [ref=e200]
+                - text: Tested
+              - generic [ref=e202]: Live
+          - generic [ref=e203]:
+            - generic [ref=e205]: "03"
+            - heading "14-Day Starter System. We build and deliver your working system in 14 days after requirements are approved. No endless waiting." [level=3] [ref=e206]
+        - generic [ref=e207]:
+          - generic [ref=e210]:
+            - generic [ref=e211]:
+              - img [ref=e213]
+              - img [ref=e216]
+            - generic [ref=e218]:
+              - generic [ref=e219]:
+                - img [ref=e220]
+                - text: Hosting
+              - generic [ref=e231]:
+                - img [ref=e232]
+                - text: Backups
+          - generic [ref=e234]:
+            - generic [ref=e236]: "04"
+            - heading "Monthly Support. Optional ongoing support including maintenance, hosting, backups, bug fixes, and improvements as your business grows." [level=3] [ref=e237]
+    - generic [ref=e239]:
+      - generic [ref=e240]:
+        - generic [ref=e241]: Get Started
+        - heading "Let's Talk About Your Business" [level=2] [ref=e242]
+        - paragraph [ref=e244]: No pressure, no jargon — just a real conversation about what's slowing you down and how we can help.
+      - generic [ref=e246]:
+        - generic [ref=e247]:
+          - heading "Let's turn your manual processes into automated systems." [level=3] [ref=e248]
+          - paragraph [ref=e249]: You don't need bloated software or a 6-month project. You need that one process — the one that eats your time, loses your paperwork, or makes your team groan — to just work. We build focused solutions for your biggest bottleneck, delivered in 14 days.
+        - generic [ref=e250]:
+          - heading "Book a free checkup — no strings attached." [level=3] [ref=e251]
+          - paragraph [ref=e252]: Pick a time that works for you. We'll listen, ask a few questions, and tell you honestly if we can help. If we're not the right fit, we'll say so.
+        - generic [ref=e253]:
+          - generic [ref=e254]:
+            - img [ref=e256]
+            - generic [ref=e258]: Free technical assessment
+          - generic [ref=e259]:
+            - img [ref=e261]
+            - generic [ref=e263]: Clear, non-technical breakdown
+          - generic [ref=e264]:
+            - img [ref=e266]
+            - generic [ref=e268]: Scheduled in Philippine Standard Time (PST)
+  - contentinfo [ref=e270]:
+    - generic [ref=e271]:
+      - heading "Great systems come from teams that are close enough to care — and technical enough to automate things." [level=2] [ref=e272]
+      - generic [ref=e273]:
+        - generic [ref=e274]:
+          - link "Book a 15-Min Scoping Call" [ref=e275] [cursor=pointer]:
+            - /url: "#contact"
+          - paragraph [ref=e276]: No technical jargon, just practical solutions.
+        - generic [ref=e277]:
+          - link "Systems" [ref=e278] [cursor=pointer]:
+            - /url: "#systems"
+          - link "Process" [ref=e279] [cursor=pointer]:
+            - /url: "#process"
+          - link "Contact" [ref=e280] [cursor=pointer]:
+            - /url: "#contact"
+    - generic [ref=e282]:
+      - paragraph [ref=e283]: © 2026 beyond.dev — A beyond.ink studio company.
+      - generic [ref=e284]:
+        - link "LinkedIn" [ref=e285] [cursor=pointer]:
+          - /url: "#"
+        - link "GitHub" [ref=e286] [cursor=pointer]:
+          - /url: "#"
+  - button "Open Next.js Dev Tools" [ref=e292] [cursor=pointer]:
+    - img [ref=e293]

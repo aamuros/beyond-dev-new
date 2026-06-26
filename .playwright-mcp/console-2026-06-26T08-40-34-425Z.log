@@ -1,0 +1,8 @@
+[   71381ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1lc1_next_dist_0oz01pn._.js:2477
+[   71429ms] [LOG] [Fast Refresh] done in 67ms @ http://localhost:3000/_next/static/chunks/1lc1_next_dist_0oz01pn._.js:2477
+[   71532ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1lc1_next_dist_0oz01pn._.js:2477
+[   71553ms] [LOG] [Fast Refresh] done in 124ms @ http://localhost:3000/_next/static/chunks/1lc1_next_dist_0oz01pn._.js:2477
+[   71662ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/1lc1_next_dist_0oz01pn._.js:2477
+[   71666ms] [LOG] [Fast Refresh] done in 113ms @ http://localhost:3000/_next/static/chunks/1lc1_next_dist_0oz01pn._.js:2477
+[  306412ms] [WARNING] The resource https://app.cal.com/_next/static/media/CalSansUI%5Bwght%2CGEOM%5D-s.p.17~pqx5aww0vr.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ https://app.cal.com/beyond-dev-2wzrnz/15min/embed?layout=month_view&theme=light&embedType=inline&ui.color-scheme=light&embed=:0
+[  311611ms] [WARNING] The resource https://app.cal.com/_next/static/media/CalSansUI%5Bwght%2CGEOM%5D-s.p.17~pqx5aww0vr.woff2 was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally. @ https://app.cal.com/beyond-dev-2wzrnz/15min/embed?layout=month_view&theme=light&embedType=inline&ui.color-scheme=light&embed=:0

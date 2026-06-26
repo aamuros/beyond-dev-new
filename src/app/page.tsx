@@ -16,9 +16,7 @@ export default function Home() {
         <Contact />
       </main>
 
-      <section className="relative z-0 bg-[#09637E]">
-        <Footer />
-      </section>
+      <Footer />
     </>
   );
 }

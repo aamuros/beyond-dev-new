@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 
 export default function Footer() {
   return (
-    <footer className="sticky bottom-0 z-10 w-full bg-[#09637E] text-slate-50 pt-24 pb-12 px-6 flex flex-col justify-between">
-      <div className="max-w-6xl mx-auto w-full flex-1 flex flex-col justify-center">
+    <footer className="sticky bottom-0 w-full overflow-hidden bg-[#09637E] text-slate-50 pt-16 pb-10 px-6">
+      <div className="max-w-6xl mx-auto w-full">
         
         {/* Massive Statement with Upward Reveal Animation */}
         <motion.h2 
@@ -24,7 +24,7 @@ export default function Footer() {
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-16 mb-8 items-start"
+          className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-10 mb-2 items-start"
         >
           <div>
             <a href="#contact" className="inline-block bg-white text-[#09637E] font-semibold text-lg py-4 px-8 rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm">

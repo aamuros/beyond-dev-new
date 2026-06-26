@@ -1,0 +1,219 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - link "Popcorn logo" [ref=e8] [cursor=pointer]:
+          - /url: /
+          - img [ref=e10]
+          - img [ref=e13]
+        - generic [ref=e21]:
+          - link "Home" [ref=e22] [cursor=pointer]:
+            - /url: /
+          - link "Manifesto" [ref=e23] [cursor=pointer]:
+            - /url: /manifesto
+          - link "Research" [ref=e24] [cursor=pointer]:
+            - /url: /research
+          - link "Careers" [ref=e25] [cursor=pointer]:
+            - /url: /careers
+      - generic [ref=e26]:
+        - link:
+          - /url: "#"
+        - link "Sign up" [ref=e29] [cursor=pointer]:
+          - /url: "#"
+          - strong [ref=e33]: Sign up
+  - main [ref=e34]:
+    - generic [ref=e37]:
+      - generic [ref=e38]:
+        - link "Now live!" [ref=e40] [cursor=pointer]:
+          - /url: "#"
+          - strong [ref=e42]: Now live!
+        - heading "One global plan. No hassle." [level=1] [ref=e44]
+        - paragraph [ref=e46]: Enjoy unlimited global service for $69/mo. No roaming fees, or headaches.
+        - link "Sign up" [ref=e48] [cursor=pointer]:
+          - /url: "#"
+          - strong [ref=e52]: Sign up
+      - generic [ref=e56]:
+        - heading "Unlimited talk, text and data" [level=3] [ref=e61]
+        - heading "Works in 180+ countries" [level=3] [ref=e66]
+        - heading "Cancel anytime" [level=3] [ref=e71]
+      - generic [ref=e72]: "*Subject to our Play by the Rules policy"
+    - generic [ref=e75]:
+      - generic [ref=e76]:
+        - heading "A US number, with peace of mind." [level=2] [ref=e77]
+        - paragraph [ref=e78]:
+          - text: Get started in 72 Seconds.
+          - text: Activate from anywhere worldwide.
+      - generic [ref=e79]:
+        - generic [ref=e80]:
+          - generic [ref=e82]:
+            - generic [ref=e83]: Monthly fee
+            - generic [ref=e84]: $69
+            - generic [ref=e85]:
+              - generic [ref=e86]: Calls & Text
+              - generic [ref=e87]: Unlimited Data
+              - generic [ref=e88]: Roaming
+            - generic [ref=e89]:
+              - img [ref=e91]
+              - generic [ref=e93]: All inclusive
+          - generic [ref=e94]:
+            - heading "Simple" [level=3] [ref=e95]
+            - paragraph [ref=e96]:
+              - text: A US phone plan without
+              - text: costly roaming fees.
+        - generic [ref=e106]:
+          - heading "Fast & Easy" [level=3] [ref=e107]
+          - paragraph [ref=e108]:
+            - text: Get started in minutes.
+            - text: Keep your US number globally.
+        - generic [ref=e114]:
+          - heading "Borderless" [level=3] [ref=e115]
+          - paragraph [ref=e116]:
+            - text: Made for global living.
+            - text: No 90 day limits.
+    - generic [ref=e119]:
+      - generic [ref=e120]:
+        - generic [ref=e123]: The world is your oyster
+        - heading "Our coverage? Glad you asked." [level=2] [ref=e125]:
+          - text: Our coverage?
+          - text: Glad you asked.
+        - paragraph [ref=e126]: Experience premium 5G coverage across the US, and 180+ countries.
+      - generic [ref=e130]:
+        - generic [ref=e132]:
+          - img [ref=e134]
+          - generic [ref=e138]: France
+        - generic [ref=e140]:
+          - img [ref=e142]
+          - generic [ref=e146]: Germany
+        - generic [ref=e148]:
+          - img [ref=e150]
+          - generic [ref=e156]: Mexico
+        - generic [ref=e158]:
+          - img [ref=e160]
+          - generic [ref=e163]: Japan
+        - generic [ref=e165]:
+          - img [ref=e167]
+          - generic [ref=e173]: Brazil
+        - generic [ref=e176]: 150+ More
+        - generic [ref=e178]:
+          - img [ref=e180]
+          - generic [ref=e185]: Canada
+        - generic [ref=e187]:
+          - img [ref=e189]
+          - generic [ref=e204]: UK
+        - generic [ref=e206]:
+          - img [ref=e208]
+          - generic [ref=e212]: Colombia
+        - generic [ref=e214]:
+          - img [ref=e216]
+          - generic [ref=e221]: UAE
+    - generic [ref=e224]:
+      - heading "They love it, so will you" [level=2] [ref=e226]
+      - generic [ref=e227]:
+        - generic [ref=e228]:
+          - heading "“A game changer for travelers”" [level=3] [ref=e230]
+          - generic [ref=e231]: Chicagosnow1
+        - generic [ref=e232]:
+          - heading "“No more roaming costs or buying extra eSIMs”" [level=3] [ref=e234]
+          - generic [ref=e235]: nnnoah25
+        - generic [ref=e236]:
+          - heading "“Legitimately the best carrier experience”" [level=3] [ref=e238]
+          - generic [ref=e239]: r_x_rx
+    - generic [ref=e242]:
+      - generic [ref=e243]:
+        - generic [ref=e246]: FAQs
+        - heading "Got questions? Here’s the answers." [level=2] [ref=e248]
+      - list [ref=e250]:
+        - listitem [ref=e251]:
+          - generic [ref=e252]:
+            - generic [ref=e253] [cursor=pointer]:
+              - generic [ref=e254]: What is Popcorn?
+              - img [ref=e256]
+            - paragraph [ref=e259]: Popcorn is a simple, all-in-one global phone plan that just works. Enjoy unlimited talk, text, and data worldwide for one price. No hidden fees, roaming charges or hassle.
+        - listitem [ref=e260]:
+          - generic [ref=e261]:
+            - generic [ref=e262] [cursor=pointer]:
+              - generic [ref=e263]: What countries are you available in?
+              - img [ref=e265]
+            - paragraph [ref=e268]: We’re live in 180+ countries. The only places we haven’t seen users are a few remote islands or unstable regions like North Korea.
+        - listitem [ref=e269]:
+          - generic [ref=e270]:
+            - generic [ref=e271] [cursor=pointer]:
+              - generic [ref=e272]: Can I keep my current phone number?
+              - img [ref=e274]
+            - paragraph [ref=e277]: Absolutely, we support US numbers and you can transfer yours directly in the app. Or grab a fresh one if you’d like.
+        - listitem [ref=e278]:
+          - generic [ref=e279]:
+            - generic [ref=e280] [cursor=pointer]:
+              - generic [ref=e281]: Will it work on my phone?
+              - img [ref=e283]
+            - paragraph [ref=e286]: If your phone supports eSIM and is from the last 5 years, you’re good to go.
+        - listitem [ref=e287]:
+          - generic [ref=e288]:
+            - generic [ref=e289] [cursor=pointer]:
+              - generic [ref=e290]: How much does it cost?
+              - img [ref=e292]
+            - paragraph [ref=e295]: $69/mo including taxes. That’s it.
+        - listitem [ref=e296]:
+          - generic [ref=e297]:
+            - generic [ref=e298] [cursor=pointer]:
+              - generic [ref=e299]: Can I cancel anytime?
+              - img [ref=e301]
+            - paragraph [ref=e304]: No contracts, just pay monthly and cancel anytime.
+    - generic [ref=e308]:
+      - generic [ref=e310]:
+        - heading "Get connected in 5 minutes" [level=3] [ref=e311]
+        - list [ref=e312]:
+          - listitem [ref=e313]:
+            - generic [ref=e314]: "1"
+            - generic [ref=e315]: Sign up
+          - listitem [ref=e316]:
+            - generic [ref=e317]: "2"
+            - generic [ref=e318]: Install eSIM
+          - listitem [ref=e319]:
+            - generic [ref=e320]: "3"
+            - generic [ref=e321]: You’re online!
+        - generic [ref=e322]:
+          - generic [ref=e323]: Yes, we timed it.
+          - img [ref=e325]
+      - generic [ref=e327]:
+        - generic [ref=e328]:
+          - heading "One plan, one price." [level=3] [ref=e329]:
+            - text: One plan,
+            - text: one price.
+          - generic [ref=e330]: $69
+          - generic [ref=e331]: Per Month
+        - link "Sign up" [ref=e333] [cursor=pointer]:
+          - /url: "#"
+          - strong [ref=e337]: Sign up
+  - generic [ref=e340]:
+    - generic [ref=e341]:
+      - link [ref=e342] [cursor=pointer]:
+        - /url: "#"
+        - img [ref=e344]
+      - generic [ref=e346]:
+        - generic [ref=e347]: The Good
+        - link "Home" [ref=e348] [cursor=pointer]:
+          - /url: /
+        - link "Manifesto" [ref=e349] [cursor=pointer]:
+          - /url: /manifesto
+        - link "Research" [ref=e350] [cursor=pointer]:
+          - /url: /research
+        - link "Careers" [ref=e351] [cursor=pointer]:
+          - /url: /careers
+      - generic [ref=e352]:
+        - generic [ref=e353]: The Boring
+        - link "Terms" [ref=e354] [cursor=pointer]:
+          - /url: /terms
+        - link "Play by the Rules" [ref=e355] [cursor=pointer]:
+          - /url: /rules
+        - link "Privacy" [ref=e356] [cursor=pointer]:
+          - /url: /privacy-policy
+        - link "Help" [ref=e357] [cursor=pointer]:
+          - /url: https://help.popcorn.space/
+      - generic [ref=e358]:
+        - generic [ref=e359]: The Cool
+        - link "X" [ref=e360] [cursor=pointer]:
+          - /url: https://x.com/popcorn
+        - link "Instagram" [ref=e361] [cursor=pointer]:
+          - /url: https://www.instagram.com/onpopcorn/
+    - img [ref=e363]
