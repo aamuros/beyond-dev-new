@@ -8,14 +8,37 @@ import Contact from "@/components/sections/contact";
 export default function Home() {
   return (
     <>
-      <main className="flex-1">
-        <Hero />
-        <LogoCloud />
-        <PainPoints />
-        <Process />
-        <Contact />
+      <main>
+        {/* Hero — full viewport, no navbar visible here */}
+        <section className="snap-section">
+          <Hero />
+        </section>
+
+        {/* Logo Cloud */}
+        <section className="snap-section">
+          <LogoCloud />
+        </section>
+
+        {/* Pain Points */}
+        <section className="snap-section">
+          <PainPoints />
+        </section>
+
+        {/* Process */}
+        <section className="snap-section">
+          <Process />
+        </section>
+
+        {/* Contact */}
+        <section className="snap-section">
+          <Contact />
+        </section>
       </main>
-      <Footer />
+
+      {/* Footer flows after snap sections */}
+      <section className="snap-section snap-section--footer">
+        <Footer />
+      </section>
     </>
   );
 }

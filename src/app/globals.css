@@ -407,3 +407,39 @@ body {
   font-weight: 600;
 }
 
+/* ------------------------------------------------------------------ */
+/*  Snap Scroll System                                                 */
+/* ------------------------------------------------------------------ */
+
+html {
+  scroll-snap-type: y mandatory;
+  overflow-y: auto;
+}
+
+.snap-section {
+  scroll-snap-align: start;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Let inner sections fill the snap wrapper */
+.snap-section > section {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Hero keeps its own top padding */
+.snap-section:first-child > section {
+  justify-content: flex-start;
+}
+
+/* Footer section — auto height, just snaps to start */
+.snap-section--footer {
+  min-height: auto;
+  justify-content: flex-start;
+}

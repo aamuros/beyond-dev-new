@@ -484,7 +484,7 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
 /* ------------------------------------------------------------------ */
 
 export default function FloatingNavbar() {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
@@ -493,10 +493,14 @@ export default function FloatingNavbar() {
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() ?? 0;
-    if (latest < 50) {
-      setVisible(true);
+    const heroThreshold = typeof window !== "undefined" ? window.innerHeight * 0.85 : 600;
+
+    if (latest < heroThreshold) {
+      // Still in hero section — stay hidden
+      setVisible(false);
     } else {
-      setVisible(latest < previous);
+      // Past hero: show on scroll up, hide on scroll down
+      setVisible(latest < previous || latest <= heroThreshold + 10);
     }
   });
 
