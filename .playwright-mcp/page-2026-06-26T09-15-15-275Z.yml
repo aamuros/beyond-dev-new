@@ -1,0 +1,228 @@
+- generic [active] [ref=e1]:
+  - main [ref=e2]:
+    - generic [ref=e6]:
+      - generic [ref=e9]:
+        - 'link "14-Day Starter: Get your first system built Learn more" [ref=e11] [cursor=pointer]':
+          - /url: "#process"
+          - 'heading "14-Day Starter: Get your first system built Learn more" [level=3] [ref=e13]'
+        - heading "Simple systems for your business." [level=1] [ref=e14]:
+          - text: Simple systems for
+          - text: your business.
+        - link "Book Your Free Checkup" [ref=e16] [cursor=pointer]:
+          - /url: "#contact"
+          - generic [ref=e17]: Book Your Free Checkup
+        - paragraph [ref=e19]:
+          - strong [ref=e20]: Over 200 businesses trust us
+          - text: to build their systems and grow online.
+        - generic [ref=e21]:
+          - generic [ref=e22]:
+            - button "Previous slide" [disabled]:
+              - img
+            - img "Dashboard overview" [ref=e25]
+            - button "Next slide" [ref=e26] [cursor=pointer]:
+              - img [ref=e27]
+          - generic [ref=e29]:
+            - button "Go to slide 1" [ref=e30] [cursor=pointer]
+            - button "Go to slide 2" [ref=e31] [cursor=pointer]
+            - button "Go to slide 3" [ref=e32] [cursor=pointer]
+      - generic [ref=e37]:
+        - generic [ref=e38]:
+          - img "Granola" [ref=e40]
+          - img "Wispr Flow" [ref=e42]
+          - img "Listen Labs" [ref=e44]
+          - img "Obvious" [ref=e46]
+          - img "Modal" [ref=e48]
+          - img "USV" [ref=e50]
+          - img "Replicate" [ref=e52]
+          - img "Railway" [ref=e54]
+          - img "Taskrabbit" [ref=e56]
+          - img "Public" [ref=e58]
+          - img "Wordsmith" [ref=e60]
+          - img "Passionfroot" [ref=e62]
+        - generic [ref=e63]:
+          - img "Granola" [ref=e65]
+          - img "Wispr Flow" [ref=e67]
+          - img "Listen Labs" [ref=e69]
+          - img "Obvious" [ref=e71]
+          - img "Modal" [ref=e73]
+          - img "USV" [ref=e75]
+          - img "Replicate" [ref=e77]
+          - img "Railway" [ref=e79]
+          - img "Taskrabbit" [ref=e81]
+          - img "Public" [ref=e83]
+          - img "Wordsmith" [ref=e85]
+          - img "Passionfroot" [ref=e87]
+    - generic [ref=e89]:
+      - generic [ref=e91]:
+        - generic [ref=e92]: The Problem
+        - heading "Sound Familiar?" [level=2] [ref=e93]
+        - heading "Many local businesses still run on paper, chat, and hope. If this is your daily reality, you're not alone." [level=3] [ref=e95]:
+          - strong [ref=e96]: Many local businesses still run on paper, chat, and hope.
+          - text: If this is your daily reality, you're not alone.
+      - generic [ref=e98]:
+        - generic [ref=e99]:
+          - img [ref=e101]
+          - heading "Paper & Notebooks" [level=3] [ref=e104]
+          - paragraph [ref=e105]: Orders, bookings, and records scattered across notebooks that get lost or damaged.
+        - generic [ref=e106]:
+          - img [ref=e108]
+          - heading "Messy Spreadsheets" [level=3] [ref=e111]
+          - paragraph [ref=e112]: Excel files with broken formulas, duplicate entries, and no one knows which version is correct.
+        - generic [ref=e113]:
+          - img [ref=e115]
+          - heading "Messenger & Facebook" [level=3] [ref=e117]
+          - paragraph [ref=e118]: Customer orders buried in chat threads, impossible to track, search, or hand off to staff.
+        - generic [ref=e119]:
+          - img [ref=e121]
+          - heading "Screenshots as Records" [level=3] [ref=e124]
+          - paragraph [ref=e125]: Photos of receipts, payment confirmations, and inventory counts with no system to organize them.
+        - generic [ref=e126]:
+          - img [ref=e128]
+          - heading "Hours Wasted Daily" [level=3] [ref=e131]
+          - paragraph [ref=e132]: Time that should go toward growing your business instead gets burned on admin work.
+        - generic [ref=e133]:
+          - img [ref=e135]
+          - heading "Costly Mistakes" [level=3] [ref=e137]
+          - paragraph [ref=e138]: Missed orders, double bookings, wrong inventory counts, and lost payments costing you real money.
+    - generic [ref=e142]:
+      - generic [ref=e143]:
+        - generic [ref=e144]:
+          - generic [ref=e145]: How it works
+          - heading "From Messy to Managed in 4 Steps" [level=2] [ref=e146]
+        - paragraph [ref=e147]: Our proven process takes you from paper chaos to a working system — quickly and without the headaches.
+      - list [ref=e149]:
+        - listitem [ref=e150]:
+          - generic [ref=e153]:
+            - generic [ref=e154]:
+              - img [ref=e156]
+              - generic [ref=e158]: Identify pain points
+            - generic [ref=e159]:
+              - img [ref=e161]
+              - generic [ref=e163]: Map current workflow
+            - generic [ref=e166]: Review documents
+          - generic [ref=e167]:
+            - img [ref=e168]
+            - heading "Free Business Process Checkup" [level=3] [ref=e172]
+          - paragraph [ref=e173]: We talk to you, understand how your business currently works, and identify the one messy process causing the most pain.
+        - listitem [ref=e174]:
+          - img [ref=e187]
+          - generic [ref=e194]:
+            - img [ref=e195]
+            - heading "System Blueprint" [level=3] [ref=e198]
+          - paragraph [ref=e199]: We create a clear workflow plan showing exactly what the system will do, how it fits your process, and what you'll get.
+        - listitem [ref=e200]:
+          - generic [ref=e203]:
+            - img [ref=e205]
+            - generic [ref=e214]:
+              - generic [ref=e215]:
+                - img [ref=e216]
+                - text: Built
+              - generic [ref=e218]:
+                - img [ref=e219]
+                - text: Tested
+              - generic [ref=e221]: Live
+          - generic [ref=e222]:
+            - img [ref=e223]
+            - heading "14-Day Starter System" [level=3] [ref=e228]
+          - paragraph [ref=e229]: We build and deliver your working system in 14 days after requirements are approved. No endless waiting.
+        - listitem [ref=e230]:
+          - generic [ref=e233]:
+            - generic [ref=e234]:
+              - img [ref=e236]
+              - img [ref=e239]
+            - generic [ref=e241]:
+              - generic [ref=e242]:
+                - img [ref=e243]
+                - text: Hosting
+              - generic [ref=e254]:
+                - img [ref=e255]
+                - text: Backups
+          - generic [ref=e257]:
+            - img [ref=e258]
+            - heading "Monthly Support" [level=3] [ref=e260]
+          - paragraph [ref=e261]: Optional ongoing support including maintenance, hosting, backups, bug fixes, and improvements as your business grows.
+    - generic [ref=e265]:
+      - generic [ref=e266]:
+        - generic [ref=e267]: FAQ
+        - heading "Questions? Answers." [level=2] [ref=e268]:
+          - text: Questions?
+          - text: Answers.
+      - generic [ref=e270]:
+        - heading "What kind of businesses do you work with?" [level=3] [ref=e272]:
+          - button "What kind of businesses do you work with?" [ref=e273] [cursor=pointer]:
+            - text: What kind of businesses do you work with?
+            - img [ref=e274]
+        - heading "How long does it take to build a system?" [level=3] [ref=e277]:
+          - button "How long does it take to build a system?" [ref=e278] [cursor=pointer]:
+            - text: How long does it take to build a system?
+            - img [ref=e279]
+        - heading "Do I need technical knowledge to use the system?" [level=3] [ref=e282]:
+          - button "Do I need technical knowledge to use the system?" [ref=e283] [cursor=pointer]:
+            - text: Do I need technical knowledge to use the system?
+            - img [ref=e284]
+        - heading "What happens after the system is delivered?" [level=3] [ref=e287]:
+          - button "What happens after the system is delivered?" [ref=e288] [cursor=pointer]:
+            - text: What happens after the system is delivered?
+            - img [ref=e289]
+        - heading "How much does it cost?" [level=3] [ref=e292]:
+          - button "How much does it cost?" [ref=e293] [cursor=pointer]:
+            - text: How much does it cost?
+            - img [ref=e294]
+        - heading "Can you integrate with tools we already use?" [level=3] [ref=e297]:
+          - button "Can you integrate with tools we already use?" [ref=e298] [cursor=pointer]:
+            - text: Can you integrate with tools we already use?
+            - img [ref=e299]
+        - heading "What if I'm not happy with the result?" [level=3] [ref=e302]:
+          - button "What if I'm not happy with the result?" [ref=e303] [cursor=pointer]:
+            - text: What if I'm not happy with the result?
+            - img [ref=e304]
+        - heading "Is my business data secure?" [level=3] [ref=e307]:
+          - button "Is my business data secure?" [ref=e308] [cursor=pointer]:
+            - text: Is my business data secure?
+            - img [ref=e309]
+    - generic [ref=e313]:
+      - generic [ref=e314]:
+        - generic [ref=e315]: Get Started
+        - heading "Let's Talk About Your Business" [level=2] [ref=e316]
+        - paragraph [ref=e318]: No pressure, no jargon — just a real conversation about what's slowing you down and how we can help.
+      - generic [ref=e320]:
+        - generic [ref=e321]:
+          - heading "Let's turn your manual processes into automated systems." [level=3] [ref=e322]
+          - paragraph [ref=e323]: You don't need bloated software or a 6-month project. You need that one process — the one that eats your time, loses your paperwork, or makes your team groan — to just work. We build focused solutions for your biggest bottleneck, delivered in 14 days.
+        - generic [ref=e324]:
+          - heading "Book a free checkup — no strings attached." [level=3] [ref=e325]
+          - paragraph [ref=e326]: Pick a time that works for you. We'll listen, ask a few questions, and tell you honestly if we can help. If we're not the right fit, we'll say so.
+        - generic [ref=e327]:
+          - generic [ref=e328]:
+            - img [ref=e330]
+            - generic [ref=e332]: Free technical assessment
+          - generic [ref=e333]:
+            - img [ref=e335]
+            - generic [ref=e337]: Clear, non-technical breakdown
+          - generic [ref=e338]:
+            - img [ref=e340]
+            - generic [ref=e342]: Scheduled in Philippine Standard Time (PST)
+  - contentinfo [ref=e344]:
+    - generic [ref=e345]:
+      - heading "Great systems come from teams that are close enough to care — and technical enough to automate things." [level=2] [ref=e346]
+      - generic [ref=e347]:
+        - generic [ref=e348]:
+          - link "Book a 15-Min Scoping Call" [ref=e349] [cursor=pointer]:
+            - /url: "#contact"
+          - paragraph [ref=e350]: No technical jargon, just practical solutions.
+        - generic [ref=e351]:
+          - link "Systems" [ref=e352] [cursor=pointer]:
+            - /url: "#systems"
+          - link "Process" [ref=e353] [cursor=pointer]:
+            - /url: "#process"
+          - link "Contact" [ref=e354] [cursor=pointer]:
+            - /url: "#contact"
+    - generic [ref=e356]:
+      - paragraph [ref=e357]: © 2026 beyond.dev — A beyond.ink studio company.
+      - generic [ref=e358]:
+        - link "LinkedIn" [ref=e359] [cursor=pointer]:
+          - /url: "#"
+        - link "GitHub" [ref=e360] [cursor=pointer]:
+          - /url: "#"
+  - button "Open Next.js Dev Tools" [ref=e366] [cursor=pointer]:
+    - img [ref=e367]

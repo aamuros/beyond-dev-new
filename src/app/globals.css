@@ -444,7 +444,6 @@ body {
 
 @layer base {
   html {
-    scroll-snap-type: y mandatory;
     overflow-y: auto;
   }
 
