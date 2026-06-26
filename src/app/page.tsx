@@ -1,5 +1,6 @@
 import Footer from "@/components/layout/footer";
 import Hero from "@/components/sections/hero";
+import LogoCloud from "@/components/sections/logo-cloud";
 import PainPoints from "@/components/sections/pain-points";
 import Process from "@/components/sections/process";
 import Faq from "@/components/sections/faq";
@@ -14,6 +15,7 @@ export default function Home() {
         <PainPoints />
         <Process />
         <Contact />
+      </main>
       <main>
         {/* Hero (includes Logo Cloud) */}
         <section className="snap-section">
