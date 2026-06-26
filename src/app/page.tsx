@@ -8,38 +8,38 @@ import Contact from "@/components/sections/contact";
 
 export default function Home() {
   return (
-    <>
-      <main className="relative z-10 bg-white shadow-xl rounded-b-[80px] overflow-hidden">
-        <section className="snap-section">
+    <div className="relative bg-black">
+      <div className="relative h-[135vh] bg-black">
+        <div className="sticky top-0 h-screen overflow-hidden bg-black">
           <Hero />
-        </section>
+        </div>
+      </div>
 
+      <main className="relative z-20 -mt-[35vh] overflow-hidden rounded-t-[48px] bg-white shadow-xl">
         <section className="snap-section">
           <SimpleSystemsSection />
         </section>
 
-        {/* Pain Points */}
         <section className="snap-section snap-section--auto">
           <PainPoints />
         </section>
 
-        {/* Process */}
         <section className="snap-section">
           <Process />
         </section>
 
-        {/* FAQ */}
         <section className="snap-section snap-section--auto">
           <Faq />
         </section>
 
-        {/* Contact */}
         <section className="snap-section">
           <Contact />
         </section>
       </main>
 
-      <Footer />
-    </>
+      <div className="relative bg-[#09637E]">
+        <Footer />
+      </div>
+    </div>
   );
 }

@@ -116,6 +116,7 @@ export default function InteractiveTextGrid() {
 
           let charToDraw = "-";
           let charOpacityIndex = 0;
+          let isTrailHit = false;
           const noise =
             Math.sin(i * 0.08 + time * 0.0002) +
             Math.cos(j * 0.1 + time * 0.00015) +
@@ -138,6 +139,7 @@ export default function InteractiveTextGrid() {
             if (distY < spacingY * 1.5 && distX < 60) {
               charToDraw = "%";
               charOpacityIndex = 5;
+              isTrailHit = true;
               break;
             }
 
@@ -154,8 +156,9 @@ export default function InteractiveTextGrid() {
           }
 
           const opacity = 0.15 + charOpacityIndex * 0.14;
+          const rgb = isTrailHit ? "125, 125, 125" : "170, 170, 170";
 
-          ctx.fillStyle = `rgba(170, 170, 170, ${opacity})`;
+          ctx.fillStyle = `rgba(${rgb}, ${opacity})`;
           ctx.fillText(charToDraw, finalX, finalY);
         }
       }
