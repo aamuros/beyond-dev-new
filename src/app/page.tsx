@@ -8,37 +8,55 @@ import Contact from "@/components/sections/contact";
 
 export default function Home() {
   return (
-    <div className="relative bg-black">
-      <div className="relative h-[135vh] bg-black">
-        <div className="sticky top-0 h-screen overflow-hidden bg-black">
-          <Hero />
-        </div>
+    <div className="relative min-h-screen bg-black">
+      {/* 
+        True footer back layer.
+        It is fixed behind the foreground page.
+        It does not participate in the hero transition.
+      */}
+      <div className="fixed inset-x-0 bottom-0 z-0 h-[70vh] overflow-hidden bg-[#09637E]">
+        <Footer />
       </div>
 
-      <main className="relative z-20 -mt-[35vh] overflow-hidden rounded-t-[48px] bg-white shadow-xl">
-        <section className="snap-section">
-          <SimpleSystemsSection />
+      {/* 
+        Foreground page layer.
+        This is above the footer.
+      */}
+      <div className="relative z-10">
+        {/* Hero backplate zone */}
+        <section className="relative h-[135vh] bg-black">
+          <div className="sticky top-0 h-screen overflow-hidden bg-black">
+            <Hero />
+          </div>
         </section>
 
-        <section className="snap-section snap-section--auto">
-          <PainPoints />
-        </section>
+        {/* 
+          One continuous white page panel.
+          Top rounded corners reveal black hero.
+          Bottom rounded corners reveal fixed teal footer.
+          Bottom margin creates reveal space for footer.
+        */}
+        <main className="relative -mt-[35vh] mb-[70vh] overflow-hidden rounded-t-[48px] rounded-b-[80px] bg-white shadow-xl">
+          <section className="snap-section">
+            <SimpleSystemsSection />
+          </section>
 
-        <section className="snap-section">
-          <Process />
-        </section>
+          <section className="snap-section snap-section--auto">
+            <PainPoints />
+          </section>
 
-        <section className="snap-section snap-section--auto">
-          <Faq />
-        </section>
+          <section className="snap-section">
+            <Process />
+          </section>
 
-        <section className="snap-section">
-          <Contact />
-        </section>
-      </main>
+          <section className="snap-section snap-section--auto">
+            <Faq />
+          </section>
 
-      <div className="relative bg-[#09637E]">
-        <Footer />
+          <section className="snap-section">
+            <Contact />
+          </section>
+        </main>
       </div>
     </div>
   );

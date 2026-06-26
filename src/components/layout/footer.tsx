@@ -83,7 +83,7 @@ const linkClasses =
 
 export default function Footer() {
   return (
-    <footer className="sticky bottom-0 w-full overflow-hidden bg-[#09637E] text-slate-50 pt-16 pb-10 px-6">
+    <footer className="relative min-h-[70vh] w-full overflow-hidden bg-[#09637E] text-slate-50 pt-16 pb-10 px-6">
       <div className="max-w-6xl mx-auto w-full">
         
         {/* Massive Statement with Upward Reveal Animation */}
