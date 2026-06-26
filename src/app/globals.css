@@ -246,7 +246,7 @@ html {
 }
 
 body {
-  background: #ffffff !important;
+  background: white !important;
   color: #19171c;
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
   font-size: 12px;

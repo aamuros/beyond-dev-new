@@ -8,7 +8,7 @@ import Contact from "@/components/sections/contact";
 
 export default function Home() {
   return (
-    <>
+    <div className="bg-[#09637E]">
       <main className="relative z-10 bg-white shadow-xl rounded-b-[80px] overflow-hidden">
         {/* Hero (includes Logo Cloud) */}
         <section className="snap-section">
@@ -42,6 +42,6 @@ export default function Home() {
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }
