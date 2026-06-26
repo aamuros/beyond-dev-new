@@ -15,6 +15,10 @@ export default function SmoothScrollProvider({
         duration: 1.2,
         smoothWheel: true,
         syncTouch: false,
+        anchors: {
+          offset: -80,
+          duration: 1.2,
+        },
       }}
     >
       {children}

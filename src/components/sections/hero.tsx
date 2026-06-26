@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SmoothLink from "@/components/ui/smooth-link";
 import LogoCloud from "@/components/sections/logo-cloud";
 import DashboardCarousel from "@/components/sections/dashboard-carousel";
 
@@ -11,7 +12,7 @@ export default function Hero() {
             <div>
                 <div className="mx-auto w-full max-w-[1200px] px-6 min-[1441px]:max-w-[1280px]">
                 <div className="mb-5 flex justify-center">
-                  <Link
+                  <SmoothLink
                     href="#process"
                     className="inline-flex items-center rounded-full bg-black/[0.06] px-3 py-1.5 text-[13px] leading-[1.4] text-[#6e6e73] no-underline transition-colors hover:bg-black/[0.1]"
                   >
@@ -22,9 +23,9 @@ export default function Hero() {
                         <span className="underline underline-offset-2 decoration-black/30">
                           Learn more
                         </span>
-                      </h3>
+                       </h3>
                     </span>
-                  </Link>
+                  </SmoothLink>
                 </div>
 
                 <h1 className="text-[36px] leading-[90%] font-extrabold tracking-[-0.02em] text-[#19171c] font-['TWK_Lausanne',sans-serif] lg:text-[80px] lg:tracking-[-0.03em] min-[1441px]:text-[115px] min-[1441px]:tracking-[-3.6px]">
@@ -34,14 +35,14 @@ export default function Hero() {
                 </h1>
 
                 <div className="mt-8 flex justify-center">
-                  <Link
+                  <SmoothLink
                     href="#contact"
                     className="inline-flex items-center justify-center rounded-[10px] bg-[#202124] px-5 py-2.5 text-[14px] font-semibold leading-[1.4] text-white no-underline transition-colors hover:bg-[#2a2b2e]"
                   >
                     <span className="inline-flex items-center gap-inherit">
                       Book Your Free Checkup
                     </span>
-                  </Link>
+                  </SmoothLink>
                 </div>
 
                 <div className="mt-10 flex justify-center overflow-hidden">
