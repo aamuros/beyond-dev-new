@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Mail, MapPin, Phone } from "lucide-react";
 import SmoothLink from "@/components/ui/smooth-link";
 const footerLinkGroups = [
   {
