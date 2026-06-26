@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function Footer() {
   return (
-    <footer className="fixed bottom-0 left-0 right-0 z-0 w-full bg-[#09637E] text-slate-50 pt-24 pb-12 px-6 h-screen flex flex-col justify-between overflow-hidden">
+    <footer className="sticky bottom-0 z-10 w-full bg-[#09637E] text-slate-50 pt-24 pb-12 px-6 flex flex-col justify-between">
       <div className="max-w-6xl mx-auto w-full flex-1 flex flex-col justify-center">
         
         {/* Massive Statement with Upward Reveal Animation */}

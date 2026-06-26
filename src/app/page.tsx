@@ -8,7 +8,7 @@ import Contact from "@/components/sections/contact";
 export default function Home() {
   return (
     <>
-      <main className="relative z-10 bg-white shadow-xl">
+      <main className="relative z-10 bg-white shadow-xl rounded-b-[80px] overflow-hidden">
         <Hero />
         <LogoCloud />
         <PainPoints />
@@ -16,9 +16,9 @@ export default function Home() {
         <Contact />
       </main>
 
-      {/* Spacer allows scrolling past main content to reveal the fixed footer */}
-      <div className="h-screen" />
-      <Footer />
+      <section className="relative z-0 bg-[#09637E]">
+        <Footer />
+      </section>
     </>
   );
 }
