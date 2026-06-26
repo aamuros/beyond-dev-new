@@ -2,6 +2,7 @@ import Footer from "@/components/layout/footer";
 import Hero from "@/components/sections/hero";
 import PainPoints from "@/components/sections/pain-points";
 import Process from "@/components/sections/process";
+import Projects from "@/components/sections/projects";
 import Faq from "@/components/sections/faq";
 import Contact from "@/components/sections/contact";
 
@@ -22,6 +23,11 @@ export default function Home() {
         {/* Process */}
         <section className="snap-section">
           <Process />
+        </section>
+
+        {/* Projects */}
+        <section className="snap-section snap-section--auto">
+          <Projects />
         </section>
 
         {/* FAQ */}

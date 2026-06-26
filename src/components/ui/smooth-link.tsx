@@ -25,10 +25,13 @@ export default function SmoothLink({ href, onClick, ...props }: SmoothLinkProps)
     if (e.defaultPrevented) return;
 
     if (hasHash && isSamePage && hash) {
-      e.preventDefault();
       const target = document.querySelector(hash) as HTMLElement | null;
       if (target) {
+        e.preventDefault();
         lenis?.scrollTo(target, { offset: -80 });
+      } else if (path === "" && pathname !== "/") {
+        // Target doesn't exist on this page — navigate to homepage with hash
+        window.location.href = `/${hash}`;
       }
     } else if (isSamePage && !hasHash) {
       e.preventDefault();
