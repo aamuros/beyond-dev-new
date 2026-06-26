@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SmoothLink from "@/components/ui/smooth-link";
 import { ArrowRight } from "lucide-react";
 
 function DashedLine() {
@@ -212,20 +213,20 @@ export default function Cta() {
               </h2>
 
               <div className="flex w-full items-center justify-center gap-x-2.5 gap-y-2 max-md:flex-col max-md:items-center mt-6 lg:justify-start">
-                <Link
+                <SmoothLink
                   href="#contact"
                   className="relative inline-flex cursor-pointer items-center justify-center text-nowrap border transition-colors duration-300 ease-in-out hover:duration-50 active:duration-50 disabled:pointer-events-none disabled:cursor-default h-9 gap-x-1.5 rounded-[10px] px-3 text-sm has-[>svg:last-child,>img:last-child]:pr-2 has-[>svg:first-child,>img:first-child]:pl-2 max-lg:h-11.5 max-lg:gap-x-2 max-lg:rounded-xl max-lg:px-3.5 max-lg:text-base max-lg:has-[>svg:last-child,>img:last-child]:pr-3 max-lg:has-[>svg:first-child,>img:first-child]:pl-3 button-primary max-md:hidden"
                 >
                   Book Free Checkup
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </SmoothLink>
 
-                <Link
+                <SmoothLink
                   href="#process"
                   className="relative inline-flex cursor-pointer items-center justify-center text-nowrap border transition-colors duration-300 ease-in-out hover:duration-50 active:duration-50 disabled:pointer-events-none disabled:cursor-default h-9 gap-x-1.5 rounded-[10px] px-3 text-sm has-[>svg:last-child,>img:last-child]:pr-2 has-[>svg:first-child,>img:first-child]:pl-2 max-lg:h-11.5 max-lg:gap-x-2 max-lg:rounded-xl max-lg:px-3.5 max-lg:text-base max-lg:has-[>svg:last-child,>img:last-child]:pr-3 max-lg:has-[>svg:first-child,>img:first-child]:pl-3 button-outline"
                 >
                   See How It Works
-                </Link>
+                </SmoothLink>
               </div>
             </div>
 

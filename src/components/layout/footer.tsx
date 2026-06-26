@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import SmoothLink from "@/components/ui/smooth-link";
 const footerLinkGroups = [
   {
     heading: "Systems",
@@ -104,16 +105,16 @@ export default function Footer() {
           className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-10 mb-2 items-start"
         >
           <div>
-            <a href="#contact" className="inline-block bg-white text-[#09637E] font-semibold text-lg py-4 px-8 rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm">
+            <SmoothLink href="#contact" className="inline-block bg-white text-[#09637E] font-semibold text-lg py-4 px-8 rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm">
               Book a 15-Min Scoping Call
-            </a>
+            </SmoothLink>
             <p className="mt-3 text-sm text-slate-300">No technical jargon, just practical solutions.</p>
           </div>
           
           <div className="flex flex-col space-y-3 text-xl font-medium md:pl-12">
-            <a href="#systems" className="hover:text-white text-slate-300 transition-colors w-max">Systems</a>
-            <a href="#process" className="hover:text-white text-slate-300 transition-colors w-max">Process</a>
-            <a href="#contact" className="hover:text-white text-slate-300 transition-colors w-max">Contact</a>
+            <SmoothLink href="#systems" className="hover:text-white text-slate-300 transition-colors w-max">Systems</SmoothLink>
+            <SmoothLink href="#process" className="hover:text-white text-slate-300 transition-colors w-max">Process</SmoothLink>
+            <SmoothLink href="#contact" className="hover:text-white text-slate-300 transition-colors w-max">Contact</SmoothLink>
           </div>
         </motion.div>
       </div>

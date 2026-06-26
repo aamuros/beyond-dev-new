@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
+import SmoothLink from "@/components/ui/smooth-link";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Logo from "@/components/layout/logo";
@@ -292,7 +293,7 @@ function MegaMenuPanel({ menu, onClose }: { menu: MegaMenuData; onClose: () => v
               transition={{ duration: 0.3, delay: 0.1 }}
               className="w-[220px] p-3"
             >
-              <Link
+              <SmoothLink
                 href={menu.featured.href}
                 onClick={onClose}
                 className={cn(
@@ -320,7 +321,7 @@ function MegaMenuPanel({ menu, onClose }: { menu: MegaMenuData; onClose: () => v
                   Get started
                   <IconArrowRight className="h-3.5 w-3.5" />
                 </div>
-              </Link>
+              </SmoothLink>
             </motion.div>
           )}
         </div>
@@ -445,20 +446,20 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
               ))}
 
               {directLinks.map((link) => (
-                <Link
+                <SmoothLink
                   key={link.href}
                   href={link.href}
                   onClick={onClose}
                   className="block py-3.5 px-2 text-[15px] font-semibold text-[var(--color-black-200)] border-b border-[var(--color-white-400)] hover:text-[var(--color-black-100)] transition-colors"
                 >
                   {link.label}
-                </Link>
+                </SmoothLink>
               ))}
             </nav>
 
             {/* CTA */}
             <div className="p-4 border-t border-[var(--color-white-400)]">
-              <Link
+              <SmoothLink
                 href="/#contact"
                 onClick={onClose}
                 className={cn(
@@ -470,7 +471,7 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
               >
                 Get Started
                 <IconArrowRight className="h-4 w-4" />
-              </Link>
+              </SmoothLink>
             </div>
           </motion.div>
         </>
@@ -579,7 +580,7 @@ export default function FloatingNavbar() {
               {/* Desktop nav items — left aligned */}
               <div className="hidden lg:flex items-center gap-0.5">
                 {/* Home link */}
-                <Link
+                <SmoothLink
                   href="/"
                   className={cn(
                     "px-6 py-2.5 text-[16px] font-semibold leading-[24px] -tracking-[0.352px] rounded-full",
@@ -589,7 +590,7 @@ export default function FloatingNavbar() {
                   )}
                 >
                   Home
-                </Link>
+                </SmoothLink>
 
                 {/* Mega-menu triggers */}
                 {megaMenus.map((menu) => (
@@ -633,25 +634,25 @@ export default function FloatingNavbar() {
                 ))}
 
                 {/* Direct links */}
-                {directLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={cn(
-                      "px-6 py-2.5 text-[16px] font-semibold leading-[24px] -tracking-[0.352px] rounded-full",
-                      "text-[#19171c]",
-                      "transition-all duration-200",
-                      "hover:text-[var(--color-black-100)] hover:bg-[var(--color-white-300)]"
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+              {directLinks.map((link) => (
+                <SmoothLink
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "px-6 py-2.5 text-[16px] font-semibold leading-[24px] -tracking-[0.352px] rounded-full",
+                    "text-[#19171c]",
+                    "transition-all duration-200",
+                    "hover:text-[var(--color-black-100)] hover:bg-[var(--color-white-300)]"
+                  )}
+                >
+                  {link.label}
+                </SmoothLink>
+              ))}
               </div>
 
               {/* CTA buttons (desktop) — pushed right */}
               <div className="hidden lg:flex items-center gap-2 ml-auto">
-                <Link
+                <SmoothLink
                   href="/#contact"
                   className={cn(
                     "group/cta inline-flex items-center gap-1.5",
@@ -665,7 +666,7 @@ export default function FloatingNavbar() {
                 >
                   <span>Get Started</span>
                   <IconArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover/cta:translate-x-0.5" />
-                </Link>
+                </SmoothLink>
               </div>
 
               {/* Mobile menu button */}
