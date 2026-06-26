@@ -8,7 +8,7 @@ import Contact from "@/components/sections/contact";
 
 export default function Home() {
   return (
-    <div className="relative min-h-screen bg-black">
+    <div className="relative min-h-screen bg-[#09637E]">
       {/* 
         True footer back layer.
         It is fixed behind the foreground page.
@@ -36,27 +36,34 @@ export default function Home() {
           Bottom rounded corners reveal fixed teal footer.
           Bottom margin creates reveal space for footer.
         */}
-        <main className="relative -mt-[35vh] mb-[70vh] overflow-hidden rounded-t-[48px] rounded-b-[80px] bg-white shadow-xl">
-          <section className="snap-section">
-            <SimpleSystemsSection />
-          </section>
+        <div className="relative">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[60vh] bg-black"
+          />
 
-          <section className="snap-section snap-section--auto">
-            <PainPoints />
-          </section>
+          <main className="relative z-10 -mt-[35vh] mb-[70vh] overflow-hidden rounded-t-[48px] rounded-b-[80px] bg-white shadow-xl">
+            <section className="snap-section">
+              <SimpleSystemsSection />
+            </section>
 
-          <section className="snap-section">
-            <Process />
-          </section>
+            <section className="snap-section snap-section--auto">
+              <PainPoints />
+            </section>
 
-          <section className="snap-section snap-section--auto">
-            <Faq />
-          </section>
+            <section className="snap-section">
+              <Process />
+            </section>
 
-          <section className="snap-section">
-            <Contact />
-          </section>
-        </main>
+            <section className="snap-section snap-section--auto">
+              <Faq />
+            </section>
+
+            <section className="snap-section">
+              <Contact />
+            </section>
+          </main>
+        </div>
       </div>
     </div>
   );
