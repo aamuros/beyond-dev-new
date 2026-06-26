@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { useState, useRef, useEffect } from "react";
 import { TrendingUp, Clock, CalendarCheck, Quote } from "lucide-react";
+import SectionHeading from "@/components/ui/section-heading";
 
 const testimonials = [
   {
@@ -183,18 +184,12 @@ export default function Testimonials() {
   return (
     <section id="testimonials" className="relative my-[280px] p-0 overflow-hidden">
       <div className="w-full max-w-7xl mx-auto px-6">
-        <div className="flex flex-col items-center text-center gap-5">
-          <span className="inline-flex items-center justify-center border border-transparent bg-surface text-muted font-medium w-fit whitespace-nowrap h-6 min-w-6 text-sm px-2 gap-1 rounded-sm">
-            Results
-          </span>
-          <h2 className="text-4xl tracking-tighter leading-tight font-medium text-foreground text-balance max-w-md">
-            What Our Clients Say
-          </h2>
-          <p className="w-full max-w-sm font-medium text-muted">
-            Real businesses, real results. See how simple systems transformed
-            their daily operations.
-          </p>
-        </div>
+        <SectionHeading
+          badge="Results"
+          badgeVariant="pill"
+          title="What Our Clients Say"
+          description="Real businesses, real results. See how simple systems transformed their daily operations."
+        />
       </div>
 
       <div className="mt-16 relative">

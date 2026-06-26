@@ -18,7 +18,6 @@ const footerLinkGroups = [
     links: [
       { label: "About Us", href: "#about" },
       { label: "Our Process", href: "#process" },
-      { label: "Testimonials", href: "#testimonials" },
       { label: "Contact", href: "#contact" },
     ],
   },

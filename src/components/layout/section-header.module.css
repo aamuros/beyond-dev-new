@@ -1,0 +1,32 @@
+.header {
+  align-items: flex-start;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-bottom: 60px;
+  position: relative;
+}
+
+@media screen and (min-width: 1025px) {
+  .header {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-gap: 8px;
+    gap: 27px;
+    padding: 0;
+  }
+}
+
+@media screen and (min-width: 1441px) {
+  .header {
+    display: flex;
+    flex-direction: column;
+    grid-column: span 8 / span 8;
+    grid-column-start: 1;
+    left: 0;
+    margin-bottom: 0;
+    position: sticky;
+    top: 20vh;
+  }
+}

@@ -9,6 +9,7 @@ import {
   Shield,
 } from "lucide-react";
 import Container from "@/components/ui/container";
+import SectionHeading from "@/components/ui/section-heading";
 import { cn } from "@/lib/utils";
 
 const steps = [
@@ -177,18 +178,12 @@ export default function Process() {
   return (
     <section id="process" className="py-16 flex flex-col gap-12 relative overflow-hidden">
       <Container size="sm">
-        <div className="flex flex-col items-center text-center gap-5">
-          <span className="inline-flex items-center justify-center border border-transparent bg-surface text-muted font-medium w-fit whitespace-nowrap h-6 min-w-6 text-sm px-2 gap-1 rounded-sm">
-            How it works
-          </span>
-          <h2 className="text-4xl tracking-tighter leading-tight font-medium text-foreground text-balance max-w-md">
-            From Messy to Managed in 4 Steps
-          </h2>
-          <p className="w-full max-w-sm font-medium text-muted">
-            Our proven process takes you from paper chaos to a working system —
-            quickly and without the headaches.
-          </p>
-        </div>
+        <SectionHeading
+          badge="How it works"
+          badgeVariant="pill"
+          title="From Messy to Managed in 4 Steps"
+          description="Our proven process takes you from paper chaos to a working system — quickly and without the headaches."
+        />
       </Container>
 
       <Container size="md">

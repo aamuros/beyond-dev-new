@@ -2,39 +2,67 @@ import { cn } from "@/lib/utils";
 
 interface SectionHeadingProps {
   badge?: string;
+  badgeVariant?: "default" | "pill";
   title: string;
   description?: string;
+  descriptionHtml?: React.ReactNode;
   align?: "left" | "center";
   className?: string;
+  titleClassName?: string;
+  descriptionClassName?: string;
 }
 
 export default function SectionHeading({
   badge,
+  badgeVariant = "default",
   title,
   description,
+  descriptionHtml,
   align = "center",
   className,
+  titleClassName,
+  descriptionClassName,
 }: SectionHeadingProps) {
   return (
     <div
       className={cn(
-        "mb-12 md:mb-16",
-        align === "center" && "text-center",
+        "flex flex-col",
+        align === "center" && "items-center text-center",
+        badgeVariant === "pill" ? "gap-12" : "gap-5",
         className
       )}
     >
-      {badge && (
-        <span className="text-overline mb-4 block">
-          {badge}
-        </span>
-      )}
-      <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
+      {badge &&
+        (badgeVariant === "pill" ? (
+          <span className="inline-flex items-center justify-center bg-white-400 text-black-600 font-medium w-fit whitespace-nowrap text-sm px-3 py-1 rounded-full">
+            {badge}
+          </span>
+        ) : (
+          <span className="inline-flex items-center justify-center border border-transparent bg-surface text-muted font-medium w-fit whitespace-nowrap h-6 min-w-6 text-sm px-2 gap-1 rounded-sm">
+            {badge}
+          </span>
+        ))}
+      <h2
+        className={cn(
+          "section-heading-title text-4xl lg:text-[3.5rem] min-[1441px]:text-[5rem] text-foreground text-balance",
+          align === "center" && "max-w-2xl",
+          titleClassName
+        )}
+      >
         {title}
       </h2>
-      {description && (
-        <p className="mt-3 text-lg text-muted max-w-2xl mx-auto leading-relaxed">
-          {description}
-        </p>
+      {(description || descriptionHtml) && (
+        <div
+          className={cn(
+            "w-full max-w-lg text-muted",
+            descriptionHtml ? "section-heading-description" : "",
+            descriptionClassName
+          )}
+        >
+          {descriptionHtml || (
+            <p className="font-medium">{description}</p>
+          )}
+        </div>
       )}
     </div>
   );

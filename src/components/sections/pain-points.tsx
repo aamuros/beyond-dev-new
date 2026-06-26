@@ -8,6 +8,7 @@ import {
   LucideIcon,
 } from "lucide-react";
 import Container from "@/components/ui/container";
+import SectionHeading from "@/components/ui/section-heading";
 
 const painPoints: {
   icon: LucideIcon;
@@ -59,18 +60,21 @@ export default function PainPoints() {
       className="py-16 flex flex-col gap-12"
     >
       <Container size="sm">
-        <div className="flex flex-col items-center text-center gap-5">
-          <span className="inline-flex items-center justify-center border border-transparent bg-surface text-muted font-medium w-fit whitespace-nowrap h-6 min-w-6 text-sm px-2 gap-1 rounded-sm">
-            The Problem
-          </span>
-          <h2 className="text-4xl tracking-tighter text-foreground leading-tight font-medium text-balance max-w-lg">
-            Sound Familiar?
-          </h2>
-          <p className="w-full max-w-md font-medium text-lg leading-relaxed text-muted">
-            Many local businesses in the Philippines still run on paper, chat,
-            and hope. If this is your daily reality, you&apos;re not alone.
-          </p>
-        </div>
+        <SectionHeading
+          badge="The Problem"
+          badgeVariant="pill"
+          title="Sound Familiar?"
+          descriptionHtml={
+            <h3 className="text-lg leading-relaxed">
+              <strong className="text-foreground">
+                Many local businesses still run on paper, chat, and hope.
+              </strong>{" "}
+              If this is your daily reality, you&apos;re not alone.
+            </h3>
+          }
+          titleClassName="max-w-lg"
+          descriptionClassName="max-w-md"
+        />
       </Container>
 
       <Container>
