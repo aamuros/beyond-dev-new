@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { cn } from "@/lib/utils";
+import Logo from "@/components/layout/logo";
 
 /* ------------------------------------------------------------------ */
 /*  Icons (inline SVGs for zero-dependency megamenu icons)             */
@@ -209,10 +210,10 @@ const directLinks = [
 function MegaMenuPanel({ menu, onClose }: { menu: MegaMenuData; onClose: () => void }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8, scale: 0.98 }}
+      initial={{ opacity: 0, y: 12, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: 4, scale: 0.98 }}
-      transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+      exit={{ opacity: 0, y: 8, scale: 0.96 }}
+      transition={{ type: "spring", stiffness: 300, damping: 26, mass: 0.6 }}
       className="absolute top-full left-1/2 -translate-x-1/2 mt-3 z-50"
       style={{ minWidth: menu.featured ? "580px" : "380px" }}
     >
@@ -488,22 +489,36 @@ export default function FloatingNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastToggleRef = useRef(0);
+  const lastDirectionRef = useRef<"up" | "down" | null>(null);
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() ?? 0;
-    const scrollingDown = latest > previous;
+    const delta = latest - previous;
+    const scrollingDown = delta > 0;
     const heroHeight = typeof window !== "undefined" ? window.innerHeight : 800;
+    const now = Date.now();
+
+    let nextVisible: boolean | null = null;
 
     if (latest < 10) {
-      // At the very top — hidden
-      setVisible(false);
+      nextVisible = false;
     } else if (latest < heroHeight) {
-      // In hero section — show when scrolling down, hide when scrolling up
-      setVisible(scrollingDown);
+      if (scrollingDown && delta > 4) nextVisible = true;
+      if (!scrollingDown && delta < -4) nextVisible = false;
     } else {
-      // Past hero — show on scroll up, hide on scroll down
-      setVisible(!scrollingDown);
+      nextVisible = !scrollingDown;
+    }
+
+    if (nextVisible !== null && nextVisible !== visible) {
+      const direction = nextVisible ? "up" : "down";
+      const minInterval = lastDirectionRef.current !== direction ? 300 : 150;
+      if (now - lastToggleRef.current > minInterval) {
+        setVisible(nextVisible);
+        lastToggleRef.current = now;
+        lastDirectionRef.current = direction;
+      }
     }
   });
 
@@ -534,14 +549,19 @@ export default function FloatingNavbar() {
 
   return (
     <>
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="sync">
         {visible && (
           <motion.header
             ref={navRef}
-            initial={{ y: -100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -100, opacity: 0 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ y: -80, opacity: 0, scale: 0.98 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: -20, opacity: 0, scale: 0.98 }}
+            transition={{
+              type: "spring",
+              stiffness: 260,
+              damping: 28,
+              mass: 0.8,
+            }}
             className="fixed top-5 inset-x-0 mx-auto z-50 w-[calc(100%-2rem)] max-w-5xl"
           >
             <nav

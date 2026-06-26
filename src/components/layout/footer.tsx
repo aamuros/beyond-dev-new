@@ -1,206 +1,61 @@
-import Link from "next/link";
-import Logo from "@/components/layout/logo";
-import { Phone, Mail, MapPin } from "lucide-react";
+"use client";
 
-const footerLinkGroups = [
-  {
-    heading: "Systems",
-    links: [
-      { label: "Order Tracker", href: "#systems" },
-      { label: "Booking System", href: "#systems" },
-      { label: "Inventory Tracker", href: "#systems" },
-      { label: "Customer Database", href: "#systems" },
-      { label: "Admin Dashboard", href: "#systems" },
-    ],
-  },
-  {
-    heading: "Company",
-    links: [
-      { label: "About Us", href: "#about" },
-      { label: "Our Process", href: "#process" },
-      { label: "Contact", href: "#contact" },
-    ],
-  },
-  {
-    heading: "Resources",
-    links: [
-      { label: "Blog", href: "#" },
-      { label: "Case Studies", href: "#" },
-      { label: "FAQ", href: "#" },
-    ],
-  },
-  {
-    heading: "Contact",
-    links: [
-      { label: "+63 917 123 4567", href: "tel:+639171234567", icon: "phone" },
-      { label: "hello@beyonddev.ph", href: "mailto:hello@beyonddev.ph", icon: "mail" },
-      { label: "Philippines", href: "#", icon: "map" },
-    ],
-  },
-] as const;
-
-const socialLinks = [
-  {
-    label: "Facebook",
-    href: "#",
-  },
-  {
-    label: "Instagram",
-    href: "#",
-  },
-  {
-    label: "LinkedIn",
-    href: "#",
-  },
-  {
-    label: "GitHub",
-    href: "#",
-  },
-];
-
-const legalLinks = [
-  { label: "Privacy Policy", href: "#" },
-  { label: "Terms of Service", href: "#" },
-];
-
-function ContactIcon({ type }: { type: string }) {
-  const className = "h-4 w-4 shrink-0 text-black";
-  switch (type) {
-    case "phone":
-      return <Phone className={className} />;
-    case "mail":
-      return <Mail className={className} />;
-    case "map":
-      return <MapPin className={className} />;
-    default:
-      return null;
-  }
-}
-
-const linkClasses =
-  "block w-fit rounded transition-colors outline-none focus-visible:outline-focus px-1.5 -mx-1.5 text-xs font-medium text-black hover:text-gray-500 text-left disabled:opacity-0";
+import { motion } from "framer-motion";
 
 export default function Footer() {
   return (
-    <footer className="relative pb-32 mt-16" data-footer="true">
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-x-6 gap-y-16">
-          <div>
-            <Link
-              href="/"
-              aria-label="BeyondDev"
-              className="block w-fit outline-none focus-visible:outline-focus rounded text-black p-2 -m-2 hover:text-gray-500 transition"
-            >
-              <Logo className="h-5 w-auto" />
-            </Link>
-            <div className="mt-3.5 -mb-1">
-              <p className="text-xs text-gray-500 leading-relaxed">
-                Helping local Filipino businesses replace messy manual workflows
-                with simple, working software systems.
-              </p>
-            </div>
-          </div>
+    <footer className="fixed bottom-0 left-0 right-0 z-0 w-full bg-[#09637E] text-slate-50 pt-24 pb-12 px-6 h-screen flex flex-col justify-between overflow-hidden">
+      <div className="max-w-6xl mx-auto w-full flex-1 flex flex-col justify-center">
+        
+        {/* Massive Statement with Upward Reveal Animation */}
+        <motion.h2 
+          initial={{ y: 60, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{ once: true }}
+          className="text-4xl md:text-6xl font-bold tracking-tight leading-tight max-w-5xl"
+        >
+          Great systems come from teams that are close enough to care — and technical enough to automate things.
+        </motion.h2>
 
-          <ul
-            role="list"
-            className="lg:col-span-3 grid grid-cols-2 sm:grid-cols-3 gap-x-4 sm:gap-x-6 gap-y-10"
-          >
-            {footerLinkGroups.map((group) => (
-              <li key={group.heading}>
-                <p style={{ marginTop: "-0.5625rem" }}>
-                  <span
-                    className="block w-fit rounded transition-colors outline-none focus-visible:outline-focus px-1.5 -mx-1.5 text-[0.6875rem] font-medium text-gray-500"
-                    style={{ paddingTop: "0.5625rem", paddingBottom: "0.5625rem" }}
-                  >
-                    {group.heading}
-                  </span>
-                </p>
-                <ul role="list" className="mt-1">
-                  {group.links.map((link) => (
-                    <li key={link.label}>
-                      {"icon" in link && link.icon ? (
-                        <Link
-                          href={link.href}
-                          className={linkClasses}
-                          style={{ paddingTop: "0.5625rem", paddingBottom: "0.5625rem" }}
-                        >
-                          <span className="inline-flex items-center gap-1.5">
-                            <ContactIcon type={link.icon} />
-                            {link.label}
-                          </span>
-                        </Link>
-                      ) : (
-                        <Link
-                          href={link.href}
-                          className={linkClasses}
-                          style={{ paddingTop: "0.5625rem", paddingBottom: "0.5625rem" }}
-                        >
-                          {link.label}
-                        </Link>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-            <li>
-              <p style={{ marginTop: "-0.5625rem" }}>
-                <span
-                  className="block w-fit rounded transition-colors outline-none focus-visible:outline-focus px-1.5 -mx-1.5 text-[0.6875rem] font-medium text-gray-500"
-                  style={{ paddingTop: "0.5625rem", paddingBottom: "0.5625rem" }}
-                >
-                  Socials
-                </span>
-              </p>
-              <ul role="list" className="mt-1">
-                {socialLinks.map((social) => (
-                  <li key={social.label}>
-                    <a
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={linkClasses}
-                      style={{ paddingTop: "0.5625rem", paddingBottom: "0.5625rem" }}
-                    >
-                      {social.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </li>
-            <li>
-              <p style={{ marginTop: "-0.5625rem" }}>
-                <span
-                  className="block w-fit rounded transition-colors outline-none focus-visible:outline-focus px-1.5 -mx-1.5 text-[0.6875rem] font-medium text-gray-500"
-                  style={{ paddingTop: "0.5625rem", paddingBottom: "0.5625rem" }}
-                >
-                  Legal
-                </span>
-              </p>
-              <ul role="list" className="mt-1">
-                {legalLinks.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      className={linkClasses}
-                      style={{ paddingTop: "0.5625rem", paddingBottom: "0.5625rem" }}
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-                <li>
-                  <p
-                    className="text-xs text-gray-500"
-                    style={{ paddingTop: "0.5625rem", paddingBottom: "0.5625rem" }}
-                  >
-                    &copy; {new Date().getFullYear()} BeyondDev
-                  </p>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
+        {/* Staggered Quick Links and Interaction Grid */}
+        <motion.div 
+          initial={{ y: 40, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{ once: true }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-16 items-start"
+        >
+          <div>
+            <a href="#contact" className="inline-block bg-white text-[#09637E] font-semibold text-lg py-4 px-8 rounded-full hover:scale-105 active:scale-95 transition-all shadow-sm">
+              Book a 15-Min Scoping Call
+            </a>
+            <p className="mt-3 text-sm text-slate-300">No technical jargon, just practical solutions.</p>
+          </div>
+          
+          <div className="flex flex-col space-y-3 text-xl font-medium md:pl-12">
+            <a href="#systems" className="hover:text-white text-slate-300 transition-colors w-max">Systems</a>
+            <a href="#process" className="hover:text-white text-slate-300 transition-colors w-max">Process</a>
+            <a href="#contact" className="hover:text-white text-slate-300 transition-colors w-max">Contact</a>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Structural Closing Baseline */}
+      <div className="max-w-6xl mx-auto w-full">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
+          viewport={{ once: true }}
+          className="pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between text-xs text-slate-400"
+        >
+          <p>&copy; 2026 beyond.dev &mdash; A beyond.ink studio company.</p>
+          <div className="flex gap-6 mt-3 md:mt-0">
+            <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
+            <a href="#" className="hover:text-white transition-colors">GitHub</a>
+          </div>
+        </motion.div>
       </div>
     </footer>
   );

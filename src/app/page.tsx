@@ -8,37 +8,17 @@ import Contact from "@/components/sections/contact";
 export default function Home() {
   return (
     <>
-      <main>
-        {/* Hero — full viewport, no navbar visible here */}
-        <section className="snap-section">
-          <Hero />
-        </section>
-
-        {/* Logo Cloud */}
-        <section className="snap-section">
-          <LogoCloud />
-        </section>
-
-        {/* Pain Points */}
-        <section className="snap-section">
-          <PainPoints />
-        </section>
-
-        {/* Process */}
-        <section className="snap-section">
-          <Process />
-        </section>
-
-        {/* Contact */}
-        <section className="snap-section">
-          <Contact />
-        </section>
+      <main className="relative z-10 bg-white shadow-xl">
+        <Hero />
+        <LogoCloud />
+        <PainPoints />
+        <Process />
+        <Contact />
       </main>
 
-      {/* Footer flows after snap sections */}
-      <section className="snap-section snap-section--footer">
-        <Footer />
-      </section>
+      {/* Spacer allows scrolling past main content to reveal the fixed footer */}
+      <div className="h-screen" />
+      <Footer />
     </>
   );
 }
