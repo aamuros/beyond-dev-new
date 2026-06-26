@@ -493,14 +493,18 @@ export default function FloatingNavbar() {
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious() ?? 0;
-    const heroThreshold = typeof window !== "undefined" ? window.innerHeight * 0.85 : 600;
+    const scrollingDown = latest > previous;
+    const heroHeight = typeof window !== "undefined" ? window.innerHeight : 800;
 
-    if (latest < heroThreshold) {
-      // Still in hero section — stay hidden
+    if (latest < 10) {
+      // At the very top — hidden
       setVisible(false);
+    } else if (latest < heroHeight) {
+      // In hero section — show when scrolling down, hide when scrolling up
+      setVisible(scrollingDown);
     } else {
-      // Past hero: show on scroll up, hide on scroll down
-      setVisible(latest < previous || latest <= heroThreshold + 10);
+      // Past hero — show on scroll up, hide on scroll down
+      setVisible(!scrollingDown);
     }
   });
 
