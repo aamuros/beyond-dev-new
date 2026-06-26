@@ -1,6 +1,6 @@
 import Footer from "@/components/layout/footer";
-import TopBlankSection from "@/components/sections/top-blank-section";
 import Hero from "@/components/sections/hero";
+import SimpleSystemsSection from "@/components/sections/simple-systems-section";
 import PainPoints from "@/components/sections/pain-points";
 import Process from "@/components/sections/process";
 import Faq from "@/components/sections/faq";
@@ -11,12 +11,11 @@ export default function Home() {
     <>
       <main className="relative z-10 bg-white shadow-xl rounded-b-[80px] overflow-hidden">
         <section className="snap-section">
-          <TopBlankSection />
+          <Hero />
         </section>
 
-        {/* Hero (includes Logo Cloud) */}
         <section className="snap-section">
-          <Hero />
+          <SimpleSystemsSection />
         </section>
 
         {/* Pain Points */}
