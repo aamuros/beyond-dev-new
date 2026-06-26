@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Container from "@/components/ui/container";
 import { cn } from "@/lib/utils";
@@ -14,19 +13,16 @@ function ProjectCard({
   project: Project;
   index: number;
 }) {
-  const ref = useRef<HTMLAnchorElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
     <motion.a
-      ref={ref}
       href={project.href}
       className="group relative flex flex-col overflow-hidden rounded-2xl bg-black/[0.03] aspect-[4/4.5] lg:aspect-[4/3.5]"
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 8 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
       transition={{
-        duration: 0.6,
-        delay: index * 0.15,
+        duration: 0.5,
+        delay: index * 0.08,
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
     >
