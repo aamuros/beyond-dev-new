@@ -26,6 +26,7 @@
   --color-secondary-background: var(--internal-color-secondary-background);
   --color-white-100: #fff;
   --color-banner-background: var(--color-black-0);
+  --color-brand-teal: #09637E;
   --font-sans: var(--font-inter);
   --font-display: var(--font-outfit);
   --font-mono: var(--font-jetbrains-mono);
@@ -245,7 +246,7 @@ html {
 }
 
 body {
-  background: #fff;
+  background: #09637E !important;
   color: #19171c;
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
   font-size: 12px;
@@ -440,9 +441,6 @@ body {
   font-weight: 600;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Snap Scroll System                                                 */
-/* ------------------------------------------------------------------ */
 
 @layer base {
   html {

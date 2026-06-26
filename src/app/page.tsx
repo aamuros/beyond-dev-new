@@ -8,6 +8,12 @@ import Contact from "@/components/sections/contact";
 export default function Home() {
   return (
     <>
+      <main className="relative z-10 bg-white shadow-xl rounded-b-[80px] overflow-hidden">
+        <Hero />
+        <LogoCloud />
+        <PainPoints />
+        <Process />
+        <Contact />
       <main>
         {/* Hero (includes Logo Cloud) */}
         <section className="snap-section">
@@ -35,10 +41,7 @@ export default function Home() {
         </section>
       </main>
 
-      {/* Footer flows after snap sections */}
-      <section className="snap-section snap-section--footer">
-        <Footer />
-      </section>
+      <Footer />
     </>
   );
 }
