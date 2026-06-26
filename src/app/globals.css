@@ -444,59 +444,60 @@ body {
 /*  Snap Scroll System                                                 */
 /* ------------------------------------------------------------------ */
 
-html {
-  scroll-snap-type: y mandatory;
-  overflow-y: auto;
-}
+@layer base {
+  html {
+    scroll-snap-type: y mandatory;
+    overflow-y: auto;
+  }
 
-.snap-section {
-  scroll-snap-align: start;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
+  .snap-section {
+    scroll-snap-align: start;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
-/* Let inner sections fill the snap wrapper */
-.snap-section > section {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
+  .snap-section > section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
-.snap-section > section:first-child {
-  flex: 1;
-}
+  .snap-section > section:first-child {
+    flex: 1;
+  }
 
-/* Hero keeps its own top padding */
-.snap-section:first-child {
-  justify-content: flex-start;
-}
-.snap-section:first-child > section {
-  justify-content: flex-start;
-}
+  .snap-section:first-child {
+    justify-content: flex-start;
+  }
+  .snap-section:first-child > section {
+    justify-content: flex-start;
+  }
 
-/* Auto-height sections — no forced 100vh, just snaps to start */
-.snap-section--auto,
-.snap-section--footer {
-  min-height: auto;
-  justify-content: flex-start;
-}
+  .snap-section--auto,
+  .snap-section--footer {
+    min-height: auto;
+    justify-content: flex-start;
+  }
 
-.snap-section--auto > section,
-.snap-section--footer > section {
-  justify-content: flex-start;
+  .snap-section--auto > section,
+  .snap-section--footer > section {
+    justify-content: flex-start;
+  }
 }
 
 /* ------------------------------------------------------------------ */
 /*  Global Section – Jitter-style large vertical margins               */
 /* ------------------------------------------------------------------ */
 
-.global-section {
-  margin-top: 180px;
-  padding-bottom: 100px;
-  position: relative;
+@layer base {
+  .global-section {
+    margin-top: 180px;
+    padding-bottom: 100px;
+    position: relative;
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -509,6 +510,14 @@ html {
   font-style: normal;
   font-weight: 600;
   src: url(/fonts/TWKLausanne/TWKLausanne-600.woff2) format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: 'TWK Lausanne';
+  font-style: normal;
+  font-weight: 800;
+  src: url(/fonts/TWKLausanne/TWKLausanne-800.woff2) format("woff2");
 }
 
 .pill-tag {

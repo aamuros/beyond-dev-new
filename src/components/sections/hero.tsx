@@ -1,5 +1,6 @@
 import Link from "next/link";
 import LogoCloud from "@/components/sections/logo-cloud";
+import DashboardCarousel from "@/components/sections/dashboard-carousel";
 
 export default function Hero() {
   return (
@@ -26,7 +27,7 @@ export default function Hero() {
                   </Link>
                 </div>
 
-                <h1 className="text-[36px] leading-[1.05] font-extrabold tracking-[-0.02em] text-[#19171c] lg:text-[80px] lg:leading-[95%] lg:tracking-[-0.03em] min-[1441px]:text-[115px] min-[1441px]:leading-[95%] min-[1441px]:tracking-[-3.6px]">
+                <h1 className="text-[36px] leading-[90%] font-extrabold tracking-[-0.02em] text-[#19171c] font-['TWK_Lausanne',sans-serif] lg:text-[80px] lg:tracking-[-0.03em] min-[1441px]:text-[115px] min-[1441px]:tracking-[-3.6px]">
                   Simple systems for
                   <br />
                   your business.
@@ -51,6 +52,8 @@ export default function Hero() {
                     to build their systems and grow online.
                   </p>
                 </div>
+
+                <DashboardCarousel />
               </div>
             </div>
           </section>

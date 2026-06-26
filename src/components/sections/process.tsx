@@ -176,7 +176,7 @@ const visuals = [StepVisual01, StepVisual02, StepVisual03, StepVisual04];
 
 export default function Process() {
   return (
-    <section id="process" className="global-section">
+    <section id="process" className="global-section flex flex-col">
       <Container size="xl">
         <div className="flex flex-col lg:grid lg:grid-cols-[repeat(20,1fr)] lg:gap-8">
           <div className="flex flex-col items-start gap-12 mb-24 lg:sticky lg:top-[20vh] lg:col-span-8 lg:mb-0">
