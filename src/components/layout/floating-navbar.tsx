@@ -4,7 +4,6 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import { cn } from "@/lib/utils";
-import Logo from "@/components/layout/logo";
 
 /* ------------------------------------------------------------------ */
 /*  Icons (inline SVGs for zero-dependency megamenu icons)             */
@@ -547,8 +546,8 @@ export default function FloatingNavbar() {
           >
             <nav
               className={cn(
-                "relative flex items-center justify-between",
-                "h-[52px] px-2 pl-5",
+                "relative flex items-center",
+                "h-[60px] px-4",
                 "rounded-full",
                 "bg-white/85 backdrop-blur-xl",
                 "border border-[var(--color-white-500)]",
@@ -557,22 +556,13 @@ export default function FloatingNavbar() {
                 activeMenu && "shadow-[0_8px_32px_-8px_rgba(0,0,0,0.12),0_0_0_1px_rgba(0,0,0,0.03)]"
               )}
             >
-              {/* Logo */}
-              <Link
-                href="/"
-                className="shrink-0 flex items-center"
-                aria-label="Beyond.dev – Back to homepage"
-              >
-                <Logo className="h-5 w-auto" />
-              </Link>
-
-              {/* Desktop nav items */}
+              {/* Desktop nav items — left aligned */}
               <div className="hidden lg:flex items-center gap-0.5">
                 {/* Home link */}
                 <Link
                   href="/"
                   className={cn(
-                    "px-3.5 py-2 text-[14px] font-medium rounded-full",
+                    "px-4 py-2.5 text-[15px] font-medium rounded-full",
                     "text-[var(--color-black-400)]",
                     "transition-all duration-200",
                     "hover:text-[var(--color-black-100)] hover:bg-[var(--color-white-300)]"
@@ -591,7 +581,7 @@ export default function FloatingNavbar() {
                   >
                     <button
                       className={cn(
-                        "flex items-center gap-1 px-3.5 py-2 text-[14px] font-medium rounded-full",
+                        "flex items-center gap-1 px-4 py-2.5 text-[15px] font-medium rounded-full",
                         "transition-all duration-200 cursor-pointer",
                         activeMenu === menu.trigger
                           ? "text-[var(--color-black-100)] bg-[var(--color-white-300)]"
@@ -628,7 +618,7 @@ export default function FloatingNavbar() {
                     key={link.href}
                     href={link.href}
                     className={cn(
-                      "px-3.5 py-2 text-[14px] font-medium rounded-full",
+                      "px-4 py-2.5 text-[15px] font-medium rounded-full",
                       "text-[var(--color-black-400)]",
                       "transition-all duration-200",
                       "hover:text-[var(--color-black-100)] hover:bg-[var(--color-white-300)]"
@@ -639,15 +629,15 @@ export default function FloatingNavbar() {
                 ))}
               </div>
 
-              {/* CTA buttons (desktop) */}
-              <div className="hidden lg:flex items-center gap-2">
+              {/* CTA buttons (desktop) — pushed right */}
+              <div className="hidden lg:flex items-center gap-2 ml-auto">
                 <Link
                   href="/#contact"
                   className={cn(
                     "group/cta inline-flex items-center gap-1.5",
-                    "h-9 px-5 rounded-full",
+                    "h-10 px-6 rounded-full",
                     "bg-[var(--color-black-100)] text-white",
-                    "text-[13px] font-semibold",
+                    "text-[14px] font-semibold",
                     "transition-all duration-200",
                     "hover:bg-[var(--color-black-300)]",
                     "active:scale-[0.96]"
