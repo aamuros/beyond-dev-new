@@ -24,7 +24,9 @@ export default function InteractiveTextGrid() {
     const ambientSequence = ["-", ":", "+", "*", "#"];
 
     const trail: TrailPoint[] = [];
-    const maxTrailLength = 8;
+    const maxTrailLength = 40;
+    const mouse = { x: -1000, y: -1000 };
+    const chaser = { x: -1000, y: -1000 };
 
     let animationFrameId = 0;
     let resizeFrameId = 0;
@@ -54,16 +56,9 @@ export default function InteractiveTextGrid() {
 
     const handleMouseMove = (event: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
 
-      if (x < 0 || y < 0 || x > rect.width || y > rect.height) return;
-
-      trail.unshift({ x, y });
-
-      if (trail.length > maxTrailLength) {
-        trail.pop();
-      }
+      mouse.x = event.clientX - rect.left;
+      mouse.y = event.clientY - rect.top;
     };
 
     const render = (time: number) => {
@@ -84,6 +79,18 @@ export default function InteractiveTextGrid() {
       const startX = centerX - halfWidth;
       const startY = centerY - halfHeight;
       const baseFontSize = spacingX * 1.5;
+      chaser.x += (mouse.x - chaser.x) * 0.15;
+      chaser.y += (mouse.y - chaser.y) * 0.15;
+
+      const speed = Math.sqrt((mouse.x - chaser.x) ** 2 + (mouse.y - chaser.y) ** 2);
+
+      if (speed > 1) {
+        trail.unshift({ x: chaser.x, y: chaser.y });
+      }
+
+      if (trail.length > maxTrailLength || speed <= 1) {
+        trail.pop();
+      }
 
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
@@ -96,8 +103,8 @@ export default function InteractiveTextGrid() {
           const dy = y - centerY;
           const nx = dx / halfWidth;
           const ny = dy / halfHeight;
-          const bulgeStrengthX = 0.03;
-          const bulgeStrengthY = 0.08;
+          const bulgeStrengthX = 0.05;
+          const bulgeStrengthY = 0.11;
           const distortX = 1 + bulgeStrengthX * Math.cos((ny * Math.PI) / 2);
           const distortY = 1 + bulgeStrengthY * Math.cos((nx * Math.PI) / 2);
           const finalX = centerX + dx * distortX;
@@ -133,6 +140,17 @@ export default function InteractiveTextGrid() {
               charOpacityIndex = 5;
               break;
             }
+
+            if (distY < spacingY * 3.5 && distX < 120) {
+              const proximity = 1 - distY / (spacingY * 3.5);
+
+              if (noise + proximity > 1.0) {
+                const wakeIndex = Math.floor(proximity * 3) + 1;
+
+                charOpacityIndex = Math.max(charOpacityIndex, wakeIndex);
+                charToDraw = ambientSequence[charOpacityIndex];
+              }
+            }
           }
 
           const opacity = 0.15 + charOpacityIndex * 0.14;
@@ -140,10 +158,6 @@ export default function InteractiveTextGrid() {
           ctx.fillStyle = `rgba(170, 170, 170, ${opacity})`;
           ctx.fillText(charToDraw, finalX, finalY);
         }
-      }
-
-      if (trail.length > 0) {
-        trail.pop();
       }
 
       animationFrameId = requestAnimationFrame(render);
