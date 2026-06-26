@@ -30,18 +30,15 @@ function ProjectCard({
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
     >
-      {/* Gradient background (placeholder for project image) */}
       <div
         className={cn(
           "absolute inset-0 bg-gradient-to-br transition-transform duration-700 ease-out group-hover:scale-105",
           project.gradient
         )}
       />
-
-      {/* Subtle noise/texture overlay */}
       <div className="absolute inset-0 bg-black/[0.08]" />
 
-      {/* Tags - top area */}
+      {/* Tags */}
       <div className="relative z-10 flex flex-wrap items-center gap-1.5 p-5">
         {project.tags.map((tag) => (
           <span
@@ -67,7 +64,7 @@ function ProjectCard({
         <p className="text-sm text-white/70 font-medium">{project.category}</p>
       </div>
 
-      {/* Hover arrow indicator */}
+      {/* Corner arrow */}
       <div className="absolute top-5 right-5 z-10 w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center opacity-0 scale-75 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100">
         <ArrowUpRight className="w-4 h-4 text-white" />
       </div>
@@ -94,13 +91,13 @@ export default function Projects() {
             </p>
           </div>
         </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {projects.map((project, index) => (
-            <ProjectCard key={project.title} project={project} index={index} />
-          ))}
-        </div>
       </Container>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 px-3">
+        {projects.map((project, index) => (
+          <ProjectCard key={project.title} project={project} index={index} />
+        ))}
+      </div>
     </section>
   );
 }
