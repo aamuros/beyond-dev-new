@@ -79,7 +79,7 @@ export default function DashboardCarousel() {
           <ChevronLeft className="w-4 h-4 lg:w-[18px] lg:h-[18px] text-[#19171c]" />
         </button>
 
-        <div className="relative flex-1 overflow-hidden rounded-xl shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_8px_40px_-12px_rgba(0,0,0,0.12)]">
+        <div className="relative flex-1 overflow-hidden rounded-xl shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_8px_40px_-12px_rgba(0,0,0,0.12)] mask-[linear-gradient(to_bottom,black,black_65%,transparent_100%)]">
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
               key={activeIndex}
