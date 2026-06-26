@@ -22,73 +22,89 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    title: "Santos Catering",
-    slug: "santos-catering",
-    category: "Food & Beverage",
-    year: "2024",
-    tags: ["Order System", "Payment Tracking"],
-    href: "/projects/santos-catering",
+    title: "Furniture Odyssey",
+    slug: "furniture-odyssey",
+    category: "Furniture & E-Commerce",
+    year: "2025",
+    tags: ["POS", "Landing Page"],
+    href: "/projects/furniture-odyssey",
     cta: "View Case",
-    image: "/projects/catering.jpg",
+    image: "/projects/furniture-odyssey-project-2x2.png",
     gradient: "from-amber-500/90 to-orange-600/90",
     description: [
-      "Santos Catering needed a way to manage dozens of weekly orders without losing track of payments or delivery schedules.",
-      "We built an order and payment tracking system that replaced their paper-based workflow and cut their admin time by 3 hours daily.",
+      "Furniture Odyssey needed two connected systems — a public-facing catalog website to showcase their furniture products and an internal POS dashboard to manage the full sales workflow from quotation to delivery.",
+      "We built a landing page with Supabase-backed product listings and a separate sales operations tool handling customer records, quotations, negotiated orders, payments, deliveries, and downloadable PDF documents.",
     ],
     heroImage: {
-      src: "/projects/catering-hero.jpg",
-      alt: "Santos Catering order tracking system hero",
+      src: "/projects/furniture-odyssey-hero.jpg",
+      alt: "Furniture Odyssey catalog website and POS dashboard hero",
     },
     sections: [
       {
         label: "Overview",
-        heading: "From paper chaos to a streamlined ordering system",
+        heading: "Two systems, one furniture business",
         description:
-          "Santos Catering was drowning in paper orders and manual payment tracking. We designed a clean, simple system that lets them manage orders, track payments, and view daily schedules — all from one dashboard.",
+          "Furniture Odyssey runs on two custom-built applications. The catalog website is a public-facing React + Vite landing page backed by Supabase that showcases their furniture products to potential buyers. The POS dashboard is a Next.js internal tool with Prisma and Supabase that handles the entire manual sales workflow — from customer records and quotations to order fulfillment, payments, and delivery scheduling.",
         images: [
           {
-            src: "/projects/catering-overview-1.jpg",
-            alt: "Santos Catering dashboard overview",
+            src: "/projects/furniture-odyssey-overview-1.jpg",
+            alt: "Furniture Odyssey catalog website overview",
           },
           {
-            src: "/projects/catering-overview-2.jpg",
-            alt: "Santos Catering order management screens",
+            src: "/projects/furniture-odyssey-overview-2.jpg",
+            alt: "Furniture Odyssey POS dashboard overview",
           },
         ],
       },
       {
         label: "The Challenge",
-        heading: "Handling peak-season order volume without errors",
+        heading: "Manual sales workflows with no digital backbone",
         description:
-          "During peak season, Santos Catering handles 50+ orders per week. The old paper system led to missed orders, double bookings, and lost payment records. The challenge was building something simple enough for their team to adopt quickly.",
+          "The business was managing customer inquiries, quotations, and orders through manual channels — phone, Viber, Facebook Messenger, and walk-ins. There was no centralized system to track which quotations were approved, which orders had partial payments, or which deliveries were still pending. Product references and pricing lived in scattered spreadsheets and chat threads.",
         images: [
           {
-            src: "/projects/catering-challenge-1.jpg",
-            alt: "Order flow wireframes and exploration",
+            src: "/projects/furniture-odyssey-challenge-1.jpg",
+            alt: "Manual sales workflow wireframes",
           },
           {
-            src: "/projects/catering-challenge-2.jpg",
-            alt: "Early design exploration for catering system",
+            src: "/projects/furniture-odyssey-challenge-2.jpg",
+            alt: "System architecture exploration",
           },
         ],
       },
       {
-        label: "The Solution",
-        heading: "A focused system built for speed and clarity",
+        label: "The Catalog Website",
+        heading: "A public storefront built with React and Supabase",
         description:
-          "We delivered an order tracker with payment logging, daily schedule views, and automated reminders. The interface is minimal and fast — designed for real-time use during busy service hours.",
+          "The catalog website is a React + TypeScript application built on Vite with Supabase as the backend. It displays the full furniture product line with images, categories, and product details. The site is designed to be the first touchpoint for customers — showcasing the brand and product range before they reach out through manual channels to place an order.",
         images: [
           {
-            src: "/projects/catering-solution-1.jpg",
-            alt: "Final order tracking interface",
+            src: "/projects/furniture-odyssey-catalog-1.jpg",
+            alt: "Catalog website product listing page",
           },
           {
-            src: "/projects/catering-solution-2.jpg",
-            alt: "Payment tracking and reporting screens",
+            src: "/projects/furniture-odyssey-catalog-2.jpg",
+            alt: "Catalog website product detail view",
+          },
+        ],
+      },
+      {
+        label: "The POS Dashboard",
+        heading: "An internal sales operations tool built on Next.js",
+        description:
+          "The POS is a full internal dashboard built with Next.js App Router, Prisma, and Supabase. It covers customer directory records with contact and source context, quotation creation with custom items and negotiated discounts, approved quotation conversion into operational orders, multiple payment tracking per order with downpayment and partial payment types, delivery scheduling with partial fulfillment, and downloadable React-PDF documents including quotations, invoices, receipts, and delivery summaries. Role-based permissions and activity logging keep the team accountable.",
+        images: [
+          {
+            src: "/projects/furniture-odyssey-pos-1.jpg",
+            alt: "POS quotation builder interface",
           },
           {
-            src: "/projects/catering-solution-3.jpg",
-            alt: "Daily schedule view",
+            src: "/projects/furniture-odyssey-pos-2.jpg",
+            alt: "POS order management and payment tracking",
+          },
+          {
+            src: "/projects/furniture-odyssey-pos-3.jpg",
+            alt: "POS delivery scheduling and PDF generation",
           },
         ],
       },

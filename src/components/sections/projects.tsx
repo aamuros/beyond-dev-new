@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Container from "@/components/ui/container";
@@ -30,12 +31,21 @@ function ProjectCard({
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
     >
-      <div
-        className={cn(
-          "absolute inset-0 bg-gradient-to-br transition-transform duration-700 ease-out active:scale-105 group-hover:scale-105",
-          project.gradient
-        )}
-      />
+      {project.image ? (
+        <Image
+          src={project.image}
+          alt={project.title}
+          fill
+          className="object-cover transition-transform duration-700 ease-out active:scale-105 group-hover:scale-105"
+        />
+      ) : (
+        <div
+          className={cn(
+            "absolute inset-0 bg-gradient-to-br transition-transform duration-700 ease-out active:scale-105 group-hover:scale-105",
+            project.gradient
+          )}
+        />
+      )}
       <div className="absolute inset-0 bg-black/[0.08]" />
 
       {/* Tags */}
