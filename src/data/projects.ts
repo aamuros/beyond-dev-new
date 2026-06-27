@@ -88,207 +88,219 @@ export const projects: Project[] = [
     ],
   },
   {
-    title: "Kamusta Gramby",
-    slug: "kamusta-gramby",
-    category: "Health & Wellness",
-    year: "2026",
-    tags: ["Mobile App", "Wellness"],
-    href: "/projects/kamusta-gramby",
+    title: "Reyes Auto Repair",
+    slug: "reyes-auto-repair",
+    category: "Automotive",
+    year: "2024",
+    tags: ["Customer DB", "Job Tracker"],
+    href: "/projects/reyes-auto-repair",
     cta: "View Case",
-    image: "/projects/kamusta-gramby/kamusta-gramby-project-2x2.png",
-    gradient: "from-emerald-500/90 to-green-700/90",
+    image: "/projects/auto-repair.jpg",
+    gradient: "from-slate-600/90 to-zinc-800/90",
     description: [
-      "Families with elderly relatives aging in place had no simple way to check in daily and ensure their loved ones were safe and well.",
-      "We built a React Native mobile app with a two-role system — caretakers manage medication schedules and monitor activity, while care recipients perform daily check-ins and can trigger SOS alerts, with automated SMS notifications for inactivity.",
+      "Reyes Auto Repair struggled with lost customer records and disorganized job assignments across their growing team.",
+      "We built a customer database and job tracking system that gives instant access to vehicle history and real-time job status.",
     ],
     heroImage: {
-      src: "/projects/kamusta-gramby/kamusta-gramby-hero.png",
-      alt: "Kamusta Gramby wellness check-in app hero",
+      src: "/projects/auto-repair-hero.jpg",
+      alt: "Reyes Auto Repair customer management system hero",
     },
     sections: [
       {
         label: "Overview",
-        heading: "A wellness check-in app for seniors aging in place",
+        heading: "Digitizing a 15-year-old paper-based repair shop",
         description:
-          "Kamusta Gramby is a React Native mobile application that provides a simple, daily way to check in on seniors and ensure they can safely age in place. The app operates on a two-role system — caretakers manage medication schedules, monitor activity levels, and maintain emergency contacts, while care recipients receive reminders, perform daily check-ins, and can activate an SOS feature when needed. Automated SMS alerts notify family members if the senior has been inactive for an extended period.",
+          "Reyes Auto Repair had been using paper records for over 15 years. As the business grew, they needed a digital system to track customers, vehicles, and ongoing repair jobs without losing their personal touch.",
         images: [
           {
-            src: "/projects/kamusta-gramby/kamusta-gramby-overview.png",
-            alt: "Kamusta Gramby app overview showing caretaker and care recipient screens",
+            src: "/projects/auto-repair-overview-1.jpg",
+            alt: "Customer database overview",
+          },
+          {
+            src: "/projects/auto-repair-overview-2.jpg",
+            alt: "Job tracking dashboard screens",
           },
         ],
       },
       {
         label: "The Challenge",
-        heading: "Bridging the gap between independence and safety",
+        heading: "Keeping the personal touch while going digital",
         description:
-          "Families wanted their elderly relatives to maintain independence and age comfortably at home, but worried about missed medications, falls, or periods of silence with no way to know if something was wrong. The challenge was building an app simple enough for seniors to use daily — with large touch targets, scalable fonts, and minimal friction — while giving caretakers meaningful oversight without being intrusive.",
-        images: [],
-      },
-      {
-        label: "Gramby's Screens",
-        heading: "A simple daily check-in flow designed for seniors",
-        description:
-          "The care recipient experience is designed with senior accessibility as the top priority. Every interactive element meets a 48x48dp minimum touch target, and a 3-level font scaling system (Default, Large, Extra Large) ensures readability for users with varying vision. Gramby's screens include a daily check-in prompt, medication reminders with clear visual cues, and an SOS button that immediately notifies emergency contacts. The navigation is minimal and consistent — large buttons, high-contrast colors, and no hidden gestures — so seniors can use the app independently without confusion.",
+          "The shop's owner knew regular customers by name and remembered their vehicle history. The challenge was capturing that personal knowledge in a system that anyone on the team could use.",
         images: [
           {
-            src: "/projects/kamusta-gramby/kamusta-gramby-gramby-screens.png",
-            alt: "Kamusta Gramby care recipient screens — daily check-in, medication reminders, and SOS",
+            src: "/projects/auto-repair-challenge-1.jpg",
+            alt: "Customer profile wireframes",
+          },
+          {
+            src: "/projects/auto-repair-challenge-2.jpg",
+            alt: "Design exploration for repair tracking",
           },
         ],
-        imageBesideText: true,
       },
       {
-        label: "Caretaker Screens",
-        heading: "Monitoring and medication management for family members",
+        label: "The Solution",
+        heading: "Customer profiles with full vehicle history",
         description:
-          "The caretaker interface provides full oversight without being intrusive. Caretakers can set up and manage medication schedules, view check-in history and activity patterns, maintain a list of emergency contacts, and receive automated SMS alerts if the care recipient has been inactive for 6 or more hours. The caretaker dashboard is protected with a PIN lock that activates after 1 hour of inactivity, keeping sensitive health information secure. Separate navigation stacks ensure each role only sees what's relevant to them.",
+          "We delivered a customer database with vehicle profiles, repair history, and a job board that shows what each mechanic is working on. Search is instant, and the interface works on tablets in the shop.",
         images: [
           {
-            src: "/projects/kamusta-gramby/kamusta-gramby-caretaker-screens.png",
-            alt: "Kamusta Gramby caretaker screens — medication management, activity monitoring, and alerts",
+            src: "/projects/auto-repair-solution-1.jpg",
+            alt: "Final customer profile design",
+          },
+          {
+            src: "/projects/auto-repair-solution-2.jpg",
+            alt: "Job tracking board interface",
+          },
+          {
+            src: "/projects/auto-repair-solution-3.jpg",
+            alt: "Mobile tablet view for shop floor",
           },
         ],
       },
     ],
   },
   {
-    title: "Hardware Store",
-    slug: "hardware-store",
-    category: "Retail & E-Commerce",
-    year: "2026",
-    tags: ["E-Commerce", "Inventory"],
-    href: "/projects/hardware-store",
-    cta: "View Case",
-    image: "/projects/hardware-store/hardware-store-project-2x2.png",
-    gradient: "from-orange-500/90 to-red-600/90",
-    description: [
-      "A local hardware store in the Philippines needed an online presence to let customers browse products, place delivery orders, and track order status — all without phone calls or walk-ins.",
-      "We built a full-stack e-commerce platform with a customer-facing storefront, an admin dashboard for order and inventory management, and automated SMS notifications for real-time order updates.",
-    ],
-    heroImage: {
-      src: "/projects/hardware-store/hardware-store-hero.png",
-      alt: "Hardware Store e-commerce platform hero",
-    },
-    sections: [
-      {
-        label: "Overview",
-        heading: "An online ordering system for a neighborhood hardware store",
-        description:
-          "Hardware Store is a full-stack e-commerce and inventory management platform built for a local hardware business in the Philippines. Customers browse the product catalog organized by category, search and filter by availability, add items to a cart with support for product variants like size or color, and place delivery orders with address and contact details. On the other side, store admins manage products, fulfill orders through a step-by-step status workflow, and track sales through a real-time analytics dashboard.",
-        images: [
-          {
-            src: "/projects/hardware-store/hardware-store-overview.png",
-            alt: "Hardware Store customer storefront and admin dashboard overview",
-          },
-        ],
-      },
-      {
-        label: "The Challenge",
-        heading: "No digital presence and manual order management",
-        description:
-          "The store handled all orders through phone calls, walk-ins, and chat messages. There was no centralized system to track which orders were pending, accepted, or out for delivery. Product availability was checked manually, and customers had no way to browse the full catalog before visiting the store. The business was losing potential sales from customers who expected an online ordering experience.",
-        images: [],
-      },
-      {
-        label: "The Storefront",
-        heading: "A customer-facing catalog built with React and Vite",
-        description:
-          "The storefront is a React 18 application built on Vite with Tailwind CSS and React Router v6. Customers can browse the full product catalog organized by category, search for specific items, filter by availability, and view product variants with different sizes and colors. The shopping cart supports variant selection and quantity adjustments. Registered users can save delivery addresses, view order history, and maintain a wishlist. Order tracking is available through a unique order number — no account required.",
-        images: [
-          {
-            src: "/projects/hardware-store/hardware-store-storefront.png",
-            alt: "Hardware Store customer storefront",
-          },
-        ],
-        imageBesideText: true,
-      },
-      {
-        label: "The Admin Dashboard",
-        heading: "Order fulfillment and inventory management for store staff",
-        description:
-          "The admin panel is a protected dashboard built with the same React + Vite stack, authenticated with JWT tokens. Store owners and staff can view a sales analytics dashboard with daily and monthly breakdowns, accept or reject incoming orders through a defined status workflow (pending → accepted → out for delivery → delivered), manage products including variants and bulk pricing tiers, organize categories, create staff accounts with role-based access, and generate sales reports. The system also handles automated SMS notifications through the Semaphore gateway — customers receive text updates at every order status change, and the admin gets alerted when new orders arrive.",
-        images: [
-          {
-            src: "/projects/hardware-store/hardware-store-admin.png",
-            alt: "Hardware Store admin dashboard",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    title: "Salon Keeper",
-    slug: "salon-keeper",
+    title: "Cruz Beauty Studio",
+    slug: "cruz-beauty-studio",
     category: "Beauty & Wellness",
-    year: "2026",
-    tags: ["Mobile App", "Booking & Sales"],
-    href: "/projects/salon-keeper",
+    year: "2025",
+    tags: ["Booking System", "Reminders"],
+    href: "/projects/cruz-beauty-studio",
     cta: "View Case",
-    image: "/projects/salon-keeper/salon-keeper-project-2x2.png",
-    gradient: "from-violet-500/90 to-purple-700/90",
+    image: "/projects/beauty.jpg",
+    gradient: "from-pink-500/90 to-fuchsia-600/90",
     description: [
-      "Salon owners were managing appointments through paper notebooks and tracking sales with manual receipts — leading to double bookings, missed revenue, and zero visibility into business performance.",
-      "We built a cross-platform Flutter mobile app with Firebase that handles appointment scheduling through a calendar and day-view system, product inventory management, a sales checkout flow, staff role management, and real-time reports and analytics — all in one place.",
+      "Cruz Beauty Studio's biggest pain point was double bookings and no-shows that cost them revenue every month.",
+      "We built a booking system with automated reminders that eliminated scheduling conflicts and reduced no-shows by 60%.",
     ],
     heroImage: {
-      src: "/projects/salon-keeper/salon-keeper-hero.png",
-      alt: "Salon Keeper mobile app hero — appointment calendar and sales dashboard",
+      src: "/projects/beauty-hero.jpg",
+      alt: "Cruz Beauty Studio booking system hero",
     },
     sections: [
       {
         label: "Overview",
-        heading: "A salon management app built with Flutter and Firebase",
+        heading: "A booking system designed for client retention",
         description:
-          "Salon Keeper is a cross-platform mobile application built with Flutter and backed by Firebase Authentication and Cloud Firestore. The app provides a complete management toolkit for salon owners and their staff — covering appointment scheduling, product inventory, point-of-sale checkout, staff management, and business analytics. A two-role system separates admin and staff access, so owners get full control over operations while staff members only see what they need to handle appointments and sales.",
+          "Cruz Beauty Studio needed more than a calendar — they needed a system that would keep clients coming back. We designed a booking experience with automated reminders, easy rescheduling, and a client preferences tracker.",
         images: [
           {
-            src: "/projects/salon-keeper/salon-keeper-overview.png",
-            alt: "Salon Keeper app overview — calendar, inventory, and sales screens",
+            src: "/projects/beauty-overview-1.jpg",
+            alt: "Booking system overview screens",
+          },
+          {
+            src: "/projects/beauty-overview-2.jpg",
+            alt: "Client management dashboard",
           },
         ],
       },
       {
         label: "The Challenge",
-        heading: "Paper-based scheduling and no sales visibility",
+        heading: "Eliminating double bookings and reducing no-shows",
         description:
-          "The salon managed appointments through handwritten notebooks and verbal confirmations. Double bookings were a weekly problem, and there was no way to see the day's schedule at a glance. Sales were tracked with handwritten receipts, making it impossible to know daily revenue, best-selling services, or which staff member generated the most income. Inventory of salon products was counted manually, leading to stockouts that frustrated clients.",
-        images: [],
-      },
-      {
-        label: "Appointment System",
-        heading: "Calendar and day-view scheduling with time slot management",
-        description:
-          "The appointment module provides two views — a monthly calendar page for an overview of bookings and a detailed day-view page for managing individual time slots. Each appointment is linked to a client, assigned staff member, and selected service. The system uses structured time slot models to prevent overlapping bookings and ensure each stylist's availability is respected. Staff can create, edit, and cancel appointments directly from their mobile device.",
+          "The studio was losing money from double bookings and clients forgetting appointments. The challenge was building a system that handles complex scheduling rules while sending timely reminders.",
         images: [
           {
-            src: "/projects/salon-keeper/salon-keeper-appointments.png",
-            alt: "Salon Keeper appointment calendar and day view screens",
+            src: "/projects/beauty-challenge-1.jpg",
+            alt: "Scheduling flow wireframes",
           },
-        ],
-        imageBesideText: true,
-      },
-      {
-        label: "Sales & Inventory",
-        heading: "Point-of-sale checkout and product inventory tracking",
-        description:
-          "The sales checkout page lets staff process transactions after appointments — selecting services rendered, adding product purchases, and recording payment. Every sale is logged as a sales record in Firestore, feeding into the reports and analytics page. The inventory page tracks salon products with quantity levels, so owners can see what's running low and reorder before stockouts happen. Admin and staff roles determine who can modify inventory versus who can only view it.",
-        images: [
           {
-            src: "/projects/salon-keeper/salon-keeper-sales.png",
-            alt: "Salon Keeper sales checkout and inventory management screens",
+            src: "/projects/beauty-challenge-2.jpg",
+            alt: "Reminder system design exploration",
           },
         ],
       },
       {
-        label: "Admin & Staff Roles",
-        heading: "Role-based access with separate admin and staff layouts",
+        label: "The Solution",
+        heading: "Smart booking with automated client communication",
         description:
-          "The app implements a two-role system using Firebase Authentication and Firestore security rules. Admins access the full management suite through the admin base layout — staff management, inventory control, sales reports, analytics, and settings. Staff members use a focused staff base layout that shows only their assigned appointments and the sales checkout flow. The staff management page lets admins add, edit, and deactivate staff accounts, while the settings page handles salon-level configuration like business hours and service menus.",
+          "We delivered a booking system with conflict detection, SMS/Chat reminders, and a client preferences log. Studio owners can see their day at a glance and clients get reminders 24 hours before appointments.",
         images: [
           {
-            src: "/projects/salon-keeper/salon-keeper-admin.png",
-            alt: "Salon Keeper admin dashboard and staff management screens",
+            src: "/projects/beauty-solution-1.jpg",
+            alt: "Final booking calendar design",
+          },
+          {
+            src: "/projects/beauty-solution-2.jpg",
+            alt: "Automated reminder interface",
+          },
+          {
+            src: "/projects/beauty-solution-3.jpg",
+            alt: "Client preferences and history view",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Metro Grocery Hub",
+    slug: "metro-grocery-hub",
+    category: "Retail",
+    year: "2025",
+    tags: ["Inventory", "POS Integration"],
+    href: "/projects/metro-grocery-hub",
+    cta: "View Case",
+    image: "/projects/grocery.jpg",
+    gradient: "from-emerald-500/90 to-teal-700/90",
+    description: [
+      "Metro Grocery Hub was losing money from stockouts and overordering due to manual inventory counts.",
+      "We built an inventory management system with POS integration that provides real-time stock levels and automated reorder alerts.",
+    ],
+    heroImage: {
+      src: "/projects/grocery-hero.jpg",
+      alt: "Metro Grocery Hub inventory system hero",
+    },
+    sections: [
+      {
+        label: "Overview",
+        heading: "Real-time inventory for a high-volume grocery store",
+        description:
+          "Metro Grocery Hub stocks over 3,000 SKUs and processes 200+ transactions daily. We designed an inventory system that syncs with their POS in real time and flags items that need restocking.",
+        images: [
+          {
+            src: "/projects/grocery-overview-1.jpg",
+            alt: "Inventory dashboard overview",
+          },
+          {
+            src: "/projects/grocery-overview-2.jpg",
+            alt: "Stock level monitoring screens",
+          },
+        ],
+      },
+      {
+        label: "The Challenge",
+        heading: "Syncing inventory across multiple counters",
+        description:
+          "With 4 checkout counters and a growing online ordering channel, keeping inventory accurate was impossible with manual counts. The challenge was building a system that stays accurate without constant human input.",
+        images: [
+          {
+            src: "/projects/grocery-challenge-1.jpg",
+            alt: "Multi-counter sync wireframes",
+          },
+          {
+            src: "/projects/grocery-challenge-2.jpg",
+            alt: "POS integration design exploration",
+          },
+        ],
+      },
+      {
+        label: "The Solution",
+        heading: "Automated stock tracking with smart reorder alerts",
+        description:
+          "We delivered an inventory system that auto-decrements stock on each sale, alerts the owner when items hit reorder thresholds, and generates weekly stock reports. The POS integration runs in real time with zero manual input.",
+        images: [
+          {
+            src: "/projects/grocery-solution-1.jpg",
+            alt: "Final inventory management interface",
+          },
+          {
+            src: "/projects/grocery-solution-2.jpg",
+            alt: "Reorder alert system",
+          },
+          {
+            src: "/projects/grocery-solution-3.jpg",
+            alt: "Weekly stock report view",
           },
         ],
       },
