@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div className="bg-[#09637E]">
       <main
-        className="relative z-10 bg-white shadow-2xl"
+        className="relative z-10 bg-white shadow-xl"
         style={{ clipPath: 'inset(0 0 0 0 round 0 0 80px 80px)' }}
       >
         {/* Hero (includes Logo Cloud) */}

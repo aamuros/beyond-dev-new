@@ -16,6 +16,7 @@ export default function Footer() {
   const y = useTransform(scrollYProgress, [0, 1], [40, 0]);
 
   return (
+
     <footer
       ref={footerRef}
       className="footer-drawer"
