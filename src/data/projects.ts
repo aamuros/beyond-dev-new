@@ -26,7 +26,7 @@ export const projects: Project[] = [
     title: "Furniture Odyssey",
     slug: "furniture-odyssey",
     category: "Furniture & E-Commerce",
-    year: "2025",
+    year: "2026",
     tags: ["POS", "Landing Page"],
     href: "/projects/furniture-odyssey",
     cta: "View Case",
