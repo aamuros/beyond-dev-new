@@ -44,7 +44,7 @@
   --style-overlay-z-index: 999;
   --color-page-background: var(--internal-color-primary-background);
   --color-overscroll-top: var(--color-page-background);
-  --color-overscroll-bottom: var(--color-black-50);
+  --color-overscroll-bottom: #09637E;
 }
 
 :root, :host {
@@ -416,6 +416,46 @@ body {
 
 .footer-link-list:has(.footer-link:hover) .footer-link:not(:hover) {
   opacity: 0.4;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Sticky Footer Drawer                                               */
+/* ------------------------------------------------------------------ */
+
+.footer-drawer {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  width: 100%;
+  height: 512px;
+  background-color: #09637E;
+  color: #f8fafc; /* slate-50 */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: hidden;
+}
+
+.footer-drawer__inner {
+  width: 100%;
+  max-width: 100%;
+  padding: 72px 80px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .footer-drawer {
+    height: auto;
+    min-height: 420px;
+  }
+
+  .footer-drawer__inner {
+    padding: 48px 24px 24px;
+  }
 }
 
 .section-heading-title {
