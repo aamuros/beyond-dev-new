@@ -236,6 +236,16 @@ html {
   scroll-behavior: auto;
 }
 
+html.intro-lock,
+body.intro-lock {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+body.intro-lock {
+  touch-action: none;
+}
+
 *, :after, :before, ::backdrop {
   border-color: #E4E7EC;
 }
@@ -681,4 +691,22 @@ body {
   .pain-point-card__description {
     font-size: 0.875rem;
   }
+}
+
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
 }

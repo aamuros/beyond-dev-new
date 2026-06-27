@@ -1,5 +1,7 @@
 import Footer from "@/components/layout/footer";
+import PageIntroOverlay from "@/components/layout/page-intro-overlay";
 import Hero from "@/components/sections/hero";
+import SimpleSystemsSection from "@/components/sections/simple-systems-section";
 import PainPoints from "@/components/sections/pain-points";
 import Process from "@/components/sections/process";
 import Projects from "@/components/sections/projects";
@@ -9,25 +11,44 @@ import Contact from "@/components/sections/contact";
 
 export default function Home() {
   return (
-    <div className="bg-[#09637E]">
-      <main
-        className="relative z-10 bg-white shadow-xl"
-        style={{ clipPath: 'inset(0 0 0 0 round 0 0 80px 80px)' }}
-      >
-        {/* Hero (includes Logo Cloud) */}
-        <section className="snap-section">
-          <Hero />
+    <div className="relative min-h-screen bg-[#09637E]">
+      <PageIntroOverlay />
+
+      {/* 
+        True footer back layer.
+        It is fixed behind the foreground page.
+        It does not participate in the hero transition.
+      */}
+      <div className="fixed inset-x-0 bottom-0 z-0 h-[70vh] overflow-hidden bg-[#09637E]">
+        <Footer />
+      </div>
+
+      {/* 
+        Foreground page layer.
+        This is above the footer.
+      */}
+      <div className="relative z-10">
+        {/* Hero backplate zone */}
+        <section className="relative h-[200vh] bg-black">
+          <div className="sticky top-0 h-screen overflow-hidden bg-black">
+            <Hero />
+          </div>
         </section>
 
-        {/* Pain Points */}
-        <section className="snap-section snap-section--auto">
-          <PainPoints />
-        </section>
+        {/* 
+          One continuous white page panel.
+          Top rounded corners reveal black hero.
+          Bottom rounded corners reveal fixed teal footer.
+          Bottom margin creates reveal space for footer.
+        */}
+        <main className="relative -mt-[100vh] mb-[70vh] overflow-hidden rounded-t-[48px] rounded-b-[80px] bg-white shadow-xl">
+          <section className="snap-section">
+            <SimpleSystemsSection />
+          </section>
 
-        {/* Process */}
-        <section className="snap-section">
-          <Process />
-        </section>
+          <section className="snap-section snap-section--auto">
+            <PainPoints />
+          </section>
 
         {/* Projects */}
         <section className="snap-section snap-section--auto">
@@ -44,13 +65,16 @@ export default function Home() {
           <Faq />
         </section>
 
-        {/* Contact */}
-        <section className="snap-section">
-          <Contact />
-        </section>
-      </main>
+          <section className="snap-section snap-section--auto">
+            <Faq />
+          </section>
 
       <Footer />
+          <section className="snap-section">
+            <Contact />
+          </section>
+        </main>
+      </div>
     </div>
   );
 }
