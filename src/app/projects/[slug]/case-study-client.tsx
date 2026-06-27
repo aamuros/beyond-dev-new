@@ -118,8 +118,8 @@ export default function CaseStudyClient({
   next: Project;
 }) {
   return (
-    <>
-      <main className="relative z-10 bg-white shadow-xl rounded-b-[80px]">
+    <div className="bg-[#09637E]">
+      <main className="relative z-10 bg-white shadow-xl" style={{ clipPath: 'inset(0 0 0 0 round 0 0 80px 80px)' }}>
         {/* Hero */}
         <section className="pt-32 pb-16 lg:pt-40 lg:pb-24">
           <Container size="md">
@@ -229,6 +229,6 @@ export default function CaseStudyClient({
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

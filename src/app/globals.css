@@ -445,6 +445,7 @@ body {
 @layer base {
   html {
     overflow-y: auto;
+    scroll-behavior: smooth;
   }
 
   .snap-section {
