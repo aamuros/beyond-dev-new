@@ -119,7 +119,7 @@ export default function CaseStudyClient({
 }) {
   return (
     <>
-      <main className="relative z-10 bg-white shadow-xl rounded-b-[80px] overflow-hidden">
+      <main className="relative z-10 bg-white shadow-xl rounded-b-[80px]">
         {/* Hero */}
         <section className="pt-32 pb-16 lg:pt-40 lg:pb-24">
           <Container size="md">

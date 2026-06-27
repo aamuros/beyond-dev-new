@@ -1,6 +1,23 @@
 "use client";
 
-import { ReactLenis } from "lenis/react";
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
+import { ReactLenis, useLenis } from "lenis/react";
+
+function LenisRouteSync() {
+  const lenis = useLenis();
+  const pathname = usePathname();
+  const prevPath = useRef(pathname);
+
+  useEffect(() => {
+    if (prevPath.current !== pathname && lenis) {
+      lenis.resize();
+      prevPath.current = pathname;
+    }
+  }, [pathname, lenis]);
+
+  return null;
+}
 
 export default function SmoothScrollProvider({
   children,
@@ -21,6 +38,7 @@ export default function SmoothScrollProvider({
         },
       }}
     >
+      <LenisRouteSync />
       {children}
     </ReactLenis>
   );
