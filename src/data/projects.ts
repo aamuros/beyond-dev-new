@@ -153,79 +153,6 @@ export const projects: Project[] = [
     ],
   },
   {
-    title: "Cruz Beauty Studio",
-    slug: "cruz-beauty-studio",
-    category: "Beauty & Wellness",
-    year: "2025",
-    tags: ["Booking System", "Reminders"],
-    href: "/projects/cruz-beauty-studio",
-    cta: "View Case",
-    image: "/projects/beauty.jpg",
-    gradient: "from-pink-500/90 to-fuchsia-600/90",
-    description: [
-      "Cruz Beauty Studio's biggest pain point was double bookings and no-shows that cost them revenue every month.",
-      "We built a booking system with automated reminders that eliminated scheduling conflicts and reduced no-shows by 60%.",
-    ],
-    heroImage: {
-      src: "/projects/beauty-hero.jpg",
-      alt: "Cruz Beauty Studio booking system hero",
-    },
-    sections: [
-      {
-        label: "Overview",
-        heading: "A booking system designed for client retention",
-        description:
-          "Cruz Beauty Studio needed more than a calendar — they needed a system that would keep clients coming back. We designed a booking experience with automated reminders, easy rescheduling, and a client preferences tracker.",
-        images: [
-          {
-            src: "/projects/beauty-overview-1.jpg",
-            alt: "Booking system overview screens",
-          },
-          {
-            src: "/projects/beauty-overview-2.jpg",
-            alt: "Client management dashboard",
-          },
-        ],
-      },
-      {
-        label: "The Challenge",
-        heading: "Eliminating double bookings and reducing no-shows",
-        description:
-          "The studio was losing money from double bookings and clients forgetting appointments. The challenge was building a system that handles complex scheduling rules while sending timely reminders.",
-        images: [
-          {
-            src: "/projects/beauty-challenge-1.jpg",
-            alt: "Scheduling flow wireframes",
-          },
-          {
-            src: "/projects/beauty-challenge-2.jpg",
-            alt: "Reminder system design exploration",
-          },
-        ],
-      },
-      {
-        label: "The Solution",
-        heading: "Smart booking with automated client communication",
-        description:
-          "We delivered a booking system with conflict detection, SMS/Chat reminders, and a client preferences log. Studio owners can see their day at a glance and clients get reminders 24 hours before appointments.",
-        images: [
-          {
-            src: "/projects/beauty-solution-1.jpg",
-            alt: "Final booking calendar design",
-          },
-          {
-            src: "/projects/beauty-solution-2.jpg",
-            alt: "Automated reminder interface",
-          },
-          {
-            src: "/projects/beauty-solution-3.jpg",
-            alt: "Client preferences and history view",
-          },
-        ],
-      },
-    ],
-  },
-  {
     title: "Hardware Store",
     slug: "hardware-store",
     category: "Retail & E-Commerce",
@@ -285,6 +212,83 @@ export const projects: Project[] = [
           {
             src: "/projects/hardware-store/hardware-store-admin.png",
             alt: "Hardware Store admin dashboard",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Salon Keeper",
+    slug: "salon-keeper",
+    category: "Beauty & Wellness",
+    year: "2026",
+    tags: ["Mobile App", "Booking & Sales"],
+    href: "/projects/salon-keeper",
+    cta: "View Case",
+    image: "/projects/salon-keeper/salon-keeper-project-2x2.png",
+    gradient: "from-violet-500/90 to-purple-700/90",
+    description: [
+      "Salon owners were managing appointments through paper notebooks and tracking sales with manual receipts — leading to double bookings, missed revenue, and zero visibility into business performance.",
+      "We built a cross-platform Flutter mobile app with Firebase that handles appointment scheduling through a calendar and day-view system, product inventory management, a sales checkout flow, staff role management, and real-time reports and analytics — all in one place.",
+    ],
+    heroImage: {
+      src: "/projects/salon-keeper/salon-keeper-hero.png",
+      alt: "Salon Keeper mobile app hero — appointment calendar and sales dashboard",
+    },
+    sections: [
+      {
+        label: "Overview",
+        heading: "A salon management app built with Flutter and Firebase",
+        description:
+          "Salon Keeper is a cross-platform mobile application built with Flutter and backed by Firebase Authentication and Cloud Firestore. The app provides a complete management toolkit for salon owners and their staff — covering appointment scheduling, product inventory, point-of-sale checkout, staff management, and business analytics. A two-role system separates admin and staff access, so owners get full control over operations while staff members only see what they need to handle appointments and sales.",
+        images: [
+          {
+            src: "/projects/salon-keeper/salon-keeper-overview.png",
+            alt: "Salon Keeper app overview — calendar, inventory, and sales screens",
+          },
+        ],
+      },
+      {
+        label: "The Challenge",
+        heading: "Paper-based scheduling and no sales visibility",
+        description:
+          "The salon managed appointments through handwritten notebooks and verbal confirmations. Double bookings were a weekly problem, and there was no way to see the day's schedule at a glance. Sales were tracked with handwritten receipts, making it impossible to know daily revenue, best-selling services, or which staff member generated the most income. Inventory of salon products was counted manually, leading to stockouts that frustrated clients.",
+        images: [],
+      },
+      {
+        label: "Appointment System",
+        heading: "Calendar and day-view scheduling with time slot management",
+        description:
+          "The appointment module provides two views — a monthly calendar page for an overview of bookings and a detailed day-view page for managing individual time slots. Each appointment is linked to a client, assigned staff member, and selected service. The system uses structured time slot models to prevent overlapping bookings and ensure each stylist's availability is respected. Staff can create, edit, and cancel appointments directly from their mobile device.",
+        images: [
+          {
+            src: "/projects/salon-keeper/salon-keeper-appointments.png",
+            alt: "Salon Keeper appointment calendar and day view screens",
+          },
+        ],
+        imageBesideText: true,
+      },
+      {
+        label: "Sales & Inventory",
+        heading: "Point-of-sale checkout and product inventory tracking",
+        description:
+          "The sales checkout page lets staff process transactions after appointments — selecting services rendered, adding product purchases, and recording payment. Every sale is logged as a sales record in Firestore, feeding into the reports and analytics page. The inventory page tracks salon products with quantity levels, so owners can see what's running low and reorder before stockouts happen. Admin and staff roles determine who can modify inventory versus who can only view it.",
+        images: [
+          {
+            src: "/projects/salon-keeper/salon-keeper-sales.png",
+            alt: "Salon Keeper sales checkout and inventory management screens",
+          },
+        ],
+      },
+      {
+        label: "Admin & Staff Roles",
+        heading: "Role-based access with separate admin and staff layouts",
+        description:
+          "The app implements a two-role system using Firebase Authentication and Firestore security rules. Admins access the full management suite through the admin base layout — staff management, inventory control, sales reports, analytics, and settings. Staff members use a focused staff base layout that shows only their assigned appointments and the sales checkout flow. The staff management page lets admins add, edit, and deactivate staff accounts, while the settings page handles salon-level configuration like business hours and service menus.",
+        images: [
+          {
+            src: "/projects/salon-keeper/salon-keeper-admin.png",
+            alt: "Salon Keeper admin dashboard and staff management screens",
           },
         ],
       },
