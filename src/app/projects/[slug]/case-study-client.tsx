@@ -125,7 +125,7 @@ export default function CaseStudyClient({
       <main className="relative z-10 bg-white shadow-xl rounded-b-[80px] overflow-hidden">
         {/* Hero */}
         <section className="pt-32 pb-16 lg:pt-40 lg:pb-24">
-          <Container size="xl">
+          <Container size="md">
             <div className="flex flex-col gap-8 lg:gap-12">
               <FadeIn>
                 <Link
