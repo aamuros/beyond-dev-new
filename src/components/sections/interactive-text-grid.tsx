@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 type TrailPoint = {
   x: number;
   y: number;
+  time: number;
 };
 
 export default function InteractiveTextGrid() {
@@ -24,9 +25,9 @@ export default function InteractiveTextGrid() {
     const ambientSequence = ["-", ":", "+", "*", "#"];
 
     const trail: TrailPoint[] = [];
-    const maxTrailLength = 40;
     const mouse = { x: -1000, y: -1000 };
-    const chaser = { x: -1000, y: -1000 };
+    const lastMouse = { x: -1000, y: -1000 };
+    let hasMouse = false;
 
     let animationFrameId = 0;
     let resizeFrameId = 0;
@@ -54,11 +55,12 @@ export default function InteractiveTextGrid() {
       resizeFrameId = requestAnimationFrame(resizeCanvas);
     };
 
-    const handleMouseMove = (event: MouseEvent) => {
+    const handlePointerMove = (event: PointerEvent) => {
       const rect = canvas.getBoundingClientRect();
 
       mouse.x = event.clientX - rect.left;
       mouse.y = event.clientY - rect.top;
+      hasMouse = true;
     };
 
     const render = (time: number) => {
@@ -79,16 +81,19 @@ export default function InteractiveTextGrid() {
       const startX = centerX - halfWidth;
       const startY = centerY - halfHeight;
       const baseFontSize = spacingX * 1.5;
-      chaser.x += (mouse.x - chaser.x) * 0.15;
-      chaser.y += (mouse.y - chaser.y) * 0.15;
 
-      const speed = Math.sqrt((mouse.x - chaser.x) ** 2 + (mouse.y - chaser.y) ** 2);
+      if (hasMouse && (mouse.x !== lastMouse.x || mouse.y !== lastMouse.y)) {
+        trail.unshift({
+          x: mouse.x,
+          y: mouse.y,
+          time,
+        });
 
-      if (speed > 1) {
-        trail.unshift({ x: chaser.x, y: chaser.y });
+        lastMouse.x = mouse.x;
+        lastMouse.y = mouse.y;
       }
 
-      if (trail.length > maxTrailLength || speed <= 1) {
+      while (trail.length > 0 && time - trail[trail.length - 1].time > 1000) {
         trail.pop();
       }
 
@@ -116,49 +121,71 @@ export default function InteractiveTextGrid() {
 
           let charToDraw = "-";
           let charOpacityIndex = 0;
-          let isTrailHit = false;
-          const noise =
-            Math.sin(i * 0.08 + time * 0.0002) +
-            Math.cos(j * 0.1 + time * 0.00015) +
-            Math.sin((i - j) * 0.04 - time * 0.00025);
+          const chunkMask = Math.sin(i * 0.11) + Math.cos(j * 0.08 + i * 0.03);
+          const cellHash = Math.abs(Math.sin(i * 12.9898 + j * 78.233));
+          const isAmbientEligible = chunkMask > 0.75 || cellHash > 0.94;
 
-          if (noise > 1.2) {
-            const normalized = (noise - 1.2) / 1.5;
-            const index = Math.min(4, Math.floor(normalized * 5));
+          if (isAmbientEligible) {
+            const noise =
+              Math.sin(i * 0.08 + time * 0.0002) +
+              Math.cos(j * 0.1 + time * 0.00015) +
+              Math.sin((i - j) * 0.04 - time * 0.00025);
 
-            charToDraw = ambientSequence[index];
-            charOpacityIndex = index;
-          }
+            if (noise > 1.2) {
+              const normalized = (noise - 1.2) / 1.5;
+              const index = Math.min(3, Math.floor(normalized * 4));
 
-          for (let t = 0; t < trail.length; t += 1) {
-            const tx = trail[t].x;
-            const ty = trail[t].y;
-            const distX = Math.abs(finalX - tx);
-            const distY = Math.abs(finalY - ty);
-
-            if (distY < spacingY * 1.5 && distX < 60) {
-              charToDraw = "%";
-              charOpacityIndex = 5;
-              isTrailHit = true;
-              break;
+              charToDraw = ambientSequence[index];
+              charOpacityIndex = index;
             }
 
-            if (distY < spacingY * 3.5 && distX < 120) {
-              const proximity = 1 - distY / (spacingY * 3.5);
+            const worm =
+              Math.sin(i * 0.2 - time * 0.0003) *
+              Math.cos(j * 0.2 + time * 0.0002);
 
-              if (noise + proximity > 1.0) {
-                const wakeIndex = Math.floor(proximity * 3) + 1;
+            if (worm > 0.4) {
+              const normalized = (worm - 0.4) / 0.6;
+              const wormIndex = Math.max(1, Math.min(3, Math.floor(normalized * 4)));
 
-                charOpacityIndex = Math.max(charOpacityIndex, wakeIndex);
-                charToDraw = ambientSequence[charOpacityIndex];
+              if (wormIndex > charOpacityIndex) {
+                charOpacityIndex = wormIndex;
+                charToDraw = ambientSequence[wormIndex];
               }
             }
           }
 
-          const opacity = 0.15 + charOpacityIndex * 0.14;
-          const rgb = isTrailHit ? "125, 125, 125" : "170, 170, 170";
+          let hitAge = -1;
 
-          ctx.fillStyle = `rgba(${rgb}, ${opacity})`;
+          const verticalReach = spacingY * (0.8 + cellHash * 1.7);
+          const horizontalReach = 40 + cellHash * 50;
+
+          for (let t = 0; t < trail.length; t += 1) {
+            const pt = trail[t];
+
+            const distX = Math.abs(finalX - pt.x);
+            const distY = Math.abs(finalY - pt.y);
+
+            if (distX < horizontalReach && distY < verticalReach) {
+              hitAge = time - pt.time;
+              break;
+            }
+          }
+
+          if (hitAge !== -1) {
+            if (hitAge < 500) {
+              charToDraw = "%";
+              charOpacityIndex = 5;
+            } else {
+              const fadeProgress = (hitAge - 500) / 500;
+
+              charToDraw = "#";
+              charOpacityIndex = Math.max(0, Math.floor((1 - fadeProgress) * 4));
+            }
+          }
+
+          const opacity = 0.15 + charOpacityIndex * 0.14;
+
+          ctx.fillStyle = `rgba(170, 170, 170, ${opacity})`;
           ctx.fillText(charToDraw, finalX, finalY);
         }
       }
@@ -198,7 +225,7 @@ export default function InteractiveTextGrid() {
     intersectionObserver.observe(parent);
 
     window.addEventListener("resize", scheduleResize);
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
 
     startAnimation();
 
@@ -208,7 +235,7 @@ export default function InteractiveTextGrid() {
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
       window.removeEventListener("resize", scheduleResize);
-      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("pointermove", handlePointerMove);
     };
   }, []);
 
