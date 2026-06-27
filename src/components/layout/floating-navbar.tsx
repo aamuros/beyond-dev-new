@@ -1,20 +1,27 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import SmoothLink from "@/components/ui/smooth-link";
+import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
-import { cn } from "@/lib/utils";
 import Logo from "@/components/layout/logo";
 
-/* ------------------------------------------------------------------ */
-/*  Icons                                                              */
-/* ------------------------------------------------------------------ */
+const navLinks = [
+  { label: "Systems", href: "#systems" },
+  { label: "Process", href: "#process" },
+  { label: "Work", href: "#projects" },
+];
 
-function IconArrowRight({ className }: { className?: string }) {
+/* Shared transition config — keeps padding + CTA perfectly in sync */
+const smoothTransition = {
+  duration: 0.45,
+  ease: [0.25, 0.1, 0.25, 1] as const, /* cubic-bezier — smooth ease-out */
+};
+
+function IconX({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M5 12h14" />
-      <path d="m12 5 7 7-7 7" />
+      <path d="M18 6 6 18" />
+      <path d="m6 6 12 12" />
     </svg>
   );
 }
@@ -28,29 +35,6 @@ function IconMenu({ className }: { className?: string }) {
     </svg>
   );
 }
-
-function IconX({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M18 6 6 18" />
-      <path d="m6 6 12 12" />
-    </svg>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/*  Navigation Data                                                    */
-/* ------------------------------------------------------------------ */
-
-const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "Pricing", href: "/#contact" },
-  { label: "Contact", href: "/#contact" },
-];
-
-/* ------------------------------------------------------------------ */
-/*  Mobile Drawer                                                      */
-/* ------------------------------------------------------------------ */
 
 function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
   useEffect(() => {
@@ -76,20 +60,14 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
             className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
             onClick={onClose}
           />
-
           <motion.div
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className={cn(
-              "fixed top-0 right-0 bottom-0 z-50 w-[min(85vw,360px)]",
-              "bg-white shadow-2xl",
-              "flex flex-col overflow-y-auto"
-            )}
+            className="fixed top-0 right-0 bottom-0 z-50 w-[min(85vw,360px)] bg-white shadow-2xl flex flex-col overflow-y-auto"
           >
-            <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--color-white-400)]">
-              <Logo className="h-5 w-auto" />
+            <div className="flex items-center justify-end px-5 py-4 border-b border-[var(--color-white-400)]">
               <button
                 onClick={onClose}
                 className="p-2 rounded-lg hover:bg-[var(--color-white-300)] transition-colors"
@@ -98,35 +76,18 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
                 <IconX className="h-5 w-5 text-[var(--color-black-400)]" />
               </button>
             </div>
-
             <nav className="flex-1 px-4 py-3">
               {navLinks.map((link) => (
-                <SmoothLink
+                <Link
                   key={link.href}
                   href={link.href}
                   onClick={onClose}
-                  className="block py-3.5 px-2 text-[15px] font-semibold text-[var(--color-black-200)] border-b border-[var(--color-white-400)] hover:text-[var(--color-black-100)] transition-colors"
+                  className="block py-3.5 px-2 text-[15px] font-semibold text-[#141414] border-b border-[var(--color-white-400)] hover:text-[var(--color-black-100)] transition-colors"
                 >
                   {link.label}
-                </SmoothLink>
+                </Link>
               ))}
             </nav>
-
-            <div className="p-4 border-t border-[var(--color-white-400)]">
-              <SmoothLink
-                href="/#contact"
-                onClick={onClose}
-                className={cn(
-                  "flex items-center justify-center gap-2 w-full py-3 rounded-full",
-                  "bg-[var(--color-black-100)] text-white text-[14px] font-semibold",
-                  "transition-all duration-200 hover:bg-[var(--color-black-300)]",
-                  "active:scale-[0.97]"
-                )}
-              >
-                Get Started
-                <IconArrowRight className="h-4 w-4" />
-              </SmoothLink>
-            </div>
           </motion.div>
         </>
       )}
@@ -134,121 +95,137 @@ function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void })
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  Main Floating Navbar                                               */
-/* ------------------------------------------------------------------ */
-
 export default function FloatingNavbar() {
-  const [visible, setVisible] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const navRef = useRef<HTMLDivElement>(null);
-  const lastToggleRef = useRef(0);
-  const lastDirectionRef = useRef<"up" | "down" | null>(null);
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    const previous = scrollY.getPrevious() ?? 0;
-    const delta = latest - previous;
-    const scrollingDown = delta > 0;
-    const heroHeight = typeof window !== "undefined" ? window.innerHeight : 800;
-    const now = Date.now();
-
-    let nextVisible: boolean | null = null;
-
-    if (latest < 10) {
-      nextVisible = false;
-    } else if (latest < heroHeight) {
-      if (scrollingDown && delta > 4) nextVisible = true;
-      if (!scrollingDown && delta < -4) nextVisible = false;
-    } else {
-      nextVisible = !scrollingDown;
-    }
-
-    if (nextVisible !== null && nextVisible !== visible) {
-      const direction = nextVisible ? "up" : "down";
-      const minInterval = lastDirectionRef.current !== direction ? 300 : 150;
-      if (now - lastToggleRef.current > minInterval) {
-        setVisible(nextVisible);
-        lastToggleRef.current = now;
-        lastDirectionRef.current = direction;
-      }
-    }
+    setScrolled(latest > 50);
   });
+
+  const handleAnchorClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+      if (href.startsWith("#")) {
+        e.preventDefault();
+        const el = document.querySelector(href);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    },
+    []
+  );
 
   return (
     <>
-      <AnimatePresence mode="sync">
-        {visible && (
-          <motion.header
-            ref={navRef}
-            initial={{ y: -80, opacity: 0, scale: 0.98 }}
-            animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: -20, opacity: 0, scale: 0.98 }}
-            transition={{
-              type: "spring",
-              stiffness: 260,
-              damping: 28,
-              mass: 0.8,
-            }}
-            className="fixed top-5 inset-x-0 mx-auto z-50 w-[calc(100%-2rem)] max-w-5xl"
+      <motion.header
+        initial={{ y: -80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 260, damping: 28, mass: 0.8 }}
+        className="fixed top-0 inset-x-0 z-50 flex justify-center items-center pt-6 w-min mx-auto overflow-visible"
+      >
+        <motion.nav
+          animate={{ paddingRight: scrolled ? 8 : 24 }}
+          transition={smoothTransition}
+          className="relative flex flex-row flex-nowrap items-center content-center justify-start w-[584px] h-[72px] py-[17px] pl-6 rounded-[36px] gap-[10px] bg-[rgba(237,237,237,0.64)] backdrop-blur-[48px] overflow-visible select-none"
+          style={{ paddingRight: 24 }}
+        >
+          <Link href="/" className="shrink-0 flex items-center">
+            <Logo className="h-[38px] w-auto text-[#141414]" />
+          </Link>
+
+          <div
+            className="hidden lg:flex flex-row flex-nowrap items-center content-center justify-end overflow-visible relative"
+            style={{ flex: "1 0 0px", height: 22 }}
           >
-            <nav
-              className={cn(
-                "relative flex items-center",
-                "h-[100px] px-4",
-                "rounded-[20px]",
-                "bg-white",
-                "border-b border-[#f2f1f3]",
-                "shadow-[0px_62px_17px_0px_rgba(0,0,0,0),0px_40px_16px_0px_rgba(0,0,0,0.01),0px_22px_13px_0px_rgba(0,0,0,0.02),0px_10px_10px_0px_rgba(0,0,0,0.04),0px_2px_5px_0px_rgba(0,0,0,0.04)]",
-                "transition-[border-radius,box-shadow] duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
-              )}
+            <div
+              className="flex flex-row items-center shrink-0"
+              style={{ gap: 24 }}
             >
-              <div className="hidden lg:flex items-center gap-0.5">
-                {navLinks.map((link) => (
-                  <SmoothLink
-                    key={link.href}
-                    href={link.href}
-                    className={cn(
-                      "px-6 py-2.5 text-[16px] font-semibold leading-[24px] -tracking-[0.352px] rounded-full",
-                      "text-[#19171c]",
-                      "transition-all duration-200",
-                      "hover:text-[var(--color-black-100)] hover:bg-[var(--color-white-300)]"
-                    )}
-                  >
-                    {link.label}
-                  </SmoothLink>
-                ))}
-              </div>
-
-              <div className="hidden lg:flex items-center gap-2 ml-auto">
-                <SmoothLink
-                  href="/#contact"
-                  className={cn(
-                    "group/cta inline-flex items-center gap-1.5",
-                    "h-10 px-6 rounded-full",
-                    "bg-[var(--color-black-100)] text-white",
-                    "text-[14px] font-semibold",
-                    "transition-all duration-200",
-                    "hover:bg-[var(--color-black-300)]",
-                    "active:scale-[0.96]"
-                  )}
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={(e) => handleAnchorClick(e, link.href)}
+                  style={{
+                    fontSize: 16,
+                    fontStyle: "normal",
+                    fontWeight: 600,
+                    letterSpacing: "0.2px",
+                    lineHeight: "22px",
+                    color: "#141414",
+                    textDecoration: "none",
+                    cursor: "pointer",
+                  }}
+                  className="whitespace-nowrap transition-opacity duration-200 hover:opacity-70"
                 >
-                  <span>Get Started</span>
-                  <IconArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover/cta:translate-x-0.5" />
-                </SmoothLink>
-              </div>
+                  {link.label}
+                </Link>
+              ))}
+            </div>
 
-              <button
-                className="lg:hidden p-2.5 rounded-full hover:bg-[var(--color-white-300)] transition-colors cursor-pointer"
-                onClick={() => setMobileOpen(true)}
-                aria-label="Open menu"
-              >
-                <IconMenu className="h-5 w-5 text-[var(--color-black-400)]" />
-              </button>
-            </nav>
-          </motion.header>
-        )}
-      </AnimatePresence>
+            <AnimatePresence initial={false}>
+              {scrolled && (
+                <motion.div
+                  key="cta-button"
+                  initial={{ width: 0, opacity: 0, marginLeft: 0 }}
+                  animate={{ width: "auto", opacity: 1, marginLeft: 24 }}
+                  exit={{ width: 0, opacity: 0, marginLeft: 0 }}
+                  transition={{
+                    width: smoothTransition,
+                    marginLeft: smoothTransition,
+                    opacity: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] },
+                  }}
+                  className="shrink-0 overflow-hidden"
+                  style={{ borderRadius: 999 }}
+                >
+                  <Link
+                    href="#contact"
+                    onClick={(e) => handleAnchorClick(e, "#contact")}
+                    className="whitespace-nowrap select-none"
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 0,
+                      fontSize: 16,
+                      fontStyle: "normal",
+                      fontWeight: 600,
+                      letterSpacing: "0.2px",
+                      lineHeight: "22px",
+                      color: "#fff",
+                      background: "#141414",
+                      backdropFilter: "blur(40px)",
+                      borderRadius: 999,
+                      borderWidth: 0,
+                      borderStyle: "none",
+                      padding: "11px 16px",
+                      textAlign: "center",
+                      textDecoration: "none",
+                      cursor: "pointer",
+                      transition: "color 0.2s, background 0.2s",
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = "#2e3238"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = "#141414"; }}
+                  >
+                    <span>Get in touch</span>
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <button
+            className="lg:hidden p-2 rounded-full hover:bg-[rgba(255,255,255,0.4)] transition-colors cursor-pointer shrink-0"
+            onClick={() => setMobileOpen(true)}
+            aria-label="Open menu"
+          >
+            <IconMenu className="h-5 w-5 text-[#141414]" />
+          </button>
+        </motion.nav>
+      </motion.header>
 
       <MobileDrawer open={mobileOpen} onClose={() => setMobileOpen(false)} />
     </>
