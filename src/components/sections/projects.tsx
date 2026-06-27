@@ -26,12 +26,22 @@ function ProjectCard({
         ease: [0.25, 0.46, 0.45, 0.94],
       }}
     >
-      <div
-        className={cn(
-          "absolute inset-0 bg-gradient-to-br transition-transform duration-700 ease-out group-hover:scale-105",
-          project.gradient
-        )}
-      />
+      {project.image ? (
+        <Image
+          src={project.image}
+          alt={project.title}
+          fill
+          sizes="(max-width: 1024px) 100vw, 50vw"
+          className="object-cover transition-transform duration-700 ease-out active:scale-105 group-hover:scale-105"
+        />
+      ) : (
+        <div
+          className={cn(
+            "absolute inset-0 bg-gradient-to-br transition-transform duration-700 ease-out active:scale-105 group-hover:scale-105",
+            project.gradient
+          )}
+        />
+      )}
       <div className="absolute inset-0 bg-black/[0.08]" />
 
       {/* Tags */}
@@ -61,7 +71,7 @@ function ProjectCard({
       </div>
 
       {/* Corner arrow */}
-      <div className="absolute top-5 right-5 z-10 w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center opacity-0 scale-75 transition-all duration-300 group-hover:opacity-100 group-hover:scale-100">
+      <div className="absolute top-5 right-5 z-10 w-9 h-9 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center opacity-100 scale-100 transition-all duration-300 lg:opacity-0 lg:scale-75 lg:group-hover:opacity-100 lg:group-hover:scale-100">
         <ArrowUpRight className="w-4 h-4 text-white" />
       </div>
     </motion.a>
