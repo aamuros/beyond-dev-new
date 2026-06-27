@@ -20,8 +20,8 @@ export default function InteractiveTextGrid() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const cols = 150;
-    const rows = 56;
+    const cols = 135;
+    const rows = 65;
     const ambientSequence = ["-", ":", "+", "*", "#"];
 
     const trail: TrailPoint[] = [];
@@ -73,14 +73,14 @@ export default function InteractiveTextGrid() {
       const centerY = height / 2;
       const usableWidth = width * 0.9;
       const spacingX = usableWidth / cols;
-      const spacingY = spacingX * 1.6;
-      const totalWidth = cols * spacingX;
-      const totalHeight = rows * spacingY;
+      const spacingY = spacingX * 1.18;
+      const totalWidth = (cols-1) * spacingX;
+      const totalHeight = (rows-1) * spacingY;
       const halfWidth = totalWidth / 2;
       const halfHeight = totalHeight / 2;
       const startX = centerX - halfWidth;
       const startY = centerY - halfHeight;
-      const baseFontSize = spacingX * 1.5;
+      const baseFontSize = spacingX * 1.7;
 
       if (hasMouse && (mouse.x !== lastMouse.x || mouse.y !== lastMouse.y)) {
         trail.unshift({
@@ -108,14 +108,13 @@ export default function InteractiveTextGrid() {
           const dy = y - centerY;
           const nx = dx / halfWidth;
           const ny = dy / halfHeight;
-          const bulgeStrengthX = 0.05;
+          const bulgeStrengthX = 0.07;
           const bulgeStrengthY = 0.11;
           const distortX = 1 + bulgeStrengthX * Math.cos((ny * Math.PI) / 2);
           const distortY = 1 + bulgeStrengthY * Math.cos((nx * Math.PI) / 2);
           const finalX = centerX + dx * distortX;
           const finalY = centerY + dy * distortY;
-          const edgeDistance = Math.max(Math.abs(nx), Math.abs(ny));
-          const fontScale = Math.max(0.4, 1 - edgeDistance * 0.25);
+          const fontScale = 1;
 
           ctx.font = `${baseFontSize * fontScale}px monospace`;
 
@@ -156,8 +155,13 @@ export default function InteractiveTextGrid() {
 
           let hitAge = -1;
 
+          // Dynamic Reach for the Chunky Hover Trail
           const verticalReach = spacingY * (0.8 + cellHash * 1.7);
-          const horizontalReach = 40 + cellHash * 50;
+
+          // Reduced horizontal reach:
+          // Instead of hardcoded 40-90px, this now scales with the actual grid spacing.
+          // This creates a tighter trail around roughly 3-6 columns total.
+          const horizontalReach = spacingX * (1.5 + cellHash * 1.5);
 
           for (let t = 0; t < trail.length; t += 1) {
             const pt = trail[t];
@@ -183,10 +187,26 @@ export default function InteractiveTextGrid() {
             }
           }
 
-          const opacity = 0.15 + charOpacityIndex * 0.14;
+          const opacity = 0.23 + charOpacityIndex * 0.14;
 
-          ctx.fillStyle = `rgba(170, 170, 170, ${opacity})`;
-          ctx.fillText(charToDraw, finalX, finalY);
+          ctx.fillStyle = `rgba(80, 80, 80, ${opacity})`;
+
+          // Typographic centering correction.
+          // Some monospace glyphs are not visually centered even with textBaseline = "middle".
+          let yNudge = 0;
+
+          if (charToDraw === "*") {
+            // Asterisk usually sits too high, so push it down.
+            yNudge = baseFontSize * fontScale * 0.18;
+          } else if (charToDraw === "+") {
+            // Plus can sit slightly high depending on the browser/font.
+            yNudge = baseFontSize * fontScale * 0.04;
+          } else if (charToDraw === "-") {
+            // Dash can sit slightly low, so lift it very slightly.
+            yNudge = baseFontSize * fontScale * -0.02;
+          }
+
+          ctx.fillText(charToDraw, finalX, finalY + yNudge);
         }
       }
 

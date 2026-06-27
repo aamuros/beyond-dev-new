@@ -50,26 +50,22 @@ export default function Home() {
             <PainPoints />
           </section>
 
-        {/* Projects */}
-        <section className="snap-section snap-section--auto">
-          <Projects />
-        </section>
+          <section className="snap-section">
+            <Process />
+          </section>
 
-        {/* Testimonials */}
-        <section className="snap-section snap-section--auto">
-          <Testimonials />
-        </section>
+          <section className="snap-section snap-section--auto">
+            <Projects />
+          </section>
 
-        {/* FAQ */}
-        <section className="snap-section snap-section--auto">
-          <Faq />
-        </section>
+          <section className="snap-section snap-section--auto">
+            <Testimonials />
+          </section>
 
           <section className="snap-section snap-section--auto">
             <Faq />
           </section>
 
-      <Footer />
           <section className="snap-section">
             <Contact />
           </section>
