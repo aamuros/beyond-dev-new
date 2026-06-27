@@ -17,9 +17,9 @@ const logos = [
 
 function LogoRow() {
   return (
-    <div className="flex shrink-0 items-center gap-10 max-lg:gap-7 max-md:gap-5">
+    <div className="flex shrink-0 items-center gap-12 max-lg:gap-9 max-md:gap-6">
       {logos.map((logo) => (
-        <div key={logo.name} className="flex h-13 shrink-0 items-center max-xl:h-11 max-md:h-9">
+        <div key={logo.name} className="flex h-16 shrink-0 items-center max-xl:h-14 max-md:h-11">
           <Image
             alt={logo.name}
             loading="lazy"
@@ -38,7 +38,7 @@ function LogoRow() {
 export default function LogoCloud() {
   return (
     <section id="systems">
-      <div className="grid grid-cols-12 justify-items-center mt-10 pb-12 lg:mt-12">
+      <div className="grid grid-cols-12 justify-items-center mt-20 pb-12 lg:mt-24">
         <div className="col-[2/-2] w-full">
           <div className="relative overflow-hidden mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
             <div className="marquee-track flex w-max">

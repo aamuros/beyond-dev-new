@@ -593,3 +593,93 @@ body {
     padding: 0.3125rem 1.3125rem;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/*  Pain Points – Jitter-style Sticky Card Stack                       */
+/* ------------------------------------------------------------------ */
+
+.pain-point-card-list {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.pain-point-card {
+  aspect-ratio: 510 / 640;
+  background-color: rgb(243, 243, 245);
+  border-radius: 40px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+  max-width: 510px;
+  overflow: hidden;
+  padding-top: 80px;
+  position: sticky;
+  width: 510px;
+  z-index: 1;
+}
+
+.pain-point-card__header {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.pain-point-card__video {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.pain-point-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 32px 32px;
+}
+
+.pain-point-card__title {
+  color: rgb(25, 23, 28);
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.pain-point-card__description {
+  color: #6e6e73;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .pain-point-card {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: auto;
+    min-height: 480px;
+    border-radius: 24px;
+    padding-top: 48px;
+  }
+
+  .pain-point-card__content {
+    padding: 0 24px 24px;
+  }
+
+  .pain-point-card__title {
+    font-size: 1.25rem;
+  }
+
+  .pain-point-card__description {
+    font-size: 0.875rem;
+  }
+}
