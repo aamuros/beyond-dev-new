@@ -3,6 +3,7 @@ export interface CaseStudySection {
   heading: string;
   description: string;
   images: { src: string; alt: string }[];
+  imageBesideText?: boolean;
 }
 
 export interface Project {
@@ -29,14 +30,14 @@ export const projects: Project[] = [
     tags: ["POS", "Landing Page"],
     href: "/projects/furniture-odyssey",
     cta: "View Case",
-    image: "/projects/furniture-odyssey-project-2x2.png",
+    image: "/projects/furniture-odyssey/furniture-odyssey-project-2x2.png",
     gradient: "from-amber-500/90 to-orange-600/90",
     description: [
       "Furniture Odyssey needed two connected systems — a public-facing catalog website to showcase their furniture products and an internal POS dashboard to manage the full sales workflow from quotation to delivery.",
       "We built a landing page with Supabase-backed product listings and a separate sales operations tool handling customer records, quotations, negotiated orders, payments, deliveries, and downloadable PDF documents.",
     ],
     heroImage: {
-      src: "/projects/furniture-odyssey-hero.jpg",
+      src: "/projects/furniture-odyssey/furniture-odyssey-hero.png",
       alt: "Furniture Odyssey catalog website and POS dashboard hero",
     },
     sections: [
@@ -47,12 +48,8 @@ export const projects: Project[] = [
           "Furniture Odyssey runs on two custom-built applications. The catalog website is a public-facing React + Vite landing page backed by Supabase that showcases their furniture products to potential buyers. The POS dashboard is a Next.js internal tool with Prisma and Supabase that handles the entire manual sales workflow — from customer records and quotations to order fulfillment, payments, and delivery scheduling.",
         images: [
           {
-            src: "/projects/furniture-odyssey-overview-1.jpg",
-            alt: "Furniture Odyssey catalog website overview",
-          },
-          {
-            src: "/projects/furniture-odyssey-overview-2.jpg",
-            alt: "Furniture Odyssey POS dashboard overview",
+            src: "/projects/furniture-odyssey/furniture-odyssey-overview.png",
+            alt: "Furniture Odyssey catalog website and POS dashboard overview",
           },
         ],
       },
@@ -61,16 +58,7 @@ export const projects: Project[] = [
         heading: "Manual sales workflows with no digital backbone",
         description:
           "The business was managing customer inquiries, quotations, and orders through manual channels — phone, Viber, Facebook Messenger, and walk-ins. There was no centralized system to track which quotations were approved, which orders had partial payments, or which deliveries were still pending. Product references and pricing lived in scattered spreadsheets and chat threads.",
-        images: [
-          {
-            src: "/projects/furniture-odyssey-challenge-1.jpg",
-            alt: "Manual sales workflow wireframes",
-          },
-          {
-            src: "/projects/furniture-odyssey-challenge-2.jpg",
-            alt: "System architecture exploration",
-          },
-        ],
+        images: [],
       },
       {
         label: "The Catalog Website",
@@ -79,14 +67,11 @@ export const projects: Project[] = [
           "The catalog website is a React + TypeScript application built on Vite with Supabase as the backend. It displays the full furniture product line with images, categories, and product details. The site is designed to be the first touchpoint for customers — showcasing the brand and product range before they reach out through manual channels to place an order.",
         images: [
           {
-            src: "/projects/furniture-odyssey-catalog-1.jpg",
-            alt: "Catalog website product listing page",
-          },
-          {
-            src: "/projects/furniture-odyssey-catalog-2.jpg",
-            alt: "Catalog website product detail view",
+            src: "/projects/furniture-odyssey/furniture-odyssey-catalog.png",
+            alt: "Furniture Odyssey catalog website",
           },
         ],
+        imageBesideText: true,
       },
       {
         label: "The POS Dashboard",
@@ -95,16 +80,8 @@ export const projects: Project[] = [
           "The POS is a full internal dashboard built with Next.js App Router, Prisma, and Supabase. It covers customer directory records with contact and source context, quotation creation with custom items and negotiated discounts, approved quotation conversion into operational orders, multiple payment tracking per order with downpayment and partial payment types, delivery scheduling with partial fulfillment, and downloadable React-PDF documents including quotations, invoices, receipts, and delivery summaries. Role-based permissions and activity logging keep the team accountable.",
         images: [
           {
-            src: "/projects/furniture-odyssey-pos-1.jpg",
-            alt: "POS quotation builder interface",
-          },
-          {
-            src: "/projects/furniture-odyssey-pos-2.jpg",
-            alt: "POS order management and payment tracking",
-          },
-          {
-            src: "/projects/furniture-odyssey-pos-3.jpg",
-            alt: "POS delivery scheduling and PDF generation",
+            src: "/projects/furniture-odyssey/furniture-odyssey-pos.png",
+            alt: "Furniture Odyssey POS dashboard",
           },
         ],
       },

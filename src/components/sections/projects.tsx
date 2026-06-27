@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
@@ -17,14 +17,25 @@ function ProjectCard({
 }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [hasAnimated, setHasAnimated] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return sessionStorage.getItem(`project-animated-${project.slug}`) === "true";
+  });
+
+  useEffect(() => {
+    if (isInView && !hasAnimated) {
+      setHasAnimated(true);
+      sessionStorage.setItem(`project-animated-${project.slug}`, "true");
+    }
+  }, [isInView, hasAnimated, project.slug]);
 
   return (
     <motion.a
       ref={ref}
       href={project.href}
       className="group relative flex flex-col overflow-hidden rounded-2xl bg-black/[0.03] aspect-[4/4.5] lg:aspect-[4/3.5] active:scale-[0.98] transition-transform duration-200"
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      initial={false}
+      animate={{ opacity: hasAnimated ? 1 : 0, y: hasAnimated ? 0 : 40 }}
       transition={{
         duration: 0.6,
         delay: index * 0.15,
@@ -36,6 +47,7 @@ function ProjectCard({
           src={project.image}
           alt={project.title}
           fill
+          sizes="(max-width: 1024px) 100vw, 50vw"
           className="object-cover transition-transform duration-700 ease-out active:scale-105 group-hover:scale-105"
         />
       ) : (

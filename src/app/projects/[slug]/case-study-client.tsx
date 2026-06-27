@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -41,36 +42,71 @@ function SectionBlock({
   section: Project["sections"][0];
   index: number;
 }) {
+  const hasSingleImage = section.images.length === 1;
+
   return (
     <div className="flex flex-col gap-8 lg:gap-12">
-      <FadeIn>
-        <div className="flex flex-col gap-4 max-w-2xl">
-          <span className="text-sm font-semibold text-muted tracking-wide uppercase">
-            {section.label}
-          </span>
-          <h2 className="section-heading-title text-3xl lg:text-4xl min-[1441px]:text-5xl text-foreground">
-            {section.heading}
-          </h2>
-          <p className="text-base lg:text-lg text-muted leading-relaxed font-medium">
-            {section.description}
-          </p>
-        </div>
-      </FadeIn>
-      <div className="flex flex-col gap-4">
-        {section.images.map((img, i) => (
-          <FadeIn key={i} delay={i * 0.1}>
-            <div
-              className={cn(
-                "relative overflow-hidden rounded-2xl bg-surface aspect-[16/9]"
-              )}
-            >
-              <div className="absolute inset-0 flex items-center justify-center text-muted text-sm">
-                {img.alt}
-              </div>
+      {section.imageBesideText ? (
+        <FadeIn>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="flex flex-col gap-4">
+              <span className="text-sm font-semibold text-muted tracking-wide uppercase">
+                {section.label}
+              </span>
+              <h2 className="section-heading-title text-3xl lg:text-4xl min-[1441px]:text-5xl text-foreground">
+                {section.heading}
+              </h2>
+              <p className="text-base lg:text-lg text-muted leading-relaxed font-medium">
+                {section.description}
+              </p>
+            </div>
+            <div className="relative overflow-hidden rounded-2xl bg-surface aspect-[3/4]">
+              <Image
+                src={section.images[0].src}
+                alt={section.images[0].alt}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+              />
+            </div>
+          </div>
+        </FadeIn>
+      ) : (
+        <>
+          <FadeIn>
+            <div className="flex flex-col gap-4 max-w-2xl">
+              <span className="text-sm font-semibold text-muted tracking-wide uppercase">
+                {section.label}
+              </span>
+              <h2 className="section-heading-title text-3xl lg:text-4xl min-[1441px]:text-5xl text-foreground">
+                {section.heading}
+              </h2>
+              <p className="text-base lg:text-lg text-muted leading-relaxed font-medium">
+                {section.description}
+              </p>
             </div>
           </FadeIn>
-        ))}
-      </div>
+          <div className="flex flex-col gap-4">
+            {section.images.map((img, i) => (
+              <FadeIn key={i} delay={i * 0.1}>
+                <div
+                  className={cn(
+                    "relative overflow-hidden rounded-2xl bg-surface aspect-[16/9]"
+                  )}
+                >
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 1024px"
+                    className="object-cover"
+                  />
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }
@@ -135,9 +171,13 @@ export default function CaseStudyClient({
           <Container size="xl">
             <FadeIn>
               <div className="relative overflow-hidden rounded-2xl bg-surface aspect-[16/9]">
-                <div className="absolute inset-0 flex items-center justify-center text-muted text-sm">
-                  {project.heroImage.alt}
-                </div>
+                <Image
+                  src={project.heroImage.src}
+                  alt={project.heroImage.alt}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 1024px"
+                  className="object-cover"
+                />
               </div>
             </FadeIn>
           </Container>
