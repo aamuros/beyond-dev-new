@@ -1,85 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Phone, Mail, MapPin } from "lucide-react";
 import SmoothLink from "@/components/ui/smooth-link";
-const footerLinkGroups = [
-  {
-    heading: "Systems",
-    links: [
-      { label: "Order Tracker", href: "#systems" },
-      { label: "Booking System", href: "#systems" },
-      { label: "Inventory Tracker", href: "#systems" },
-      { label: "Customer Database", href: "#systems" },
-      { label: "Admin Dashboard", href: "#systems" },
-    ],
-  },
-  {
-    heading: "Company",
-    links: [
-      { label: "About Us", href: "#about" },
-      { label: "Our Process", href: "#process" },
-      { label: "Contact", href: "#contact" },
-    ],
-  },
-  {
-    heading: "Resources",
-    links: [
-      { label: "Blog", href: "#" },
-      { label: "Case Studies", href: "#" },
-      { label: "FAQ", href: "#faq" },
-    ],
-  },
-  {
-    heading: "Contact",
-    links: [
-      { label: "+63 917 123 4567", href: "tel:+639171234567", icon: "phone" },
-      { label: "hello@beyonddev.ph", href: "mailto:hello@beyonddev.ph", icon: "mail" },
-      { label: "Philippines", href: "#", icon: "map" },
-    ],
-  },
-] as const;
-
-const socialLinks = [
-  {
-    label: "Facebook",
-    href: "#",
-  },
-  {
-    label: "Instagram",
-    href: "#",
-  },
-  {
-    label: "LinkedIn",
-    href: "#",
-  },
-  {
-    label: "GitHub",
-    href: "#",
-  },
-];
-
-const legalLinks = [
-  { label: "Privacy Policy", href: "#" },
-  { label: "Terms of Service", href: "#" },
-];
-
-function ContactIcon({ type }: { type: string }) {
-  const className = "h-4 w-4 shrink-0 text-black";
-  switch (type) {
-    case "phone":
-      return <Phone className={className} />;
-    case "mail":
-      return <Mail className={className} />;
-    case "map":
-      return <MapPin className={className} />;
-    default:
-      return null;
-  }
-}
-
-const linkClasses =
-  "block w-fit rounded transition-colors outline-none focus-visible:outline-focus px-1.5 -mx-1.5 text-xs font-medium text-black hover:text-gray-500 text-left disabled:opacity-0";
 
 export default function Footer() {
   return (
@@ -131,8 +53,8 @@ export default function Footer() {
         >
           <p>&copy; 2026 beyond.dev &mdash; A beyond.ink studio company.</p>
           <div className="flex gap-6 mt-3 md:mt-0">
-            <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
-            <a href="#" className="hover:text-white transition-colors">GitHub</a>
+            <span className="text-slate-400">LinkedIn</span>
+            <span className="text-slate-400">GitHub</span>
           </div>
         </motion.div>
       </div>

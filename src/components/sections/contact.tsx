@@ -9,7 +9,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="global-section bg-white md:h-screen md:min-h-0 flex flex-col justify-center py-6 md:py-12 overflow-hidden"
+      className="global-section !mt-[60px] !pb-[200px] bg-white md:h-screen md:min-h-0 flex flex-col justify-center pt-6 md:pt-12 overflow-hidden"
     >
       <Container size="lg" className="flex flex-col gap-6 md:gap-8">
         <SectionHeading
