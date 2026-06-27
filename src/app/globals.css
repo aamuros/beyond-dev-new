@@ -609,12 +609,12 @@ body {
 }
 
 .pain-point-card {
-  aspect-ratio: 510 / 640;
   background-color: rgb(243, 243, 245);
   border-radius: 40px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column-reverse;
+  height: 640px;
   justify-content: space-between;
   max-width: 510px;
   overflow: hidden;
@@ -665,7 +665,6 @@ body {
     width: 100%;
     max-width: 100%;
     height: auto;
-    aspect-ratio: auto;
     min-height: 480px;
     border-radius: 24px;
     padding-top: 48px;
