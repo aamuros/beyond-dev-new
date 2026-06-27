@@ -9,10 +9,7 @@ import Contact from "@/components/sections/contact";
 export default function Home() {
   return (
     <div className="bg-[#09637E]">
-      <main
-        className="relative z-10 bg-white shadow-xl"
-        style={{ clipPath: 'inset(0 0 0 0 round 0 0 80px 80px)' }}
-      >
+      <main className="relative z-10 bg-white shadow-xl rounded-b-[80px]">
         {/* Hero (includes Logo Cloud) */}
         <section className="snap-section">
           <Hero />
