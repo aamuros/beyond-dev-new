@@ -88,73 +88,65 @@ export const projects: Project[] = [
     ],
   },
   {
-    title: "Reyes Auto Repair",
-    slug: "reyes-auto-repair",
-    category: "Automotive",
-    year: "2024",
-    tags: ["Customer DB", "Job Tracker"],
-    href: "/projects/reyes-auto-repair",
+    title: "Kamusta Gramby",
+    slug: "kamusta-gramby",
+    category: "Health & Wellness",
+    year: "2026",
+    tags: ["Mobile App", "Wellness"],
+    href: "/projects/kamusta-gramby",
     cta: "View Case",
-    image: "/projects/auto-repair.jpg",
-    gradient: "from-slate-600/90 to-zinc-800/90",
+    image: "/projects/kamusta-gramby/kamusta-gramby-project-2x2.png",
+    gradient: "from-emerald-500/90 to-green-700/90",
     description: [
-      "Reyes Auto Repair struggled with lost customer records and disorganized job assignments across their growing team.",
-      "We built a customer database and job tracking system that gives instant access to vehicle history and real-time job status.",
+      "Families with elderly relatives aging in place had no simple way to check in daily and ensure their loved ones were safe and well.",
+      "We built a React Native mobile app with a two-role system — caretakers manage medication schedules and monitor activity, while care recipients perform daily check-ins and can trigger SOS alerts, with automated SMS notifications for inactivity.",
     ],
     heroImage: {
-      src: "/projects/auto-repair-hero.jpg",
-      alt: "Reyes Auto Repair customer management system hero",
+      src: "/projects/kamusta-gramby/kamusta-gramby-hero.png",
+      alt: "Kamusta Gramby wellness check-in app hero",
     },
     sections: [
       {
         label: "Overview",
-        heading: "Digitizing a 15-year-old paper-based repair shop",
+        heading: "A wellness check-in app for seniors aging in place",
         description:
-          "Reyes Auto Repair had been using paper records for over 15 years. As the business grew, they needed a digital system to track customers, vehicles, and ongoing repair jobs without losing their personal touch.",
+          "Kamusta Gramby is a React Native mobile application that provides a simple, daily way to check in on seniors and ensure they can safely age in place. The app operates on a two-role system — caretakers manage medication schedules, monitor activity levels, and maintain emergency contacts, while care recipients receive reminders, perform daily check-ins, and can activate an SOS feature when needed. Automated SMS alerts notify family members if the senior has been inactive for an extended period.",
         images: [
           {
-            src: "/projects/auto-repair-overview-1.jpg",
-            alt: "Customer database overview",
-          },
-          {
-            src: "/projects/auto-repair-overview-2.jpg",
-            alt: "Job tracking dashboard screens",
+            src: "/projects/kamusta-gramby/kamusta-gramby-overview.png",
+            alt: "Kamusta Gramby app overview showing caretaker and care recipient screens",
           },
         ],
       },
       {
         label: "The Challenge",
-        heading: "Keeping the personal touch while going digital",
+        heading: "Bridging the gap between independence and safety",
         description:
-          "The shop's owner knew regular customers by name and remembered their vehicle history. The challenge was capturing that personal knowledge in a system that anyone on the team could use.",
-        images: [
-          {
-            src: "/projects/auto-repair-challenge-1.jpg",
-            alt: "Customer profile wireframes",
-          },
-          {
-            src: "/projects/auto-repair-challenge-2.jpg",
-            alt: "Design exploration for repair tracking",
-          },
-        ],
+          "Families wanted their elderly relatives to maintain independence and age comfortably at home, but worried about missed medications, falls, or periods of silence with no way to know if something was wrong. The challenge was building an app simple enough for seniors to use daily — with large touch targets, scalable fonts, and minimal friction — while giving caretakers meaningful oversight without being intrusive.",
+        images: [],
       },
       {
-        label: "The Solution",
-        heading: "Customer profiles with full vehicle history",
+        label: "Gramby's Screens",
+        heading: "A simple daily check-in flow designed for seniors",
         description:
-          "We delivered a customer database with vehicle profiles, repair history, and a job board that shows what each mechanic is working on. Search is instant, and the interface works on tablets in the shop.",
+          "The care recipient experience is designed with senior accessibility as the top priority. Every interactive element meets a 48x48dp minimum touch target, and a 3-level font scaling system (Default, Large, Extra Large) ensures readability for users with varying vision. Gramby's screens include a daily check-in prompt, medication reminders with clear visual cues, and an SOS button that immediately notifies emergency contacts. The navigation is minimal and consistent — large buttons, high-contrast colors, and no hidden gestures — so seniors can use the app independently without confusion.",
         images: [
           {
-            src: "/projects/auto-repair-solution-1.jpg",
-            alt: "Final customer profile design",
+            src: "/projects/kamusta-gramby/kamusta-gramby-gramby-screens.png",
+            alt: "Kamusta Gramby care recipient screens — daily check-in, medication reminders, and SOS",
           },
+        ],
+        imageBesideText: true,
+      },
+      {
+        label: "Caretaker Screens",
+        heading: "Monitoring and medication management for family members",
+        description:
+          "The caretaker interface provides full oversight without being intrusive. Caretakers can set up and manage medication schedules, view check-in history and activity patterns, maintain a list of emergency contacts, and receive automated SMS alerts if the care recipient has been inactive for 6 or more hours. The caretaker dashboard is protected with a PIN lock that activates after 1 hour of inactivity, keeping sensitive health information secure. Separate navigation stacks ensure each role only sees what's relevant to them.",
+        images: [
           {
-            src: "/projects/auto-repair-solution-2.jpg",
-            alt: "Job tracking board interface",
-          },
-          {
-            src: "/projects/auto-repair-solution-3.jpg",
-            alt: "Mobile tablet view for shop floor",
+            src: "/projects/kamusta-gramby/kamusta-gramby-caretaker-screens.png",
+            alt: "Kamusta Gramby caretaker screens — medication management, activity monitoring, and alerts",
           },
         ],
       },
@@ -234,73 +226,65 @@ export const projects: Project[] = [
     ],
   },
   {
-    title: "Metro Grocery Hub",
-    slug: "metro-grocery-hub",
-    category: "Retail",
-    year: "2025",
-    tags: ["Inventory", "POS Integration"],
-    href: "/projects/metro-grocery-hub",
+    title: "Hardware Store",
+    slug: "hardware-store",
+    category: "Retail & E-Commerce",
+    year: "2026",
+    tags: ["E-Commerce", "Inventory"],
+    href: "/projects/hardware-store",
     cta: "View Case",
-    image: "/projects/grocery.jpg",
-    gradient: "from-emerald-500/90 to-teal-700/90",
+    image: "/projects/hardware-store/hardware-store-project-2x2.png",
+    gradient: "from-orange-500/90 to-red-600/90",
     description: [
-      "Metro Grocery Hub was losing money from stockouts and overordering due to manual inventory counts.",
-      "We built an inventory management system with POS integration that provides real-time stock levels and automated reorder alerts.",
+      "A local hardware store in the Philippines needed an online presence to let customers browse products, place delivery orders, and track order status — all without phone calls or walk-ins.",
+      "We built a full-stack e-commerce platform with a customer-facing storefront, an admin dashboard for order and inventory management, and automated SMS notifications for real-time order updates.",
     ],
     heroImage: {
-      src: "/projects/grocery-hero.jpg",
-      alt: "Metro Grocery Hub inventory system hero",
+      src: "/projects/hardware-store/hardware-store-hero.png",
+      alt: "Hardware Store e-commerce platform hero",
     },
     sections: [
       {
         label: "Overview",
-        heading: "Real-time inventory for a high-volume grocery store",
+        heading: "An online ordering system for a neighborhood hardware store",
         description:
-          "Metro Grocery Hub stocks over 3,000 SKUs and processes 200+ transactions daily. We designed an inventory system that syncs with their POS in real time and flags items that need restocking.",
+          "Hardware Store is a full-stack e-commerce and inventory management platform built for a local hardware business in the Philippines. Customers browse the product catalog organized by category, search and filter by availability, add items to a cart with support for product variants like size or color, and place delivery orders with address and contact details. On the other side, store admins manage products, fulfill orders through a step-by-step status workflow, and track sales through a real-time analytics dashboard.",
         images: [
           {
-            src: "/projects/grocery-overview-1.jpg",
-            alt: "Inventory dashboard overview",
-          },
-          {
-            src: "/projects/grocery-overview-2.jpg",
-            alt: "Stock level monitoring screens",
+            src: "/projects/hardware-store/hardware-store-overview.png",
+            alt: "Hardware Store customer storefront and admin dashboard overview",
           },
         ],
       },
       {
         label: "The Challenge",
-        heading: "Syncing inventory across multiple counters",
+        heading: "No digital presence and manual order management",
         description:
-          "With 4 checkout counters and a growing online ordering channel, keeping inventory accurate was impossible with manual counts. The challenge was building a system that stays accurate without constant human input.",
-        images: [
-          {
-            src: "/projects/grocery-challenge-1.jpg",
-            alt: "Multi-counter sync wireframes",
-          },
-          {
-            src: "/projects/grocery-challenge-2.jpg",
-            alt: "POS integration design exploration",
-          },
-        ],
+          "The store handled all orders through phone calls, walk-ins, and chat messages. There was no centralized system to track which orders were pending, accepted, or out for delivery. Product availability was checked manually, and customers had no way to browse the full catalog before visiting the store. The business was losing potential sales from customers who expected an online ordering experience.",
+        images: [],
       },
       {
-        label: "The Solution",
-        heading: "Automated stock tracking with smart reorder alerts",
+        label: "The Storefront",
+        heading: "A customer-facing catalog built with React and Vite",
         description:
-          "We delivered an inventory system that auto-decrements stock on each sale, alerts the owner when items hit reorder thresholds, and generates weekly stock reports. The POS integration runs in real time with zero manual input.",
+          "The storefront is a React 18 application built on Vite with Tailwind CSS and React Router v6. Customers can browse the full product catalog organized by category, search for specific items, filter by availability, and view product variants with different sizes and colors. The shopping cart supports variant selection and quantity adjustments. Registered users can save delivery addresses, view order history, and maintain a wishlist. Order tracking is available through a unique order number — no account required.",
         images: [
           {
-            src: "/projects/grocery-solution-1.jpg",
-            alt: "Final inventory management interface",
+            src: "/projects/hardware-store/hardware-store-storefront.png",
+            alt: "Hardware Store customer storefront",
           },
+        ],
+        imageBesideText: true,
+      },
+      {
+        label: "The Admin Dashboard",
+        heading: "Order fulfillment and inventory management for store staff",
+        description:
+          "The admin panel is a protected dashboard built with the same React + Vite stack, authenticated with JWT tokens. Store owners and staff can view a sales analytics dashboard with daily and monthly breakdowns, accept or reject incoming orders through a defined status workflow (pending → accepted → out for delivery → delivered), manage products including variants and bulk pricing tiers, organize categories, create staff accounts with role-based access, and generate sales reports. The system also handles automated SMS notifications through the Semaphore gateway — customers receive text updates at every order status change, and the admin gets alerted when new orders arrive.",
+        images: [
           {
-            src: "/projects/grocery-solution-2.jpg",
-            alt: "Reorder alert system",
-          },
-          {
-            src: "/projects/grocery-solution-3.jpg",
-            alt: "Weekly stock report view",
+            src: "/projects/hardware-store/hardware-store-admin.png",
+            alt: "Hardware Store admin dashboard",
           },
         ],
       },
