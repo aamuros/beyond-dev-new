@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Messenger & Facebook - Motion Design</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #f3f3f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+    gap: 12px;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  canvas { display: block; }
+  #ui { display: flex; gap: 8px; align-items: center; }
+  button {
+    padding: 8px 20px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: inherit;
+  }
+  button:hover { background: #f0f0f0; }
+  #status { font: 12px system-ui; color: #999; }
+</style>
+</head>
+<body>
+<canvas id="c" width="400" height="500"></canvas>
+<div id="ui">
+  <button id="export">Export GIF</button>
+  <span id="status"></span>
+</div>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const W = 400, H = 500;
+const LOOP = 4;
+
+function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+function lerp(a, b, t) { return a + (b - a) * t; }
+function easeOutQuint(t) { return 1 - Math.pow(1 - t, 5); }
+function easeOutBack(t) { const c=2.2; return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2); }
+function easeOutElastic(t) {
+  if (t<=0) return 0; if (t>=1) return 1;
+  return Math.pow(2,-10*t)*Math.sin((t*10-0.75)*((2*Math.PI)/3))+1;
+}
+function springOut(t) { return 1 - Math.exp(-7*t) * Math.cos(t * Math.PI * 4.5); }
+function springBounce(t) { return 1 - Math.exp(-5.5*t) * Math.cos(t * Math.PI * 5); }
+function smooth01(t) { return t*t*(3-2*t); }
+
+function drawShadow(blur, ox, oy) {
+  ctx.shadowColor = 'rgba(0,0,0,0.06)';
+  ctx.shadowBlur = blur;
+  ctx.shadowOffsetX = ox;
+  ctx.shadowOffsetY = oy;
+}
+function clearShadow() {
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = 0;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
+}
+
+function drawChatBubble(x, y, w, h, rot, alpha, opts = {}) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.globalAlpha = clamp01(alpha);
+
+  const isRight = opts.align === 'right';
+  const bgColor = opts.color || (isRight ? '#0084ff' : '#e4e6eb');
+  const textColor = opts.textColor || (isRight ? '#fff' : '#333');
+  const radius = 14;
+
+  drawShadow(10, 0, 3);
+  ctx.fillStyle = bgColor;
+  ctx.beginPath();
+  ctx.roundRect(-w/2, -h/2, w, h, radius);
+  ctx.fill();
+  clearShadow();
+
+  if (opts.text) {
+    ctx.fillStyle = textColor;
+    ctx.font = `${opts.fontSize || 9}px system-ui, sans-serif`;
+    ctx.textBaseline = 'middle';
+    const lines = opts.text.split('\n');
+    const lineH = (opts.fontSize || 9) * 1.35;
+    const startY = -((lines.length - 1) * lineH) / 2;
+    ctx.textAlign = 'center';
+    lines.forEach((line, i) => {
+      ctx.fillText(line, 0, startY + i * lineH);
+    });
+    ctx.textAlign = 'left';
+  }
+
+  // Tail
+  if (!opts.noTail) {
+    ctx.fillStyle = bgColor;
+    ctx.beginPath();
+    if (isRight) {
+      ctx.moveTo(w/2 - 6, h/2 - 2);
+      ctx.lineTo(w/2 + 4, h/2 + 6);
+      ctx.lineTo(w/2 - 14, h/2 - 2);
+    } else {
+      ctx.moveTo(-w/2 + 6, h/2 - 2);
+      ctx.lineTo(-w/2 - 4, h/2 + 6);
+      ctx.lineTo(-w/2 + 14, h/2 - 2);
+    }
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+function drawNotificationDot(x, y, alpha, scale) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(scale || 1, scale || 1);
+  ctx.globalAlpha = clamp01(alpha);
+  drawShadow(4, 0, 1);
+  ctx.fillStyle = '#d94f4f';
+  ctx.beginPath();
+  ctx.arc(0, 0, 7, 0, Math.PI * 2);
+  ctx.fill();
+  clearShadow();
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 8px system-ui';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('3', 0, 1);
+  ctx.textAlign = 'left';
+  ctx.restore();
+}
+
+function drawPhoneFrame(x, y, w, h, rot, alpha) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.globalAlpha = clamp01(alpha);
+
+  drawShadow(20, 0, 6);
+  ctx.fillStyle = '#1a1a2e';
+  ctx.beginPath();
+  ctx.roundRect(-w/2, -h/2, w, h, 18);
+  ctx.fill();
+  clearShadow();
+
+  ctx.fillStyle = '#fff';
+  ctx.beginPath();
+  ctx.roundRect(-w/2 + 4, -h/2 + 4, w - 8, h - 8, 14);
+  ctx.fill();
+
+  // Top bar
+  ctx.fillStyle = '#0084ff';
+  ctx.beginPath();
+  ctx.roundRect(-w/2 + 4, -h/2 + 4, w - 8, 30, [14, 14, 0, 0]);
+  ctx.fill();
+
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 9px system-ui';
+  ctx.textAlign = 'center';
+  ctx.fillText('Messenger', 0, -h/2 + 22);
+  ctx.textAlign = 'left';
+
+  ctx.restore();
+}
+
+function drawSearchBar(x, y, w, rot, alpha, searchText) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.globalAlpha = clamp01(alpha);
+
+  drawShadow(6, 0, 2);
+  ctx.fillStyle = '#f0f2f5';
+  ctx.beginPath();
+  ctx.roundRect(-w/2, -12, w, 24, 12);
+  ctx.fill();
+  clearShadow();
+
+  ctx.fillStyle = '#bbb';
+  ctx.font = '9px system-ui';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('🔍', -w/2 + 8, 1);
+
+  ctx.fillStyle = searchText ? '#d94f4f' : '#999';
+  ctx.font = `${searchText ? '600' : '400'} 9px 'Courier New', monospace`;
+  ctx.fillText(searchText || 'Search orders...', -w/2 + 24, 1);
+
+  ctx.restore();
+}
+
+function drawScene(t) {
+  ctx.clearRect(0, 0, W, H);
+
+  ctx.fillStyle = '#f3f3f5';
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = 'rgba(200, 200, 215, 0.18)';
+  for (let gx = 12; gx < W; gx += 24) {
+    for (let gy = 12; gy < H; gy += 24) {
+      ctx.beginPath();
+      ctx.arc(gx, gy, 0.8, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  const cx = W/2, cy = H/2 + 5;
+
+  // === PHONE FRAME ===
+  const phoneIn = smooth01(clamp01((t + 0.03) / 0.12));
+  const phoneScale = easeOutBack(phoneIn);
+  const phoneBreath = Math.sin(t * Math.PI * 2.5) * 1.2;
+  const phoneShake = t > 0.45 ? smooth01(clamp01((t-0.45)/0.05)) * smooth01(clamp01((1-t)/0.3)) * Math.sin(t*180) * 2 : 0;
+
+  const pw = 200, ph = 340;
+
+  ctx.save();
+  ctx.translate(cx + phoneShake, cy + phoneBreath);
+  ctx.scale(phoneScale, phoneScale);
+  drawPhoneFrame(0, 0, pw, ph, 0, phoneIn);
+  ctx.restore();
+
+  const phoneX = cx + phoneShake;
+  const phoneY = cy + phoneBreath;
+
+  // === SEARCH BAR inside phone ===
+  const searchT = clamp01((t - 0.08) / 0.1);
+  const searchShake = t > 0.5 ? Math.sin(t * 300) * 3 : 0;
+  const searchTexts = [null, null, 'ord...', 'order #1...', 'order #1024', 'NO RESULTS'];
+  const searchIdx = Math.min(searchTexts.length - 1, Math.floor(t * searchTexts.length));
+  const searchText = searchTexts[searchIdx] || null;
+
+  ctx.save();
+  ctx.translate(phoneX, phoneY);
+  ctx.scale(phoneScale, phoneScale);
+  drawSearchBar(0, -ph/2 + 50, pw - 30, 0, smooth01(searchT), searchText);
+  ctx.restore();
+
+  // === CHAT MESSAGES inside phone ===
+  const chatMsgs = [
+    { delay:0.04, text:'hi, i want to\norder 50 pcs', align:'left', color:'#e4e6eb', y:-100 },
+    { delay:0.08, text:'sure! when\ndo you need it?', align:'right', color:'#0084ff', y:-75 },
+    { delay:0.12, text:'can you also add\n20 more?', align:'left', color:'#e4e6eb', y:-48 },
+    { delay:0.16, text:'wait which order\nwas this again?', align:'right', color:'#0084ff', y:-20 },
+    { delay:0.20, text:'yung order ko\nlast week po', align:'left', color:'#e4e6eb', y:8 },
+    { delay:0.24, text:'magkano po\nyung 50 pcs?', align:'left', color:'#e4e6eb', y:36 },
+    { delay:0.28, text:'sino po nag order\nnung 20?', align:'right', color:'#0084ff', y:65 },
+    { delay:0.32, text:'ay yung sa GC po\nhindi dito', align:'left', color:'#e4e6eb', y:93 },
+    { delay:0.36, text:'???\nwhich GC?', align:'right', color:'#0084ff', y:122 },
+  ];
+
+  ctx.save();
+  ctx.translate(phoneX, phoneY);
+  ctx.scale(phoneScale, phoneScale);
+  ctx.beginPath();
+  ctx.roundRect(-pw/2 + 4, -ph/2 + 34, pw - 8, ph - 38, [0, 0, 14, 14]);
+  ctx.clip();
+
+  chatMsgs.forEach((msg, i) => {
+    const mt = clamp01((t - msg.delay) / 0.12);
+    const me = springOut(mt);
+    const mAlpha = smooth01(mt);
+    const mScale = 0.6 + me * 0.4;
+    const slideX = msg.align === 'right' ? lerp(30, 0, me) : lerp(-30, 0, me);
+
+    drawChatBubble(
+      slideX + (msg.align === 'right' ? 35 : -35),
+      msg.y,
+      110, 32,
+      0,
+      mAlpha,
+      { text: msg.text, align: msg.align, color: msg.color, textColor: msg.align === 'right' ? '#fff' : '#333', fontSize: 7, noTail: true }
+    );
+  });
+
+  ctx.restore();
+
+  // === FLOATING NOTIFICATION BADGES ===
+  const notifs = [
+    { x: phoneX + pw/2 - 15, y: phoneY - ph/2 + 15, delay:0.20 },
+    { x: phoneX + pw/2 + 10, y: phoneY - ph/2 - 10, delay:0.30 },
+    { x: phoneX + pw/2 + 25, y: phoneY - ph/2 + 5, delay:0.38 },
+  ];
+  notifs.forEach((n, i) => {
+    const nt = clamp01((t - n.delay) / 0.1);
+    if (nt > 0.005) {
+      const sc = easeOutElastic(nt);
+      drawNotificationDot(n.x, n.y, smooth01(nt) * 0.9, sc);
+    }
+  });
+
+  // === FLOATING CHAT THREADS (mini windows behind phone) ===
+  const threads = [
+    { delay:0.06, sx:-80, sy:120, ex:50, ey:100, sr:0.2, er:0.04, w:90, h:45, color:'#e4e6eb', label:'GC: Orders' },
+    { delay:0.10, sx:W+70, sy:100, ex:340, ey:90, sr:-0.18, er:-0.03, w:85, h:45, color:'#e4e6eb', label:'Customer A' },
+    { delay:0.14, sx:50, sy:-60, ex:70, ey:390, sr:0.3, er:0.08, w:80, h:45, color:'#e4e6eb', label:'GC: Sales' },
+    { delay:0.18, sx:W+50, sy:380, ex:320, ey:400, sr:-0.25, er:-0.06, w:85, h:45, color:'#e4e6eb', label:'Supplier Chat' },
+  ];
+  threads.forEach((th, i) => {
+    const tt = clamp01((t - th.delay) / 0.18);
+    const te = springOut(tt);
+    const tx = lerp(th.sx, th.ex, te);
+    const ty = lerp(th.sy, th.ey, te);
+    const tr = lerp(th.sr, th.er, te);
+    const bob = Math.sin(t*Math.PI*2.3 + i*1.6) * (1.2 + i*0.3);
+    const sway = Math.sin(t*Math.PI*2 + i*1.1) * 0.01;
+
+    ctx.save();
+    ctx.translate(tx, ty+bob);
+    ctx.rotate(tr+sway);
+    ctx.globalAlpha = smooth01(tt) * 0.85;
+    drawShadow(12, 0, 3);
+    ctx.fillStyle = th.color;
+    ctx.beginPath();
+    ctx.roundRect(-th.w/2, -th.h/2, th.w, th.h, 10);
+    ctx.fill();
+    clearShadow();
+    ctx.fillStyle = '#666';
+    ctx.font = '7px system-ui';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(th.label, 0, -6);
+    ctx.fillStyle = '#bbb';
+    ctx.font = '6px system-ui';
+    ctx.fillText('💬 ...', 0, 8);
+    ctx.textAlign = 'left';
+    ctx.restore();
+  });
+
+  // === "ORDER LOST" BADGE ===
+  const lostT = clamp01((t - 0.40) / 0.1);
+  if (lostT > 0.005) {
+    const sc = easeOutElastic(lostT);
+    ctx.save();
+    ctx.translate(phoneX, phoneY + ph/2 + 30);
+    ctx.scale(sc, sc);
+    ctx.globalAlpha = smooth01(lostT) * 0.9;
+    drawShadow(8, 0, 2);
+    ctx.fillStyle = 'rgba(217, 79, 79, 0.1)';
+    ctx.strokeStyle = '#d94f4f';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.roundRect(-50, -12, 100, 24, 12);
+    ctx.fill();
+    ctx.stroke();
+    clearShadow();
+    ctx.fillStyle = '#d94f4f';
+    ctx.font = 'bold 9px system-ui';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('order lost in chat', 0, 1);
+    ctx.textAlign = 'left';
+    ctx.restore();
+  }
+}
+
+// Ping-pong loop
+function drawFrame(t) {
+  const pingPong = t < 0.5 ? t * 2 : 2 - t * 2;
+  drawScene(pingPong);
+}
+
+let startTime = null;
+let animFrameId;
+
+function animate(ts) {
+  if (!startTime) startTime = ts;
+  const elapsed = ((ts - startTime) / 1000) % LOOP;
+  const t = elapsed / LOOP;
+  drawFrame(t);
+  animFrameId = requestAnimationFrame(animate);
+}
+animFrameId = requestAnimationFrame(animate);
+
+// GIF Export
+const exportBtn = document.getElementById('export');
+const statusEl = document.getElementById('status');
+
+exportBtn.addEventListener('click', async () => {
+  cancelAnimationFrame(animFrameId);
+  exportBtn.disabled = true;
+  statusEl.textContent = 'Loading encoder...';
+
+  await new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = '/assets/gif.js/gif.js';
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+
+  const FPS = 20;
+  const FRAMES = FPS * LOOP;
+
+  const gif = new GIF({
+    workers: 2,
+    quality: 1,
+    width: W,
+    height: H,
+    workerScript: '/assets/gif.js/gif.worker.js',
+  });
+
+  statusEl.textContent = `Rendering ${FRAMES} frames...`;
+
+  for (let f = 0; f < FRAMES; f++) {
+    const t = f / FRAMES;
+    drawFrame(t);
+    gif.addFrame(ctx, {copy: true, delay: Math.round(1000/FPS)});
+    if (f % 15 === 0) statusEl.textContent = `Frame ${f+1}/${FRAMES}...`;
+  }
+
+  statusEl.textContent = 'Encoding GIF...';
+
+  gif.on('finished', blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'messenger-facebook.gif';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    statusEl.textContent = `Done! ${(blob.size/1024).toFixed(0)}KB`;
+    exportBtn.disabled = false;
+    animFrameId = requestAnimationFrame(animate);
+    startTime = performance.now();
+  });
+
+  gif.render();
+});
+</script>
+</body>
+</html>

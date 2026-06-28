@@ -5,35 +5,31 @@ import SectionHeading from "@/components/ui/section-heading";
 const painPoints: {
   title: string;
   description: string;
-  video: string;
-  backgroundColor?: string;
+  image: string;
 }[] = [
   {
     title: "Paper & Notebooks",
     description:
       "Orders, bookings, and records scattered across notebooks that get lost or damaged.",
-    video: "https://framerusercontent.com/assets/MkRqx95luhv3HrzWUVBPk3lbk.mp4",
+    image: "/assets/paper-notebooks.gif",
   },
   {
     title: "Messy Spreadsheets",
     description:
       "Excel files with broken formulas, duplicate entries, and no one knows which version is correct.",
-    video: "https://framerusercontent.com/assets/jqYjBn39McfA2B8VkBvj3Ca2U0.mp4",
-    backgroundColor: "#A981FF",
+    image: "/assets/messy-spreadsheets.gif",
   },
   {
     title: "Messenger & Facebook",
     description:
       "Customer orders buried in chat threads, impossible to track, search, or hand off to staff.",
-    video: "https://framerusercontent.com/assets/DpMFb4zuxQzqPqM9HQtesX9P6AE.mp4",
-    backgroundColor: "#05BAFF",
+    image: "/assets/messenger-facebook.gif",
   },
   {
     title: "Screenshots as Records",
     description:
       "Photos of receipts, payment confirmations, and inventory counts with no system to organize them.",
-    video: "https://framerusercontent.com/assets/MkRqx95luhv3HrzWUVBPk3lbk.mp4",
-    backgroundColor: "#F5FF63",
+    image: "/assets/screenshots-records.gif",
   },
 ];
 
@@ -60,20 +56,15 @@ function PainPointCard({
         style={{
           top: `${top}px`,
           marginBottom: isLast ? 0 : isSecondToLast ? 25 : `${CARD_GAP}px`,
-          ...(point.backgroundColor && {
-            backgroundColor: point.backgroundColor,
-          }),
         }}
       >
         <div className="pain-point-card__header">
-          <video
-            src={point.video}
-            loop
-            preload="auto"
-            muted
-            playsInline
-            autoPlay
+          <img
+            src={point.image}
+            alt={point.title}
             className="pain-point-card__video"
+            loading="eager"
+            decoding="async"
           />
         </div>
         <div className="pain-point-card__content">
