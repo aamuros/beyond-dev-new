@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import Logo from "@/components/layout/logo";
+import SmoothLink from "@/components/ui/smooth-link";
 
 const navLinks = [
   { label: "Systems", href: "#systems" },
@@ -172,9 +173,9 @@ export default function FloatingNavbar() {
       >
         {/* ── Top bar (logo + desktop links + mobile toggle) ──── */}
         <div className="flex flex-row flex-nowrap items-center content-center justify-start h-[56px] py-[16px] pl-5 lg:h-[72px] lg:py-[17px] lg:pl-6 gap-[10px]">
-          <Link href="/" className="shrink-0 flex items-center">
+          <SmoothLink href="#hero" className="shrink-0 flex items-center">
             <Logo className="h-[28px] lg:h-[38px] w-auto text-[#141414]" />
-          </Link>
+          </SmoothLink>
 
           {/* Desktop nav links */}
           <div

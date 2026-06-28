@@ -4,7 +4,7 @@ import DashboardCarousel from "@/components/sections/dashboard-carousel";
 
 export default function Hero() {
   return (
-    <section className="relative block overflow-hidden bg-[#FFFFFF] m-0 pt-[129px] pb-8 text-[12px] leading-[1.4] text-[#19171c] font-normal antialiased lg:pt-[160px] lg:pb-10 min-[1441px]:pt-[200px] min-[1441px]:pb-12">
+    <section id="hero" className="relative block overflow-hidden bg-[#FFFFFF] m-0 pt-[129px] pb-8 text-[12px] leading-[1.4] text-[#19171c] font-normal antialiased lg:pt-[160px] lg:pb-10 min-[1441px]:pt-[200px] min-[1441px]:pb-12">
       <div>
         <div className="headerWrapper">
           <section className="text-center">
