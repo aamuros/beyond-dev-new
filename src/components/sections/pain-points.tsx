@@ -38,6 +38,9 @@ const CARD_TOP_INCREMENT = 25;
 const CARD_GAP = 50;
 const SPACER_GAP = 30;
 
+const CARD_COLORS: (string | null)[] = [null, "#05BAFF", "#A981FF", "#F5FF63"];
+const CARD_LIGHT_TEXT = new Set([1, 2]);
+
 function PainPointCard({
   point,
   index,
@@ -48,15 +51,18 @@ function PainPointCard({
   const top = CARD_TOP_BASE + index * CARD_TOP_INCREMENT;
   const isLast = index === painPoints.length - 1;
   const isSecondToLast = index === painPoints.length - 2;
+  const color = CARD_COLORS[index];
+  const lightText = CARD_LIGHT_TEXT.has(index);
 
   return (
     <>
       <li
-        className="pain-point-card"
+        className={`pain-point-card${color ? " pain-point-card--colored" : ""}${lightText ? " pain-point-card--light-text" : ""}`}
         style={{
           top: `${top}px`,
           marginBottom: isLast ? 0 : isSecondToLast ? 25 : `${CARD_GAP}px`,
-        }}
+          ...(color ? { "--card-bg": color } : {}),
+        } as React.CSSProperties}
       >
         <div className="pain-point-card__header">
           <img

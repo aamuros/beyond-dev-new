@@ -605,7 +605,7 @@ body {
 }
 
 .pain-point-card {
-  background-color: rgb(243, 243, 245);
+  background-color: var(--card-bg, rgb(243, 243, 245));
   border-radius: 24px;
   box-sizing: border-box;
   display: flex;
@@ -613,7 +613,7 @@ body {
   justify-content: space-between;
   min-height: 480px;
   overflow: hidden;
-  padding-top: 48px;
+  padding: 48px 0 2.4rem;
   position: sticky;
   width: 100%;
   z-index: 1;
@@ -624,21 +624,31 @@ body {
   min-height: 0;
   overflow: hidden;
   position: relative;
-  background-color: rgb(243, 243, 245);
+  background-color: var(--card-bg, rgb(243, 243, 245));
+}
+
+.pain-point-card--colored .pain-point-card__header::before {
+  background: linear-gradient(to bottom, var(--card-bg) 0%, transparent 100%);
+  content: "";
+  inset: 0;
+  position: absolute;
 }
 
 .pain-point-card__video {
   display: block;
   height: 100%;
   object-fit: cover;
+  position: relative;
   width: 100%;
+  z-index: 1;
 }
 
 .pain-point-card__content {
+  align-items: flex-start;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 0 24px 24px;
+  gap: 1rem;
+  padding: 0 3.6rem;
 }
 
 .pain-point-card__title {
@@ -656,6 +666,14 @@ body {
   line-height: 1.6;
 }
 
+.pain-point-card--light-text .pain-point-card__title {
+  color: #fff;
+}
+
+.pain-point-card--light-text .pain-point-card__description {
+  color: rgba(255, 255, 255, .8);
+}
+
 @media (min-width: 1025px) {
   .pain-point-card {
     aspect-ratio: 400 / 620;
@@ -666,8 +684,12 @@ body {
     width: 100%;
   }
 
+  .pain-point-card--colored {
+    box-shadow: 0 18.7rem 5.2rem 0 transparent, 0 11.9rem 4.8rem 0 rgba(0,0,0,.01), 0 6.7rem 4rem 0 rgba(0,0,0,.05), 0 3rem 3rem 0 rgba(0,0,0,.09), 0 .7rem 1.6rem 0 rgba(0,0,0,.1);
+  }
+
   .pain-point-card__content {
-    padding: 0 28px 28px;
+    padding: 0 5rem;
   }
 
   .pain-point-card__title {
@@ -687,7 +709,7 @@ body {
   }
 
   .pain-point-card__content {
-    padding: 0 32px 32px;
+    padding: 0 5rem;
   }
 
   .pain-point-card__title {
