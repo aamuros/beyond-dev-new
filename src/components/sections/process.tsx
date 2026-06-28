@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect, useRef } from "react";
 import Container from "@/components/ui/container";
 
 const steps: {
@@ -31,6 +34,63 @@ const steps: {
   },
 ];
 
+const STAGGER_MS = 600;
+
+function ProcessCard({ step, index }: { step: (typeof steps)[number]; index: number }) {
+  const [src, setSrc] = useState<string | null>(null);
+  const [visible, setVisible] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          if (!src) {
+            setTimeout(() => {
+              setSrc(step.image);
+              setVisible(true);
+            }, index * STAGGER_MS);
+          } else {
+            setTimeout(() => setVisible(true), index * STAGGER_MS);
+          }
+        } else {
+          setVisible(false);
+        }
+      },
+      { threshold: 0.2 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [step.image, index, src]);
+
+  return (
+    <div ref={ref} className="flex flex-col w-full lg:w-auto lg:flex-[1_0_0px] lg:h-full">
+      <div className="relative overflow-hidden aspect-[340/425] bg-[#f2f1f3] rounded-2xl">
+        {src && (
+          <img
+            src={src}
+            alt={step.title}
+            className="block w-full h-full object-cover object-center transition-opacity duration-500"
+            style={{ opacity: visible ? 1 : 0 }}
+            decoding="async"
+          />
+        )}
+      </div>
+      <div className="flex flex-col items-center gap-2 pt-6 pb-2 px-4 flex-1">
+        <h4 className="text-base font-semibold text-[#141414] text-center leading-snug">
+          {step.title}
+        </h4>
+        <p className="text-sm text-[#717171] text-center leading-relaxed">
+          {step.description}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function Process() {
   return (
     <section id="process" className="global-section flex flex-col">
@@ -47,30 +107,10 @@ export default function Process() {
         </div>
 
         <div className="flex flex-col place-content-center place-items-center w-full max-w-[1280px] mx-auto">
-          <div className="flex flex-col lg:flex-row place-content-center lg:place-content-[center_flex-start] lg:items-stretch items-center gap-6 w-full h-min p-0 relative overflow-visible">
-            {steps.map((step) => {
-              return (
-                <div key={step.title} className="flex flex-col w-full lg:w-auto lg:flex-[1_0_0px] lg:h-full">
-                  <div className="relative overflow-hidden aspect-[340/425] bg-[#f2f1f3] rounded-2xl">
-                    <img
-                      src={step.image}
-                      alt={step.title}
-                      className="block w-full h-full object-cover object-center"
-                      loading="eager"
-                      decoding="async"
-                    />
-                  </div>
-                  <div className="flex flex-col items-center gap-2 pt-6 pb-2 px-4 flex-1">
-                    <h4 className="text-base font-semibold text-[#141414] text-center leading-snug">
-                      {step.title}
-                    </h4>
-                    <p className="text-sm text-[#717171] text-center leading-relaxed">
-                      {step.description}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
+          <div className="flex flex-col lg:flex-row place-content-center place-items-center lg:items-stretch items-center gap-6 w-full h-min p-0 relative overflow-visible">
+            {steps.map((step, index) => (
+              <ProcessCard key={step.title} step={step} index={index} />
+            ))}
           </div>
         </div>
       </Container>

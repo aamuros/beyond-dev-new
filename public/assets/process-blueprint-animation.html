@@ -1,141 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Process Step 2 - System Blueprint</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #f2f1f3; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; gap: 12px; font-family: system-ui, sans-serif; }
-  canvas { display: block; }
-  button { padding: 8px 20px; border-radius: 6px; border: 1px solid #ddd; background: #fff; cursor: pointer; font-size: 13px; }
-  #status { font: 12px system-ui; color: #999; }
-</style>
-</head>
-<body>
-<canvas id="c" width="340" height="425"></canvas>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Blueprint</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;overflow:hidden;gap:12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif}canvas{display:block}button{padding:8px 20px;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:13px;font-family:inherit}#status{font:12px system-ui;color:#999}</style>
+</head><body>
+<canvas id="c" width="680" height="850"></canvas>
 <div style="display:flex;gap:8px;align-items:center"><button id="export">Export GIF</button><span id="status"></span></div>
 <script>
-const canvas = document.getElementById('c');
-const ctx = canvas.getContext('2d');
-const W = 340, H = 425;
-const LOOP = 4;
-function clamp01(v){return v<0?0:v>1?1:v}
-function lerp(a,b,t){return a+(b-a)*t}
-function easeOutBack(t){const c=1.8;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2)}
-function easeOutElastic(t){if(t<=0)return 0;if(t>=1)return 1;return Math.pow(2,-10*t)*Math.sin((t*10-0.75)*((2*Math.PI)/3))+1}
-function springOut(t){return 1-Math.exp(-6*t)*Math.cos(t*Math.PI*4)}
-function smooth01(t){return t*t*(3-2*t)}
-const C={bg:'#f2f1f3',card:'#fff',border:'#e8e8ec',primary:'#1a1a2e',accent:'#4f6df0',accentLight:'#e8ecff',green:'#22c55e',greenLight:'#ecfdf5',text:'#1a1a2e',muted:'#8e8ea0',line:'#e2e2e8',warm:'#f7f7f9'};
-
-function drawText(text,x,y,o={}){
-  ctx.save();ctx.globalAlpha=clamp01(o.alpha??1);ctx.fillStyle=o.color||C.text;
-  ctx.font=`${o.bold?'800':'600'} ${o.size||13}px system-ui,sans-serif`;
-  ctx.textAlign=o.align||'left';ctx.textBaseline=o.baseline||'alphabetic';ctx.fillText(text,x,y);ctx.restore();
+const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+const W=680,H=850,S=2,LOOP=4;
+function clamp01(v){return v<0?0:v>1?1:v}function lerp(a,b,t){return a+(b-a)*t}function easeOut(t){return 1-Math.pow(1-t,3)}function smooth01(t){return t*t*(3-2*t)}
+const P={bg:'#ffffff',surface:'#fafafa',border:'#e5e5e5',borderLight:'#f0f0f0',ink:'#0a0a0a',ink2:'#525252',ink3:'#a3a3a3',teal:'#0d9488',tealSoft:'#f0fdfa'};
+function txt(s,x,y,o={}){ctx.save();ctx.globalAlpha=clamp01(o.a??1);ctx.fillStyle=o.c||P.ink;ctx.font=`${o.w||500} ${o.s||13}px -apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif`;ctx.textAlign=o.align||'left';ctx.textBaseline=o.base||'alphabetic';ctx.fillText(s,x,y);ctx.restore()}
+function rr(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
+function drawNode(x,y,w,h,label,num,alpha,active){
+  ctx.save();ctx.globalAlpha=clamp01(alpha);ctx.fillStyle=active?P.tealSoft:P.surface;ctx.strokeStyle=active?P.teal:P.border;ctx.lineWidth=active?1.5:0.5;
+  rr(x-w/2,y-h/2,w,h,10);ctx.fill();ctx.stroke();
+  ctx.fillStyle=active?P.teal:P.ink3;ctx.beginPath();ctx.arc(x,y-6,9,0,Math.PI*2);ctx.fill();
+  txt(String(num),x,y-3,{s:9,w:700,a:1,align:'center',c:'#fff'});
+  txt(label,x,y+12,{s:8,w:600,a:1,align:'center',c:active?P.teal:P.ink});ctx.restore();
 }
-function drawLine(x1,y1,x2,y2,a,col,w){
-  ctx.save();ctx.globalAlpha=clamp01(a);ctx.strokeStyle=col||C.line;ctx.lineWidth=w||1;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.restore();
-}
-function drawArrow(x1,y1,x2,y2,a){
-  ctx.save();ctx.globalAlpha=clamp01(a);ctx.strokeStyle=C.accent;ctx.lineWidth=2;ctx.lineCap='round';
+function drawArrow(x1,y1,x2,y2,alpha){
+  ctx.save();ctx.globalAlpha=clamp01(alpha);ctx.strokeStyle=P.teal;ctx.lineWidth=1.5;ctx.lineCap='round';
   ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
-  const angle=Math.atan2(y2-y1,x2-x1);const hs=7;
-  ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-Math.cos(angle-0.4)*hs,y2-Math.sin(angle-0.4)*hs);
-  ctx.moveTo(x2,y2);ctx.lineTo(x2-Math.cos(angle+0.4)*hs,y2-Math.sin(angle+0.4)*hs);ctx.stroke();ctx.restore();
-}
-function drawNode(x,y,w,h,label,alpha,active,icon){
-  ctx.save();ctx.globalAlpha=clamp01(alpha);
-  ctx.fillStyle=active?C.accentLight:C.card;ctx.strokeStyle=active?C.accent:C.border;ctx.lineWidth=active?1.5:1;
-  ctx.beginPath();ctx.roundRect(x-w/2,y-h/2,w,h,8);ctx.fill();ctx.stroke();
-  if(icon){ctx.font=`${Math.round(w*0.22)}px system-ui`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(icon,x,y-6)}
-  drawText(label,x,y+8,{alpha:1,size:8,bold:true,align:'center',color:active?C.accent:C.text});
-  ctx.restore();
+  const a=Math.atan2(y2-y1,x2-x1),h=5;
+  ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-Math.cos(a-0.4)*h,y2-Math.sin(a-0.4)*h);ctx.moveTo(x2,y2);ctx.lineTo(x2-Math.cos(a+0.4)*h,y2-Math.sin(a+0.4)*h);ctx.stroke();ctx.restore();
 }
 
 function drawScene(t){
-  ctx.clearRect(0,0,W,H);ctx.fillStyle=C.bg;ctx.fillRect(0,0,W,H);
+  ctx.clearRect(0,0,W,H);ctx.save();ctx.scale(S,S);
+  ctx.fillStyle=P.bg;ctx.fillRect(0,0,340,425);const cx=170;
 
-  // Blueprint title card at top
-  const titleIn=smooth01(clamp01((t+0.02)/0.1));
-  ctx.save();ctx.globalAlpha=titleIn;
-  ctx.fillStyle=C.card;ctx.strokeStyle=C.border;ctx.lineWidth=1;
-  ctx.beginPath();ctx.roundRect(W/2-90,15,180,36,8);ctx.fill();ctx.stroke();
-  ctx.fillStyle=C.accent;ctx.beginPath();ctx.roundRect(W/2-90,15,180,36,[8,8,0,0]);ctx.fill();
-  ctx.globalAlpha=titleIn;
-  drawText('SYSTEM BLUEPRINT',W/2,37,{alpha:titleIn,color:'#fff',size:11,bold:true,align:'center'});
-  ctx.restore();
+  const titleIn=smooth01(clamp01(t/0.12));
+  ctx.globalAlpha=titleIn;ctx.fillStyle=P.surface;ctx.strokeStyle=P.border;ctx.lineWidth=0.5;rr(cx-90,18,180,34,10);ctx.fill();ctx.stroke();
+  ctx.fillStyle=P.teal;rr(cx-90,18,180,3,[10,10,0,0]);ctx.fill();
+  txt('SYSTEM BLUEPRINT',cx,40,{s:11,w:600,a:titleIn,align:'center',c:P.teal});ctx.globalAlpha=1;
 
-  // Workflow nodes
   const nodes=[
-    {x:W/2,y:95,w:100,h:32,label:'Customer Order',icon:'📋',delay:0.06},
-    {x:W/2-65,y:160,w:90,h:30,label:'Validation',icon:'✓',delay:0.12},
-    {x:W/2+65,y:160,w:90,h:30,label:'Auto-Notify',icon:'🔔',delay:0.12},
-    {x:W/2,y:225,w:100,h:32,label:'Process & Build',icon:'⚙️',delay:0.18},
-    {x:W/2,y:290,w:100,h:32,label:'Track & Update',icon:'📊',delay:0.24},
-    {x:W/2-65,y:345,w:90,h:30,label:'Invoice',icon:'🧾',delay:0.30},
-    {x:W/2+65,y:345,w:90,h:30,label:'Deliver',icon:'📦',delay:0.30},
+    {x:cx,y:72,w:96,h:28,label:'Customer Order',n:1,delay:0.06},
+    {x:cx-58,y:124,w:86,h:26,label:'Validate',n:2,delay:0.12},
+    {x:cx+58,y:124,w:86,h:26,label:'Notify',n:3,delay:0.12},
+    {x:cx,y:176,w:96,h:28,label:'Process & Build',n:4,delay:0.18},
+    {x:cx,y:228,w:96,h:28,label:'Track Status',n:5,delay:0.24},
+    {x:cx-58,y:280,w:86,h:26,label:'Invoice',n:6,delay:0.30},
+    {x:cx+58,y:280,w:86,h:26,label:'Deliver',n:7,delay:0.30},
   ];
-  nodes.forEach((n,i)=>{
-    const nt=clamp01((t-n.delay)/0.14);
-    const ne=springOut(nt);const scale=0.7+ne*0.3;
-    const bob=Math.sin(t*Math.PI*2+i*1.2)*1.2;
-    ctx.save();ctx.translate(n.x,n.y+bob);ctx.scale(scale,scale);ctx.translate(-n.x,-n.y);
-    drawNode(n.x,n.y+bob,n.w,n.h,n.label,smooth01(nt),i===3||i===4,n.icon);
-    ctx.restore();
-  });
+  nodes.forEach((nd,i)=>{const nt=smooth01(clamp01((t-nd.delay)/0.14));drawNode(nd.x,nd.y,nd.w,nd.h,nd.label,nd.n,nt,i===3||i===4)});
 
-  // Arrows between nodes
   const arrows=[
-    {x1:W/2,y1:111,x2:W/2-65,y2:145,delay:0.10},
-    {x1:W/2,y1:111,x2:W/2+65,y2:145,delay:0.10},
-    {x1:W/2-65,y1:175,x2:W/2,y2:209,delay:0.16},
-    {x1:W/2+65,y1:175,x2:W/2,y2:209,delay:0.16},
-    {x1:W/2,y1:241,x2:W/2,y2:274,delay:0.22},
-    {x1:W/2,y1:306,x2:W/2-65,y2:330,delay:0.28},
-    {x1:W/2,y1:306,x2:W/2+65,y2:330,delay:0.28},
+    {x1:cx,y1:86,x2:cx-58,y2:111,delay:0.10},{x1:cx,y1:86,x2:cx+58,y2:111,delay:0.10},
+    {x1:cx-58,y1:137,x2:cx,y2:162,delay:0.16},{x1:cx+58,y1:137,x2:cx,y2:162,delay:0.16},
+    {x1:cx,y1:190,x2:cx,y2:214,delay:0.22},
+    {x1:cx,y1:242,x2:cx-58,y2:267,delay:0.28},{x1:cx,y1:242,x2:cx+58,y2:267,delay:0.28},
   ];
-  arrows.forEach(a=>{
-    const at=clamp01((t-a.delay)/0.08);
-    if(at>0.01)drawArrow(a.x1,a.y1,lerp(a.x1,a.x2,smooth01(at)),lerp(a.y1,a.y2,smooth01(at)),smooth01(at));
-  });
+  arrows.forEach(a=>{const at=smooth01(clamp01((t-a.delay)/0.08));if(at>0.01)drawArrow(a.x1,a.y1,lerp(a.x1,a.x2,at),lerp(a.y1,a.y2,at),at)});
 
-  // Connecting lines (dashed)
-  const lines=[
-    {x1:W/2-65,y1:360,x2:W/2+65,y2:360,delay:0.34},
-  ];
-  lines.forEach(l=>{
-    const lt=clamp01((t-l.delay)/0.08);
-    if(lt>0.01){ctx.save();ctx.globalAlpha=smooth01(lt)*0.4;ctx.setLineDash([4,4]);ctx.strokeStyle=C.accent;ctx.lineWidth=1;
-    ctx.beginPath();ctx.moveTo(l.x1,l.y1);ctx.lineTo(lerp(l.x1,l.x2,smooth01(lt)),l.y1);ctx.stroke();ctx.setLineDash([]);ctx.restore();}
-  });
-
-  // "Fits YOUR process" badge
-  const badgeT=clamp01((t-0.36)/0.1);
-  if(badgeT>0.005){
-    const sc=easeOutElastic(badgeT);
-    ctx.save();ctx.translate(W/2,H-28);ctx.scale(sc,sc);ctx.globalAlpha=smooth01(badgeT)*0.9;
-    ctx.fillStyle='rgba(79,109,240,0.1)';ctx.strokeStyle=C.accent;ctx.lineWidth=1.2;
-    ctx.beginPath();ctx.roundRect(-65,-12,130,24,12);ctx.fill();ctx.stroke();
-    drawText('custom fit for your flow',0,3,{alpha:1,size:9,bold:true,align:'center',color:C.accent});
-    ctx.restore();
-  }
+  const badgeT=smooth01(clamp01((t-0.38)/0.12));
+  if(badgeT>0.01){ctx.globalAlpha=badgeT;ctx.fillStyle=P.tealSoft;ctx.strokeStyle=P.teal;ctx.lineWidth=1;rr(cx-62,320,124,22,11);ctx.fill();ctx.stroke();txt('custom fit for your flow',cx,335,{s:9,w:600,a:1,align:'center',c:P.teal});ctx.globalAlpha=1}
+  ctx.restore();
 }
 
-function drawFrame(t){const pp=t<0.5?t*2:2-t*2;drawScene(pp)}
-let startTime=null;let animFrameId;
-function animate(ts){if(!startTime)startTime=ts;const elapsed=((ts-startTime)/1000)%LOOP;drawFrame(elapsed/LOOP);animFrameId=requestAnimationFrame(animate)}
-animFrameId=requestAnimationFrame(animate);
-
-document.getElementById('export').addEventListener('click',async()=>{
-  cancelAnimationFrame(animFrameId);const btn=document.getElementById('export');const st=document.getElementById('status');btn.disabled=true;st.textContent='Loading...';
-  await new Promise((r,j)=>{const s=document.createElement('script');s.src='/assets/gif.js/gif.js';s.onload=r;s.onerror=j;document.head.appendChild(s)});
-  const FPS=20,FRAMES=FPS*LOOP;
-  const gif=new GIF({workers:2,quality:1,width:W,height:H,workerScript:'/assets/gif.js/gif.worker.js'});
-  for(let f=0;f<FRAMES;f++){drawFrame(f/FRAMES);gif.addFrame(ctx,{copy:true,delay:Math.round(1000/FPS)});if(f%15===0)st.textContent=`Frame ${f+1}/${FRAMES}...`}
-  st.textContent='Encoding...';
-  gif.on('finished',blob=>{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='process-blueprint.gif';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
-    st.textContent=`Done! ${(blob.size/1024).toFixed(0)}KB`;btn.disabled=false;animFrameId=requestAnimationFrame(animate);startTime=performance.now()});
-  gif.render();
-});
-</script>
-</body>
-</html>
+function drawFrame(t){drawScene(t<0.5?t*2:2-t*2)}
+let startTime=null,animFrameId;function animate(ts){if(!startTime)startTime=ts;drawFrame(((ts-startTime)/1000)%LOOP/LOOP);animFrameId=requestAnimationFrame(animate)}animFrameId=requestAnimationFrame(animate);
+document.getElementById('export').addEventListener('click',async()=>{cancelAnimationFrame(animFrameId);const btn=document.getElementById('export'),st=document.getElementById('status');btn.disabled=true;st.textContent='Loading...';await new Promise((r,j)=>{const s=document.createElement('script');s.src='/assets/gif.js/gif.js';s.onload=r;s.onerror=j;document.head.appendChild(s)});const FPS=20,FRAMES=FPS*LOOP;const gif=new GIF({workers:2,quality:1,width:W,height:H,workerScript:'/assets/gif.js/gif.worker.js'});for(let f=0;f<FRAMES;f++){drawFrame(f/FRAMES);gif.addFrame(ctx,{copy:true,delay:Math.round(1000/FPS)});if(f%15===0)st.textContent=`${f+1}/${FRAMES}...`}st.textContent='Encoding...';gif.on('finished',blob=>{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='process-blueprint.gif';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);st.textContent=`Done! ${(blob.size/1024).toFixed(0)}KB`;btn.disabled=false;animFrameId=requestAnimationFrame(animate);startTime=performance.now()});gif.render()});
+</script></body></html>

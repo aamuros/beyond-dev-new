@@ -1,179 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Process Step 4 - Monthly Support</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #f2f1f3; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; gap: 12px; font-family: system-ui, sans-serif; }
-  canvas { display: block; }
-  button { padding: 8px 20px; border-radius: 6px; border: 1px solid #ddd; background: #fff; cursor: pointer; font-size: 13px; }
-  #status { font: 12px system-ui; color: #999; }
-</style>
-</head>
-<body>
-<canvas id="c" width="340" height="425"></canvas>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Support</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;overflow:hidden;gap:12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif}canvas{display:block}button{padding:8px 20px;border-radius:6px;border:1px solid #ddd;background:#fff;cursor:pointer;font-size:13px;font-family:inherit}#status{font:12px system-ui;color:#999}</style>
+</head><body>
+<canvas id="c" width="680" height="850"></canvas>
 <div style="display:flex;gap:8px;align-items:center"><button id="export">Export GIF</button><span id="status"></span></div>
 <script>
-const canvas = document.getElementById('c');
-const ctx = canvas.getContext('2d');
-const W = 340, H = 425;
-const LOOP = 4;
-function clamp01(v){return v<0?0:v>1?1:v}
-function lerp(a,b,t){return a+(b-a)*t}
-function easeOutBack(t){const c=1.8;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2)}
-function easeOutElastic(t){if(t<=0)return 0;if(t>=1)return 1;return Math.pow(2,-10*t)*Math.sin((t*10-0.75)*((2*Math.PI)/3))+1}
-function springOut(t){return 1-Math.exp(-6*t)*Math.cos(t*Math.PI*4)}
-function smooth01(t){return t*t*(3-2*t)}
-const C={bg:'#f2f1f3',card:'#fff',border:'#e8e8ec',primary:'#1a1a2e',accent:'#4f6df0',accentLight:'#e8ecff',green:'#22c55e',greenLight:'#ecfdf5',text:'#1a1a2e',muted:'#8e8ea0',line:'#e2e2e8',warm:'#f7f7f9',purple:'#8b5cf6',purpleLight:'#f3f0ff'};
-
-function drawText(text,x,y,o={}){
-  ctx.save();ctx.globalAlpha=clamp01(o.alpha??1);ctx.fillStyle=o.color||C.text;
-  ctx.font=`${o.bold?'800':'600'} ${o.size||13}px system-ui,sans-serif`;
-  ctx.textAlign=o.align||'left';ctx.textBaseline=o.baseline||'alphabetic';ctx.fillText(text,x,y);ctx.restore();
-}
-
-function drawMiniChart(x,y,w,h,data,alpha,color){
-  ctx.save();ctx.globalAlpha=clamp01(alpha);
-  ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.lineCap='round';ctx.lineJoin='round';
-  ctx.beginPath();
-  data.forEach((v,i)=>{
-    const px=x+(i/(data.length-1))*w;
-    const py=y+h-v*h;
-    i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
-  });
-  ctx.stroke();
-
-  // Fill under
-  ctx.globalAlpha*=0.1;ctx.fillStyle=color;
-  ctx.lineTo(x+w,y+h);ctx.lineTo(x,y+h);ctx.closePath();ctx.fill();
-  ctx.restore();
+const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+const W=680,H=850,S=2,LOOP=4;
+function clamp01(v){return v<0?0:v>1?1:v}function lerp(a,b,t){return a+(b-a)*t}function easeOut(t){return 1-Math.pow(1-t,3)}function smooth01(t){return t*t*(3-2*t)}
+const P={bg:'#ffffff',surface:'#fafafa',border:'#e5e5e5',borderLight:'#f0f0f0',ink:'#0a0a0a',ink2:'#525252',ink3:'#a3a3a3',teal:'#0d9488',tealSoft:'#f0fdfa'};
+function txt(s,x,y,o={}){ctx.save();ctx.globalAlpha=clamp01(o.a??1);ctx.fillStyle=o.c||P.ink;ctx.font=`${o.w||500} ${o.s||13}px -apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif`;ctx.textAlign=o.align||'left';ctx.textBaseline=o.base||'alphabetic';ctx.fillText(s,x,y);ctx.restore()}
+function rr(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
+function drawChart(x,y,w,h,data,alpha){
+  ctx.save();ctx.globalAlpha=clamp01(alpha);ctx.strokeStyle=P.teal;ctx.lineWidth=1.5;ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.beginPath();data.forEach((v,i)=>{const px=x+(i/(data.length-1))*w,py=y+h-v*h;i===0?ctx.moveTo(px,py):ctx.lineTo(px,py)});ctx.stroke();
+  ctx.globalAlpha*=0.06;ctx.fillStyle=P.teal;ctx.lineTo(x+w,y+h);ctx.lineTo(x,y+h);ctx.closePath();ctx.fill();ctx.restore();
 }
 
 function drawScene(t){
-  ctx.clearRect(0,0,W,H);ctx.fillStyle=C.bg;ctx.fillRect(0,0,W,H);
-  const cx=W/2;
+  ctx.clearRect(0,0,W,H);ctx.save();ctx.scale(S,S);
+  ctx.fillStyle=P.bg;ctx.fillRect(0,0,340,425);const cx=170;
 
-  // Title
-  const titleIn=smooth01(clamp01((t+0.02)/0.1));
-  ctx.save();ctx.globalAlpha=titleIn;
-  ctx.fillStyle=C.card;ctx.strokeStyle=C.border;ctx.lineWidth=1;
-  ctx.beginPath();ctx.roundRect(cx-80,15,160,36,8);ctx.fill();ctx.stroke();
-  ctx.fillStyle=C.purple;ctx.beginPath();ctx.roundRect(cx-80,15,160,36,[8,8,0,0]);ctx.fill();
-  drawText('MONTHLY SUPPORT',cx,37,{alpha:titleIn,color:'#fff',size:11,bold:true,align:'center'});
-  ctx.restore();
+  const titleIn=smooth01(clamp01(t/0.12));
+  ctx.globalAlpha=titleIn;ctx.fillStyle=P.surface;ctx.strokeStyle=P.border;ctx.lineWidth=0.5;rr(cx-75,18,150,34,10);ctx.fill();ctx.stroke();
+  ctx.fillStyle=P.teal;rr(cx-75,18,150,3,[10,10,0,0]);ctx.fill();
+  txt('MONTHLY SUPPORT',cx,40,{s:11,w:600,a:titleIn,align:'center',c:P.teal});ctx.globalAlpha=1;
 
-  // Dashboard card
-  const dashT=smooth01(clamp01((t-0.04)/0.12));
-  const dashBob=Math.sin(t*Math.PI*2.5)*1.5;
-  const dashW=260,dashH=180,dashX=cx-dashW/2,dashY=65+dashBob;
+  const dashT=smooth01(clamp01((t-0.04)/0.14)),dashBob=Math.sin(t*Math.PI*2)*1;
+  const dw=250,dh=160,dx=cx-dw/2,dy=64+dashBob;
 
-  ctx.save();ctx.globalAlpha=dashT;
-  ctx.fillStyle=C.card;ctx.strokeStyle=C.border;ctx.lineWidth=1;
-  ctx.beginPath();ctx.roundRect(dashX,dashY,dashW,dashH,10);ctx.fill();ctx.stroke();
+  ctx.globalAlpha=dashT;ctx.shadowColor='rgba(0,0,0,0.03)';ctx.shadowBlur=16;ctx.shadowOffsetY=3;ctx.fillStyle=P.surface;rr(dx,dy,dw,dh,12);ctx.fill();ctx.shadowColor='transparent';ctx.strokeStyle=P.border;ctx.lineWidth=0.5;ctx.stroke();
+  ctx.fillStyle=P.tealSoft;rr(dx,dy,dw,24,[12,12,0,0]);ctx.fill();txt('System Health',cx,dy+16,{s:9,w:600,a:dashT,align:'center',c:P.teal});
 
-  // Dashboard header
-  ctx.fillStyle=C.purpleLight;
-  ctx.beginPath();ctx.roundRect(dashX,dashY,dashW,28,[10,10,0,0]);ctx.fill();
-  drawText('System Health',cx,dashY+18,{alpha:dashT,size:9,bold:true,align:'center',color:C.purple});
-  ctx.restore();
+  const upT=smooth01(clamp01((t-0.10)/0.1));
+  if(upT>0.01){const bob=Math.sin(t*Math.PI*3)*0.6;ctx.globalAlpha=upT;ctx.fillStyle=P.tealSoft;rr(dx+10,dy+32,68,44,8);ctx.fill();const pulse=0.7+Math.sin(t*Math.PI*4)*0.3;txt('99.9%',dx+44,dy+48+bob,{s:15,w:700,a:pulse,align:'center',c:P.teal});txt('uptime',dx+44,dy+64+bob,{s:7,w:500,a:1,align:'center',c:P.ink3})}
 
-  // Uptime indicator
-  const upT=clamp01((t-0.10)/0.1);
-  if(upT>0.005){
-    const bob=Math.sin(t*Math.PI*3)*1;
-    ctx.save();ctx.globalAlpha=smooth01(upT);
-    ctx.fillStyle=C.greenLight;ctx.beginPath();ctx.roundRect(dashX+10,dashY+36,75,50,6);ctx.fill();
-    const pulse=0.7+Math.sin(t*Math.PI*4)*0.3;
-    drawText('99.9%',dashX+47,dashY+55+bob,{alpha:pulse,size:16,bold:true,align:'center',color:C.green});
-    drawText('uptime',dashX+47,dashY+72+bob,{alpha:1,size:8,bold:true,align:'center',color:C.muted});
-    ctx.restore();
-  }
+  const chartT=smooth01(clamp01((t-0.14)/0.15));
+  if(chartT>0.01){drawChart(dx+88,dy+34,152,36,[0.3,0.5,0.4,0.7,0.6,0.8,0.75,0.9,0.85,0.95].map(v=>v*chartT),chartT);txt('performance',dx+164,dy+80,{s:7,w:500,a:chartT*0.5,align:'center',c:P.ink3})}
 
-  // Chart
-  const chartT=clamp01((t-0.14)/0.15);
-  if(chartT>0.005){
-    const chartData=[0.3,0.5,0.4,0.7,0.6,0.8,0.75,0.9,0.85,0.95];
-    drawMiniChart(dashX+95,dashY+38,155,42,chartData.map(v=>v*smooth01(chartT)),smooth01(chartT),C.accent);
-    drawText('performance',dashX+172,dashY+90,{alpha:smooth01(chartT)*0.7,size:7,bold:true,align:'center',color:C.muted});
-  }
-
-  // Stats row
-  const stats=[
-    {label:'Backups',value:'30/30',icon:'💾',delay:0.20,color:C.green},
-    {label:'Bugs Fixed',value:'12',icon:'🐛',delay:0.24,color:C.accent},
-    {label:'Updates',value:'4',icon:'⬆️',delay:0.28,color:C.purple},
-  ];
-  stats.forEach((s,i)=>{
-    const st=clamp01((t-s.delay)/0.1);
-    if(st>0.005){
-      const sx=dashX+10+i*84;
-      const sy=dashY+100;
-      ctx.save();ctx.globalAlpha=smooth01(st);
-      ctx.fillStyle=C.warm;ctx.beginPath();ctx.roundRect(sx,sy,76,36,6);ctx.fill();
-      drawText(s.icon,sx+12,sy+16,{alpha:1,size:11,baseline:'middle'});
-      drawText(s.value,sx+28,sy+14,{alpha:1,size:11,bold:true,color:s.color});
-      drawText(s.label,sx+28,sy+28,{alpha:0.7,size:7,color:C.muted});
-      ctx.restore();
-    }
+  [{label:'Backups',value:'30/30',delay:0.20},{label:'Bugs Fixed',value:'12',delay:0.24},{label:'Uptime SLA',value:'Met',delay:0.28}].forEach((s,i)=>{
+    const st=smooth01(clamp01((t-s.delay)/0.1));if(st<0.01)return;
+    const sx=dx+8+i*78,sy=dy+84;ctx.globalAlpha=st;ctx.fillStyle=P.tealSoft;rr(sx,sy,70,34,8);ctx.fill();
+    txt(s.value,sx+10,sy+13,{s:11,w:700,a:1,c:P.teal});txt(s.label,sx+10,sy+26,{s:7,w:500,a:0.5,c:P.ink2});ctx.globalAlpha=1;
   });
 
-  // Shield icon
-  const shieldT=clamp01((t-0.12)/0.1);
-  const shieldE=springOut(shieldT);
-  if(shieldT>0.005){
-    const sx=cx,sy=dashY+dashH+20;
-    ctx.save();ctx.translate(sx,sy);ctx.scale(shieldE,shieldE);ctx.globalAlpha=smooth01(shieldT);
-    ctx.fillStyle=C.greenLight;ctx.beginPath();ctx.arc(0,0,18,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle=C.green;ctx.font='18px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🛡️',0,1);
-    ctx.restore();
-  }
+  const shieldT=smooth01(clamp01((t-0.12)/0.1));
+  if(shieldT>0.01){const sx=cx,sy=dy+dh+18;ctx.globalAlpha=shieldT;ctx.fillStyle=P.tealSoft;ctx.beginPath();ctx.arc(sx,sy,14,0,Math.PI*2);ctx.fill();ctx.fillStyle=P.teal;ctx.font='bold 13px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('✓',sx,sy);ctx.globalAlpha=1}
 
-  // Support benefit cards
-  const benefits=[
-    {text:'Hosting & backups',icon:'☁️',delay:0.30,sx:-60,ex:65,sy:355},
-    {text:'Bug fixes & patches',icon:'🔧',delay:0.34,sx:W+50,ex:240,sy:355},
-  ];
-  benefits.forEach((b,i)=>{
-    const bt=clamp01((t-b.delay)/0.16);
-    const be=springOut(bt);
-    const bx=lerp(b.sx,b.ex,be);
-    const by=b.sy+Math.sin(t*Math.PI*2.2+i*1.5)*1.5;
-    ctx.save();ctx.globalAlpha=smooth01(bt);
-    ctx.fillStyle=C.purpleLight;ctx.strokeStyle='rgba(139,92,246,0.3)';ctx.lineWidth=1;
-    ctx.beginPath();ctx.roundRect(bx-55,by-13,110,26,13);ctx.fill();ctx.stroke();
-    drawText(`${b.icon} ${b.text}`,bx,by+3,{alpha:1,size:9,bold:true,align:'center',color:C.text});
-    ctx.restore();
+  [{text:'Hosting & backups',delay:0.30,y:335},{text:'Bug fixes & patches',delay:0.34,y:365}].forEach(b=>{
+    const bt=smooth01(clamp01((t-b.delay)/0.14));if(bt<0.01)return;
+    ctx.font='600 10px -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif';const tw=ctx.measureText(b.text).width;
+    ctx.globalAlpha=bt;ctx.fillStyle=P.tealSoft;ctx.strokeStyle=P.teal;ctx.lineWidth=1;rr(cx-tw/2-14,b.y-11,tw+28,22,11);ctx.fill();ctx.stroke();
+    txt(b.text,cx,b.y+4,{s:10,w:600,a:1,align:'center',c:P.teal});ctx.globalAlpha=1;
   });
 
-  // "Always running" badge
-  const badgeT=clamp01((t-0.40)/0.1);
-  if(badgeT>0.005){
-    const sc=easeOutElastic(badgeT);
-    ctx.save();ctx.translate(cx,H-22);ctx.scale(sc,sc);ctx.globalAlpha=smooth01(badgeT)*0.9;
-    ctx.fillStyle='rgba(139,92,246,0.1)';ctx.strokeStyle=C.purple;ctx.lineWidth=1.2;
-    ctx.beginPath();ctx.roundRect(-65,-12,130,24,12);ctx.fill();ctx.stroke();
-    drawText('always running, always safe',0,3,{alpha:1,size:9,bold:true,align:'center',color:C.purple});
-    ctx.restore();
-  }
+  const pillT=smooth01(clamp01((t-0.40)/0.1));
+  if(pillT>0.01){ctx.globalAlpha=pillT;ctx.fillStyle=P.tealSoft;ctx.strokeStyle=P.teal;ctx.lineWidth=1;rr(cx-62,395,124,22,11);ctx.fill();ctx.stroke();txt('always running, always safe',cx,410,{s:9,w:600,a:1,align:'center',c:P.teal})}
+  ctx.restore();
 }
 
-function drawFrame(t){const pp=t<0.5?t*2:2-t*2;drawScene(pp)}
-let startTime=null;let animFrameId;
-function animate(ts){if(!startTime)startTime=ts;const elapsed=((ts-startTime)/1000)%LOOP;drawFrame(elapsed/LOOP);animFrameId=requestAnimationFrame(animate)}
-animFrameId=requestAnimationFrame(animate);
-
-document.getElementById('export').addEventListener('click',async()=>{
-  cancelAnimationFrame(animFrameId);const btn=document.getElementById('export');const st=document.getElementById('status');btn.disabled=true;st.textContent='Loading...';
-  await new Promise((r,j)=>{const s=document.createElement('script');s.src='/assets/gif.js/gif.js';s.onload=r;s.onerror=j;document.head.appendChild(s)});
-  const FPS=20,FRAMES=FPS*LOOP;
-  const gif=new GIF({workers:2,quality:1,width:W,height:H,workerScript:'/assets/gif.js/gif.worker.js'});
-  for(let f=0;f<FRAMES;f++){drawFrame(f/FRAMES);gif.addFrame(ctx,{copy:true,delay:Math.round(1000/FPS)});if(f%15===0)st.textContent=`Frame ${f+1}/${FRAMES}...`}
-  st.textContent='Encoding...';
-  gif.on('finished',blob=>{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='process-support.gif';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
-    st.textContent=`Done! ${(blob.size/1024).toFixed(0)}KB`;btn.disabled=false;animFrameId=requestAnimationFrame(animate);startTime=performance.now()});
-  gif.render();
-});
-</script>
-</body>
-</html>
+function drawFrame(t){drawScene(t<0.5?t*2:2-t*2)}
+let startTime=null,animFrameId;function animate(ts){if(!startTime)startTime=ts;drawFrame(((ts-startTime)/1000)%LOOP/LOOP);animFrameId=requestAnimationFrame(animate)}animFrameId=requestAnimationFrame(animate);
+document.getElementById('export').addEventListener('click',async()=>{cancelAnimationFrame(animFrameId);const btn=document.getElementById('export'),st=document.getElementById('status');btn.disabled=true;st.textContent='Loading...';await new Promise((r,j)=>{const s=document.createElement('script');s.src='/assets/gif.js/gif.js';s.onload=r;s.onerror=j;document.head.appendChild(s)});const FPS=20,FRAMES=FPS*LOOP;const gif=new GIF({workers:2,quality:1,width:W,height:H,workerScript:'/assets/gif.js/gif.worker.js'});for(let f=0;f<FRAMES;f++){drawFrame(f/FRAMES);gif.addFrame(ctx,{copy:true,delay:Math.round(1000/FPS)});if(f%15===0)st.textContent=`${f+1}/${FRAMES}...`}st.textContent='Encoding...';gif.on('finished',blob=>{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='process-support.gif';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);st.textContent=`Done! ${(blob.size/1024).toFixed(0)}KB`;btn.disabled=false;animFrameId=requestAnimationFrame(animate);startTime=performance.now()});gif.render()});
+</script></body></html>
