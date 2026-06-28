@@ -397,10 +397,6 @@ body {
   width: max-content;
 }
 
-.marquee-track:hover {
-  animation-play-state: paused;
-}
-
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -531,7 +527,7 @@ body {
 
 @layer base {
   .global-section {
-    margin-top: 180px;
+    margin-top: 40px;
     padding-bottom: 100px;
     position: relative;
   }
@@ -610,17 +606,16 @@ body {
 
 .pain-point-card {
   background-color: rgb(243, 243, 245);
-  border-radius: 40px;
+  border-radius: 24px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column-reverse;
-  height: 640px;
   justify-content: space-between;
-  max-width: 510px;
+  min-height: 480px;
   overflow: hidden;
-  padding-top: 80px;
+  padding-top: 48px;
   position: sticky;
-  width: 510px;
+  width: 100%;
   z-index: 1;
 }
 
@@ -642,13 +637,13 @@ body {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 0 32px 32px;
+  padding: 0 24px 24px;
 }
 
 .pain-point-card__title {
   color: rgb(25, 23, 28);
   font-family: var(--font-display), sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.2;
@@ -656,29 +651,49 @@ body {
 
 .pain-point-card__description {
   color: #6e6e73;
-  font-size: 1rem;
+  font-size: 0.875rem;
   line-height: 1.6;
 }
 
-@media (max-width: 768px) {
+@media (min-width: 1025px) {
   .pain-point-card {
+    aspect-ratio: 400 / 620;
+    border-radius: 40px;
+    max-width: 400px;
+    min-height: 0;
+    padding-top: 45px;
     width: 100%;
-    max-width: 100%;
-    height: auto;
-    min-height: 480px;
-    border-radius: 24px;
-    padding-top: 48px;
   }
 
   .pain-point-card__content {
-    padding: 0 24px 24px;
+    padding: 0 28px 28px;
   }
 
   .pain-point-card__title {
-    font-size: 1.25rem;
+    font-size: 1.375rem;
   }
 
   .pain-point-card__description {
-    font-size: 0.875rem;
+    font-size: 0.9375rem;
+  }
+}
+
+@media (min-width: 1441px) {
+  .pain-point-card {
+    aspect-ratio: 510 / 640;
+    max-width: 510px;
+    padding-top: 80px;
+  }
+
+  .pain-point-card__content {
+    padding: 0 32px 32px;
+  }
+
+  .pain-point-card__title {
+    font-size: 1.5rem;
+  }
+
+  .pain-point-card__description {
+    font-size: 1rem;
   }
 }

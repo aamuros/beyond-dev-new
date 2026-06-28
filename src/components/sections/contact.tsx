@@ -9,7 +9,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="global-section !mt-[60px] !pb-[200px] bg-white md:h-screen md:min-h-0 flex flex-col justify-center pt-6 md:pt-12 overflow-hidden"
+      className="global-section !mt-[60px] !pb-12 md:!pb-[200px] bg-white md:h-screen md:min-h-0 flex flex-col justify-center pt-6 md:pt-12 md:overflow-hidden"
     >
       <Container size="lg" className="flex flex-col gap-6 md:gap-8">
         <SectionHeading
@@ -22,7 +22,7 @@ export default function Contact() {
           className="mb-0"
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 self-center w-full max-h-[calc(100vh-220px)]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-10 self-center w-full md:max-h-[calc(100vh-220px)]">
           <div className="flex flex-col gap-6 self-center">
             <div className="flex flex-col gap-3">
               <h3 className="section-heading-title text-2xl lg:text-3xl text-foreground">
@@ -60,7 +60,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden md:h-[500px] md:max-h-[500px]">
+          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden h-[500px] md:h-[500px] md:max-h-[500px]">
             <Cal
               calLink="beyond-dev-2wzrnz/15min"
               style={{ width: "100%", height: "100%", overflow: "scroll" }}

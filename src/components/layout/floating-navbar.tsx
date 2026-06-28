@@ -11,11 +11,46 @@ const navLinks = [
   { label: "Work", href: "#projects" },
 ];
 
-/* Shared transition config — keeps padding + CTA perfectly in sync */
 const smoothTransition = {
   duration: 0.45,
-  ease: [0.25, 0.1, 0.25, 1] as const, /* cubic-bezier — smooth ease-out */
+  ease: [0.25, 0.1, 0.25, 1] as const,
 };
+
+/* ── Dropdown animation variants ───────────────────────────────── */
+
+const dropdownVariants = {
+  closed: {
+    height: 0,
+    opacity: 0,
+    transition: {
+      height: { duration: 0.35, ease: [0.25, 0.1, 0.25, 1] },
+      opacity: { duration: 0.2, ease: "easeOut" },
+    },
+  },
+  open: {
+    height: "auto",
+    opacity: 1,
+    transition: {
+      height: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] },
+      opacity: { duration: 0.25, delay: 0.05, ease: "easeIn" },
+    },
+  },
+};
+
+const linkItemVariants = {
+  closed: { opacity: 0, y: -8 },
+  open: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: 0.08 + i * 0.06,
+      duration: 0.3,
+      ease: [0.25, 0.1, 0.25, 1],
+    },
+  }),
+};
+
+/* ── Icon components ───────────────────────────────────────────── */
 
 function IconX({ className }: { className?: string }) {
   return (
@@ -36,69 +71,68 @@ function IconMenu({ className }: { className?: string }) {
   );
 }
 
-function MobileDrawer({ open, onClose }: { open: boolean; onClose: () => void }) {
-  useEffect(() => {
-    if (open) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
+/* ── Animated hamburger / X toggle ─────────────────────────────── */
 
+function MenuToggle({
+  isOpen,
+  onClick,
+}: {
+  isOpen: boolean;
+  onClick: () => void;
+}) {
   return (
-    <AnimatePresence>
-      {open && (
-        <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm"
-            onClick={onClose}
-          />
-          <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed top-0 right-0 bottom-0 z-50 w-[min(85vw,360px)] bg-white shadow-2xl flex flex-col overflow-y-auto"
+    <button
+      className="lg:hidden absolute top-[6px] right-[10px] w-[44px] h-[44px] aspect-[1/1] flex items-center justify-center overflow-clip cursor-pointer z-10 hover:bg-[rgba(255,255,255,0.4)] rounded-full transition-colors"
+      onClick={onClick}
+      aria-label={isOpen ? "Close menu" : "Open menu"}
+    >
+      <AnimatePresence mode="wait" initial={false}>
+        {isOpen ? (
+          <motion.span
+            key="close"
+            initial={{ opacity: 0, rotate: -90, scale: 0.8 }}
+            animate={{ opacity: 1, rotate: 0, scale: 1 }}
+            exit={{ opacity: 0, rotate: 90, scale: 0.8 }}
+            transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+            className="flex items-center justify-center"
           >
-            <div className="flex items-center justify-end px-5 py-4 border-b border-[var(--color-white-400)]">
-              <button
-                onClick={onClose}
-                className="p-2 rounded-lg hover:bg-[var(--color-white-300)] transition-colors"
-                aria-label="Close menu"
-              >
-                <IconX className="h-5 w-5 text-[var(--color-black-400)]" />
-              </button>
-            </div>
-            <nav className="flex-1 px-4 py-3">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={onClose}
-                  className="block py-3.5 px-2 text-[15px] font-semibold text-[#141414] border-b border-[var(--color-white-400)] hover:text-[var(--color-black-100)] transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+            <IconX className="h-5 w-5 text-[#141414]" />
+          </motion.span>
+        ) : (
+          <motion.span
+            key="menu"
+            initial={{ opacity: 0, rotate: 90, scale: 0.8 }}
+            animate={{ opacity: 1, rotate: 0, scale: 1 }}
+            exit={{ opacity: 0, rotate: -90, scale: 0.8 }}
+            transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+            className="flex items-center justify-center"
+          >
+            <IconMenu className="h-5 w-5 text-[#141414]" />
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </button>
   );
 }
+
+/* ── Main component ────────────────────────────────────────────── */
 
 export default function FloatingNavbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined"
+      ? window.matchMedia("(max-width: 1023px)").matches
+      : false
+  );
   const { scrollY } = useScroll();
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1023px)");
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 50);
@@ -118,23 +152,31 @@ export default function FloatingNavbar() {
   );
 
   return (
-    <>
-      <motion.header
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 260, damping: 28, mass: 0.8 }}
-        className="fixed top-0 inset-x-0 z-50 flex justify-center items-center pt-6 w-min mx-auto overflow-visible"
+    <motion.header
+      initial={{ y: -80, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ type: "spring", stiffness: 260, damping: 28, mass: 0.8 }}
+      className="fixed top-0 inset-x-0 z-50 flex justify-center items-start pt-4 lg:pt-6 w-min mx-auto overflow-visible"
+    >
+      {/* ── Single persistent nav bar (never unmounts) ──────────── */}
+      <motion.nav
+        animate={{
+          paddingRight: isMobile
+            ? mobileOpen ? 20 : scrolled ? 12 : 20
+            : scrolled ? 8 : 24,
+          borderRadius: isMobile && mobileOpen ? 28 : isMobile ? 28 : 36,
+        }}
+        transition={smoothTransition}
+        className="relative flex flex-col w-[382px] lg:w-[584px] rounded-[28px] lg:rounded-[36px] bg-[rgba(237,237,237,0.64)] backdrop-blur-[48px] select-none overflow-hidden lg:overflow-visible"
+        style={{ paddingRight: isMobile ? 20 : 24 }}
       >
-        <motion.nav
-          animate={{ paddingRight: scrolled ? 8 : 24 }}
-          transition={smoothTransition}
-          className="relative flex flex-row flex-nowrap items-center content-center justify-start w-[584px] h-[72px] py-[17px] pl-6 rounded-[36px] gap-[10px] bg-[rgba(237,237,237,0.64)] backdrop-blur-[48px] overflow-visible select-none"
-          style={{ paddingRight: 24 }}
-        >
+        {/* ── Top bar (logo + desktop links + mobile toggle) ──── */}
+        <div className="flex flex-row flex-nowrap items-center content-center justify-start h-[56px] py-[16px] pl-5 lg:h-[72px] lg:py-[17px] lg:pl-6 gap-[10px]">
           <Link href="/" className="shrink-0 flex items-center">
-            <Logo className="h-[38px] w-auto text-[#141414]" />
+            <Logo className="h-[28px] lg:h-[38px] w-auto text-[#141414]" />
           </Link>
 
+          {/* Desktop nav links */}
           <div
             className="hidden lg:flex flex-row flex-nowrap items-center content-center justify-end overflow-visible relative"
             style={{ flex: "1 0 0px", height: 22 }}
@@ -217,17 +259,101 @@ export default function FloatingNavbar() {
             </AnimatePresence>
           </div>
 
-          <button
-            className="lg:hidden p-2 rounded-full hover:bg-[rgba(255,255,255,0.4)] transition-colors cursor-pointer shrink-0"
-            onClick={() => setMobileOpen(true)}
-            aria-label="Open menu"
-          >
-            <IconMenu className="h-5 w-5 text-[#141414]" />
-          </button>
-        </motion.nav>
-      </motion.header>
+          {/* Mobile hamburger / close toggle */}
+          <MenuToggle
+            isOpen={mobileOpen}
+            onClick={() => setMobileOpen((prev) => !prev)}
+          />
+        </div>
 
-      <MobileDrawer open={mobileOpen} onClose={() => setMobileOpen(false)} />
-    </>
+        {/* ── Mobile dropdown content (slides open inside the same nav) */}
+        <AnimatePresence initial={false}>
+          {isMobile && mobileOpen && (
+            <motion.div
+              key="mobile-dropdown"
+              variants={dropdownVariants}
+              initial="closed"
+              animate="open"
+              exit="closed"
+              className="overflow-hidden"
+            >
+              <div className="flex flex-col gap-[24px] px-[20px] pb-[16px]">
+                {navLinks.map((link, i) => (
+                  <motion.div
+                    key={link.href}
+                    variants={linkItemVariants}
+                    initial="closed"
+                    animate="open"
+                    exit="closed"
+                    custom={i}
+                  >
+                    <Link
+                      href={link.href}
+                      onClick={(e) => {
+                        handleAnchorClick(e, link.href);
+                        setMobileOpen(false);
+                      }}
+                      style={{
+                        fontSize: 20,
+                        fontWeight: 600,
+                        lineHeight: "26px",
+                        color: "#141414",
+                        textDecoration: "none",
+                        cursor: "pointer",
+                        display: "block",
+                      }}
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                ))}
+
+                <motion.div
+                  variants={linkItemVariants}
+                  initial="closed"
+                  animate="open"
+                  exit="closed"
+                  custom={navLinks.length}
+                >
+                  <Link
+                    href="#contact"
+                    onClick={(e) => {
+                      handleAnchorClick(e, "#contact");
+                      setMobileOpen(false);
+                    }}
+                    className="whitespace-nowrap select-none"
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 0,
+                      fontSize: 16,
+                      fontWeight: 600,
+                      letterSpacing: "0.2px",
+                      lineHeight: "22px",
+                      color: "#fff",
+                      background: "#141414",
+                      backdropFilter: "blur(40px)",
+                      borderRadius: 999,
+                      borderWidth: 0,
+                      borderStyle: "none",
+                      padding: "11px 16px",
+                      textAlign: "center",
+                      textDecoration: "none",
+                      cursor: "pointer",
+                      transition: "color 0.2s, background 0.2s",
+                      width: "100%",
+                    }}
+                  >
+                    <span>Get in touch</span>
+                  </Link>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.nav>
+    </motion.header>
   );
 }

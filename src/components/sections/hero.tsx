@@ -1,4 +1,3 @@
-import Link from "next/link";
 import SmoothLink from "@/components/ui/smooth-link";
 import LogoCloud from "@/components/sections/logo-cloud";
 import DashboardCarousel from "@/components/sections/dashboard-carousel";
@@ -28,7 +27,7 @@ export default function Hero() {
                   </SmoothLink>
                 </div>
 
-                <h1 className="text-[36px] leading-[90%] font-extrabold tracking-[-0.02em] text-[#19171c] font-['TWK_Lausanne',sans-serif] lg:text-[80px] lg:tracking-[-0.03em] min-[1441px]:text-[115px] min-[1441px]:tracking-[-3.6px]">
+                <h1 className="text-[42px] leading-[90%] font-extrabold tracking-[-0.02em] text-[#19171c] font-['TWK_Lausanne',sans-serif] lg:text-[92px] lg:tracking-[-0.03em] min-[1441px]:text-[130px] min-[1441px]:tracking-[-3.6px]">
                   Simple systems for
                   <br />
                   your business.

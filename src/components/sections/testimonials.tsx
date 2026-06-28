@@ -191,7 +191,7 @@ export default function Testimonials() {
         <SectionHeading
           badge="Testimonials"
           badgeVariant="pill"
-          title="What Our Users Are Saying"
+          title="What Our Customers  Are Saying"
           description="Real businesses, real results. See how simple systems transformed their daily operations."
         />
       </Container>
