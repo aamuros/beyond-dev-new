@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Paper & Notebooks - Motion Design</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #f3f3f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+    gap: 12px;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  canvas { display: block; }
+  #ui { display: flex; gap: 8px; align-items: center; }
+  button {
+    padding: 8px 20px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: inherit;
+  }
+  button:hover { background: #f0f0f0; }
+  #status { font: 12px system-ui; color: #999; }
+</style>
+</head>
+<body>
+<canvas id="c" width="400" height="500"></canvas>
+<div id="ui">
+  <button id="export">Export GIF</button>
+  <span id="status"></span>
+</div>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const W = 400, H = 500;
+const LOOP = 4;
+
+function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+function lerp(a, b, t) { return a + (b - a) * t; }
+function easeOutQuint(t) { return 1 - Math.pow(1 - t, 5); }
+function easeInOutCubic(t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2; }
+function easeOutBack(t) { const c=2.2; return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2); }
+function easeOutElastic(t) {
+  if (t<=0) return 0; if (t>=1) return 1;
+  return Math.pow(2,-10*t)*Math.sin((t*10-0.75)*((2*Math.PI)/3))+1;
+}
+function springOut(t) { return 1 - Math.exp(-7*t) * Math.cos(t * Math.PI * 4.5); }
+function springBounce(t) { return 1 - Math.exp(-5.5*t) * Math.cos(t * Math.PI * 5); }
+function smooth01(t) { return t*t*(3-2*t); }
+
+function drawShadow(blur, ox, oy) {
+  ctx.shadowColor = 'rgba(0,0,0,0.07)';
+  ctx.shadowBlur = blur;
+  ctx.shadowOffsetX = ox;
+  ctx.shadowOffsetY = oy;
+}
+function clearShadow() {
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = 0;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
+}
+
+function drawPaperSheet(x, y, w, h, rot, alpha, opts = {}) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.globalAlpha = clamp01(alpha);
+
+  drawShadow(18, 0, 5);
+
+  ctx.fillStyle = opts.color || '#ffffff';
+  ctx.strokeStyle = '#e0e0e4';
+  ctx.lineWidth = 0.7;
+
+  if (opts.crumpled) {
+    ctx.beginPath();
+    for (let i = 0; i <= 16; i++) {
+      const a = (i / 16) * Math.PI * 2;
+      const rx = w/2 + Math.sin(a*3.7)*5 + Math.cos(a*2.1)*3;
+      const ry = h/2 + Math.cos(a*2.9)*4 + Math.sin(a*1.6)*2;
+      i===0 ? ctx.moveTo(Math.cos(a)*rx, Math.sin(a)*ry) : ctx.lineTo(Math.cos(a)*rx, Math.sin(a)*ry);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+  } else {
+    const f = opts.noFold ? 0 : 12;
+    ctx.beginPath();
+    ctx.moveTo(-w/2, -h/2);
+    ctx.lineTo(w/2 - f, -h/2);
+    ctx.lineTo(w/2, -h/2 + f);
+    ctx.lineTo(w/2, h/2);
+    ctx.lineTo(-w/2, h/2);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    if (f > 0) {
+      ctx.fillStyle = '#eaeaed';
+      ctx.beginPath();
+      ctx.moveTo(w/2-f, -h/2);
+      ctx.lineTo(w/2, -h/2+f);
+      ctx.lineTo(w/2-f, -h/2+f);
+      ctx.closePath();
+      ctx.fill();
+    }
+  }
+
+  clearShadow();
+
+  if (!opts.noLines) {
+    ctx.strokeStyle = 'rgba(185, 185, 205, 0.35)';
+    ctx.lineWidth = 0.5;
+    const startY = -h/2 + (opts.lineOffset || 20);
+    const count = opts.lineCount || 7;
+    for (let i = 0; i < count; i++) {
+      const ly = startY + i * 10;
+      if (ly > h/2 - 10) break;
+      const len = (w - 24) * (0.4 + Math.sin(i*2.3+0.7)*0.2 + 0.3);
+      ctx.beginPath();
+      ctx.moveTo(-w/2 + 12, ly);
+      ctx.lineTo(-w/2 + 12 + len, ly);
+      ctx.stroke();
+    }
+  }
+
+  ctx.restore();
+}
+
+function drawNotebook(x, y, w, h, rot, alpha, openAmt) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.globalAlpha = clamp01(alpha);
+
+  drawShadow(22, 0, 6);
+  ctx.fillStyle = '#b8383b';
+  ctx.beginPath();
+  ctx.roundRect(-w/2, -h/2, w, h, 6);
+  ctx.fill();
+  clearShadow();
+
+  ctx.fillStyle = '#fdf6e3';
+  for (let i = 0; i < 5; i++) {
+    ctx.beginPath();
+    ctx.roundRect(-w/2+3+i*0.3, -h/2+3+i*0.2, w-6, h-6, 3);
+    ctx.fill();
+  }
+
+  ctx.save();
+  ctx.translate(-w/2, 0);
+  ctx.rotate(-openAmt * 0.4);
+  drawShadow(14, 0, 4);
+  ctx.fillStyle = '#d94f4f';
+  ctx.beginPath();
+  ctx.roundRect(0, -h/2, w, h, 6);
+  ctx.fill();
+  clearShadow();
+
+  ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i < 3; i++) {
+    ctx.beginPath();
+    ctx.moveTo(14, -h/2+18+i*7);
+    ctx.lineTo(w-14, -h/2+18+i*7);
+    ctx.stroke();
+  }
+  ctx.fillStyle = 'rgba(255,255,255,0.12)';
+  ctx.font = `bold ${Math.round(w*0.1)}px system-ui`;
+  ctx.textAlign = 'center';
+  ctx.fillText('NOTEBOOK', w/2, -h/2+52);
+  ctx.restore();
+
+  ctx.strokeStyle = '#aaa';
+  ctx.lineWidth = 1.6;
+  for (let i = 0; i < 11; i++) {
+    const sy = -h/2 + 10 + (i/10)*(h-20);
+    ctx.beginPath();
+    ctx.arc(-w/2-1, sy, 3, 0, Math.PI*2);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawPen(x, y, rot, alpha) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.globalAlpha = clamp01(alpha);
+  drawShadow(10, 0, 3);
+
+  ctx.fillStyle = '#2c3e50';
+  ctx.beginPath();
+  ctx.roundRect(-2.5, -36, 5, 55, 1.5);
+  ctx.fill();
+
+  ctx.fillStyle = '#444';
+  ctx.beginPath();
+  ctx.moveTo(-2, 19);
+  ctx.lineTo(2, 19);
+  ctx.lineTo(0, 28);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle = '#d94f4f';
+  ctx.beginPath();
+  ctx.roundRect(-3, -44, 6, 10, [2,2,0,0]);
+  ctx.fill();
+
+  ctx.fillStyle = '#b8383b';
+  ctx.fillRect(2.5, -42, 1.2, 16);
+  ctx.restore();
+}
+
+function drawStrikethrough(x, y, text, rot, alpha, sz) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.globalAlpha = clamp01(alpha);
+  ctx.font = `600 ${sz}px 'Courier New', monospace`;
+  ctx.fillStyle = '#555';
+  ctx.fillText(text, 0, 0);
+  const tw = ctx.measureText(text).width;
+  ctx.strokeStyle = '#d94f4f';
+  ctx.lineWidth = 1.3;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(-1, sz*0.32);
+  ctx.lineTo(tw+1, sz*0.28);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawXMark(x, y, sz, rot, alpha, scale) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.scale(scale||1, scale||1);
+  ctx.globalAlpha = clamp01(alpha);
+  ctx.strokeStyle = '#d94f4f';
+  ctx.lineWidth = 2;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(-sz,-sz); ctx.lineTo(sz,sz);
+  ctx.moveTo(sz,-sz); ctx.lineTo(-sz,sz);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawQ(x, y, rot, alpha, sz, scale) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.scale(scale||1, scale||1);
+  ctx.globalAlpha = clamp01(alpha);
+  ctx.font = `italic ${sz}px 'Courier New', monospace`;
+  ctx.fillStyle = '#d94f4f';
+  ctx.fillText('?', 0, 0);
+  ctx.restore();
+}
+
+function drawScene(t) {
+  ctx.clearRect(0, 0, W, H);
+
+  // Background with subtle dot grid
+  ctx.fillStyle = '#f3f3f5';
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = 'rgba(200, 200, 215, 0.18)';
+  for (let gx = 12; gx < W; gx += 24) {
+    for (let gy = 12; gy < H; gy += 24) {
+      ctx.beginPath();
+      ctx.arc(gx, gy, 0.8, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  const cx = W/2, cy = H/2 + 15;
+
+  // === NOTEBOOK ===
+  const nbAppear = smooth01(clamp01((t + 0.05) / 0.12));
+  const nbScale = easeOutBack(nbAppear);
+  const nbOpen = springBounce(clamp01((t - 0.12) / 0.3)) * 0.65;
+  const nbBreath = Math.sin(t * Math.PI * 3) * 1.5;
+  const nbShakeAmt = t > 0.5 ? smooth01(clamp01((t - 0.5) / 0.05)) * smooth01(clamp01((1 - t) / 0.25)) : 0;
+  const nbShake = nbShakeAmt * Math.sin(t * 220) * 2.5;
+
+  ctx.save();
+  ctx.translate(cx + nbShake, cy + nbBreath);
+  ctx.scale(nbScale, nbScale);
+  drawNotebook(0, 0, 135, 180, Math.sin(t*Math.PI*2)*0.01, nbAppear, nbOpen);
+  ctx.restore();
+
+  // === PAPERS (flying in from edges with spring settle) ===
+  const paperDefs = [
+    { delay:0.06, sx:-90, sy:240, ex:68, ey:175, w:75, h:100, sr:0.45, er:0.07 },
+    { delay:0.10, sx:W+80, sy:160, ex:315, ey:148, w:65, h:88, sr:-0.4, er:-0.05 },
+    { delay:0.14, sx:100, sy:-80, ex:155, ey:295, w:60, h:82, sr:0.75, er:0.16 },
+    { delay:0.18, sx:W+60, sy:320, ex:280, ey:315, w:55, h:74, sr:-0.55, er:-0.1 },
+    { delay:0.22, sx:-70, sy:380, ex:115, ey:375, w:50, h:68, sr:0.65, er:0.2 },
+  ];
+
+  paperDefs.forEach((p, i) => {
+    const pt = clamp01((t - p.delay) / 0.2);
+    const pe = springOut(pt);
+    const px = lerp(p.sx, p.ex, pe);
+    const py = lerp(p.sy, p.ey, pe);
+    const pr = lerp(p.sr, p.er, pe);
+    const pa = smooth01(pt);
+    const bob = Math.sin(t*Math.PI*2.8 + i*1.4) * (1.5 + i*0.6);
+    const sway = Math.sin(t*Math.PI*2.2 + i*1.1) * 0.015;
+    drawPaperSheet(px, py+bob, p.w, p.h, pr+sway, pa);
+  });
+
+  // === CRUMPLED PAPERS ===
+  const crumpDefs = [
+    { delay:0.28, sx:40, sy:H+50, ex:172, ey:405, w:52, h:48, r:0.12 },
+    { delay:0.32, sx:W-20, sy:H+40, ex:325, ey:390, w:46, h:42, r:-0.18 },
+  ];
+  crumpDefs.forEach((c, i) => {
+    const ct = clamp01((t-c.delay)/0.16);
+    const ce = springOut(ct);
+    const cx2 = lerp(c.sx, c.ex, ce);
+    const cy2 = lerp(c.sy, c.ey, ce);
+    const bob = Math.sin(t*Math.PI*3.2 + i*2.1) * 2.5;
+    drawPaperSheet(cx2, cy2+bob, c.w, c.h, c.r + Math.sin(t*Math.PI*2)*0.02, smooth01(ct), {crumpled:true, noLines:true, color:'#f4f4f7'});
+  });
+
+  // === PEN ===
+  const penT = clamp01((t-0.24)/0.16);
+  const penE = springOut(penT);
+  const penX = lerp(W+50, 242, penE);
+  const penY = lerp(420, 438, penE);
+  const penR = lerp(0.55, 0.72, penE) + Math.sin(t*Math.PI*3.5)*0.03;
+  drawPen(penX, penY, penR, smooth01(penT));
+
+  // === STRIKETHROUGH TEXTS ===
+  const strDefs = [
+    {x:78, y:192, text:'ORDER #24', rot:0.07, sz:7.5, delay:0.36},
+    {x:318, y:165, text:'Qty: 50?', rot:-0.05, sz:7, delay:0.40},
+    {x:158, y:310, text:'booking??', rot:0.13, sz:8.5, delay:0.44},
+    {x:282, y:332, text:'who ordered', rot:-0.03, sz:7, delay:0.48},
+  ];
+  strDefs.forEach(s => {
+    const st = clamp01((t-s.delay)/0.1);
+    if (st > 0.005) drawStrikethrough(s.x, s.y, s.text, s.rot, smooth01(st)*0.7, s.sz);
+  });
+
+  // === X MARKS (elastic pop-in) ===
+  const xmDefs = [
+    {x:105, y:198, sz:5, rot:0.18, delay:0.42},
+    {x:342, y:172, sz:4, rot:-0.12, delay:0.44},
+    {x:97, y:212, sz:3.5, rot:0.32, delay:0.46},
+  ];
+  xmDefs.forEach(xm => {
+    const xt = clamp01((t-xm.delay)/0.1);
+    if (xt > 0.005) {
+      const sc = easeOutElastic(xt);
+      drawXMark(xm.x, xm.y, xm.sz, xm.rot, smooth01(xt)*0.55, sc);
+    }
+  });
+
+  // === QUESTION MARKS ===
+  const qDefs = [
+    {x:195, y:315, rot:0.08, sz:13, delay:0.50},
+    {x:355, y:342, rot:-0.06, sz:10, delay:0.52},
+  ];
+  qDefs.forEach(q => {
+    const qt = clamp01((t-q.delay)/0.1);
+    if (qt > 0.005) {
+      const sc = easeOutElastic(qt);
+      drawQ(q.x, q.y, q.rot, smooth01(qt)*0.45, q.sz, sc);
+    }
+  });
+}
+
+// Ping-pong: play forward then reverse for seamless loop
+function drawFrame(t) {
+  const pingPong = t < 0.5 ? t * 2 : 2 - t * 2;
+  drawScene(pingPong);
+}
+
+let startTime = null;
+let animFrameId;
+
+function animate(ts) {
+  if (!startTime) startTime = ts;
+  const elapsed = ((ts - startTime) / 1000) % LOOP;
+  const t = elapsed / LOOP;
+  drawFrame(t);
+  animFrameId = requestAnimationFrame(animate);
+}
+animFrameId = requestAnimationFrame(animate);
+
+// GIF Export
+const exportBtn = document.getElementById('export');
+const statusEl = document.getElementById('status');
+window.__gifFrames = null;
+
+exportBtn.addEventListener('click', async () => {
+  cancelAnimationFrame(animFrameId);
+  exportBtn.disabled = true;
+
+  statusEl.textContent = 'Loading encoder...';
+
+  await new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = '/assets/gif.js/gif.js';
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+
+  const FPS = 20;
+  const FRAMES = FPS * LOOP;
+
+  const gif = new GIF({
+    workers: 2,
+    quality: 1,
+    width: W,
+    height: H,
+    workerScript: '/assets/gif.js/gif.worker.js',
+  });
+
+  statusEl.textContent = `Rendering ${FRAMES} frames...`;
+
+  for (let f = 0; f < FRAMES; f++) {
+    const t = f / FRAMES;
+    drawFrame(t);
+    gif.addFrame(ctx, {copy: true, delay: Math.round(1000/FPS)});
+    if (f % 15 === 0) statusEl.textContent = `Frame ${f+1}/${FRAMES}...`;
+  }
+
+  statusEl.textContent = 'Encoding GIF...';
+
+  gif.on('finished', blob => {
+    window.__gifBlob = blob;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'paper-notebooks.gif';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    statusEl.textContent = `Done! ${(blob.size/1024).toFixed(0)}KB`;
+    exportBtn.disabled = false;
+    animFrameId = requestAnimationFrame(animate);
+    startTime = performance.now();
+  });
+
+  gif.render();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Screenshots as Records - Motion Design</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #f3f3f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+    gap: 12px;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  canvas { display: block; }
+  #ui { display: flex; gap: 8px; align-items: center; }
+  button {
+    padding: 8px 20px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: inherit;
+  }
+  button:hover { background: #f0f0f0; }
+  #status { font: 12px system-ui; color: #999; }
+</style>
+</head>
+<body>
+<canvas id="c" width="400" height="500"></canvas>
+<div id="ui">
+  <button id="export">Export GIF</button>
+  <span id="status"></span>
+</div>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const W = 400, H = 500;
+const LOOP = 4;
+
+function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+function lerp(a, b, t) { return a + (b - a) * t; }
+function easeOutQuint(t) { return 1 - Math.pow(1 - t, 5); }
+function easeOutBack(t) { const c=2.2; return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2); }
+function easeOutElastic(t) {
+  if (t<=0) return 0; if (t>=1) return 1;
+  return Math.pow(2,-10*t)*Math.sin((t*10-0.75)*((2*Math.PI)/3))+1;
+}
+function springOut(t) { return 1 - Math.exp(-7*t) * Math.cos(t * Math.PI * 4.5); }
+function springBounce(t) { return 1 - Math.exp(-5.5*t) * Math.cos(t * Math.PI * 5); }
+function smooth01(t) { return t*t*(3-2*t); }
+
+function drawShadow(blur, ox, oy) {
+  ctx.shadowColor = 'rgba(0,0,0,0.07)';
+  ctx.shadowBlur = blur;
+  ctx.shadowOffsetX = ox;
+  ctx.shadowOffsetY = oy;
+}
+function clearShadow() {
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = 0;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
+}
+
+function drawScreenshot(x, y, w, h, rot, alpha, opts = {}) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.globalAlpha = clamp01(alpha);
+
+  // White border (phone screenshot look)
+  drawShadow(14, 0, 4);
+  ctx.fillStyle = '#fff';
+  ctx.beginPath();
+  ctx.roundRect(-w/2, -h/2, w, h, 6);
+  ctx.fill();
+  clearShadow();
+
+  // Inner content area
+  const pad = 4;
+  const cw = w - pad*2;
+  const ch = h - pad*2;
+
+  if (opts.type === 'receipt') {
+    // Receipt style
+    ctx.fillStyle = '#fefefe';
+    ctx.fillRect(-cw/2, -ch/2, cw, ch);
+
+    // Receipt header
+    ctx.fillStyle = '#333';
+    ctx.font = `bold ${Math.round(cw*0.08)}px 'Courier New', monospace`;
+    ctx.textAlign = 'center';
+    ctx.fillText('RECEIPT', 0, -ch/2 + 16);
+
+    ctx.strokeStyle = '#ddd';
+    ctx.lineWidth = 0.5;
+    ctx.beginPath();
+    ctx.moveTo(-cw/2+6, -ch/2 + 22);
+    ctx.lineTo(cw/2-6, -ch/2 + 22);
+    ctx.stroke();
+
+    // Receipt lines
+    ctx.font = `${Math.round(cw*0.06)}px 'Courier New', monospace`;
+    ctx.fillStyle = '#555';
+    ctx.textAlign = 'left';
+    const items = ['Item A x5', 'Item B x12', 'Item C x3', 'TOTAL'];
+    items.forEach((item, i) => {
+      const ly = -ch/2 + 32 + i * 11;
+      ctx.fillStyle = i === items.length-1 ? '#333' : '#666';
+      ctx.fillText(item, -cw/2 + 6, ly);
+      if (i === items.length-1) {
+        ctx.font = `bold ${Math.round(cw*0.06)}px 'Courier New', monospace`;
+      }
+    });
+
+    // Amounts (some wrong/questionable)
+    ctx.textAlign = 'right';
+    ctx.font = `${Math.round(cw*0.06)}px 'Courier New', monospace`;
+    const amounts = ['₱1,250', '₱3,600', '₱450', '₱5,300'];
+    amounts.forEach((amt, i) => {
+      const ly = -ch/2 + 32 + i * 11;
+      ctx.fillStyle = i === 2 ? '#d94f4f' : (i === amounts.length-1 ? '#333' : '#666');
+      ctx.fillText(amt, cw/2 - 6, ly);
+    });
+
+    // Date stamp
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#aaa';
+    ctx.font = `${Math.round(cw*0.05)}px system-ui`;
+    ctx.fillText('Jun 15, 2025', -cw/2 + 6, ch/2 - 8);
+    ctx.textAlign = 'left';
+
+  } else if (opts.type === 'payment') {
+    // Payment confirmation screenshot
+    ctx.fillStyle = '#f0f8f0';
+    ctx.fillRect(-cw/2, -ch/2, cw, ch);
+
+    // Green checkmark
+    ctx.fillStyle = '#27ae60';
+    ctx.beginPath();
+    ctx.arc(0, -ch/2 + 24, 12, 0, Math.PI*2);
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(-5, -ch/2 + 24);
+    ctx.lineTo(-1, -ch/2 + 28);
+    ctx.lineTo(6, -ch/2 + 19);
+    ctx.stroke();
+
+    ctx.fillStyle = '#27ae60';
+    ctx.font = `bold ${Math.round(cw*0.07)}px system-ui`;
+    ctx.textAlign = 'center';
+    ctx.fillText('Payment Sent', 0, -ch/2 + 46);
+
+    ctx.fillStyle = '#555';
+    ctx.font = `${Math.round(cw*0.06)}px system-ui`;
+    ctx.fillText('₱2,500.00', 0, -ch/2 + 60);
+
+    ctx.fillStyle = '#999';
+    ctx.font = `${Math.round(cw*0.05)}px system-ui`;
+    ctx.fillText('Ref: GCASH-88271', 0, -ch/2 + 74);
+    ctx.fillText('Jun 15, 2025', 0, -ch/2 + 86);
+    ctx.textAlign = 'left';
+
+    // Questionable note
+    ctx.fillStyle = '#d94f4f';
+    ctx.font = `${Math.round(cw*0.05)}px 'Courier New', monospace`;
+    ctx.textAlign = 'center';
+    ctx.fillText('for which order?', 0, ch/2 - 10);
+    ctx.textAlign = 'left';
+
+  } else if (opts.type === 'inventory') {
+    // Inventory count photo style
+    ctx.fillStyle = '#f5f0e8';
+    ctx.fillRect(-cw/2, -ch/2, cw, ch);
+
+    // Grid of boxes
+    const boxW = (cw - 12) / 3;
+    const boxH = (ch - 24) / 4;
+    for (let r = 0; r < 4; r++) {
+      for (let c = 0; c < 3; c++) {
+        const bx = -cw/2 + 4 + c * (boxW + 2);
+        const by = -ch/2 + 14 + r * (boxH + 2);
+        ctx.fillStyle = c === 1 && r === 2 ? 'rgba(217,79,79,0.15)' : '#eee';
+        ctx.strokeStyle = '#ddd';
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.roundRect(bx, by, boxW, boxH, 2);
+        ctx.fill();
+        ctx.stroke();
+      }
+    }
+
+    // Counts
+    ctx.font = `bold ${Math.round(cw*0.09)}px system-ui`;
+    ctx.textAlign = 'center';
+    const counts = [
+      ['24', '18', '7'],
+      ['31', '45', '12'],
+      ['8', '52?', '0'],
+      ['15', '33', '9'],
+    ];
+    counts.forEach((row, r) => {
+      row.forEach((val, c) => {
+        const bx = -cw/2 + 4 + c * (boxW + 2) + boxW/2;
+        const by = -ch/2 + 14 + r * (boxH + 2) + boxH/2 + 3;
+        ctx.fillStyle = val.includes('?') ? '#d94f4f' : '#555';
+        ctx.fillText(val, bx, by);
+      });
+    });
+    ctx.textAlign = 'left';
+
+    // Camera icon
+    ctx.fillStyle = '#999';
+    ctx.font = `${Math.round(cw*0.06)}px system-ui`;
+    ctx.textAlign = 'center';
+    ctx.fillText('📷 IMG_2847.jpg', 0, ch/2 - 6);
+    ctx.textAlign = 'left';
+
+  } else {
+    // Generic chat screenshot
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(-cw/2, -ch/2, cw, ch);
+
+    // Fake chat bubbles
+    ctx.fillStyle = '#e4e6eb';
+    ctx.beginPath();
+    ctx.roundRect(-cw/2+4, -ch/2+8, cw*0.6, 14, 7);
+    ctx.fill();
+    ctx.fillStyle = '#0084ff';
+    ctx.beginPath();
+    ctx.roundRect(cw/2-4-cw*0.5, -ch/2+26, cw*0.5, 14, 7);
+    ctx.fill();
+    ctx.fillStyle = '#e4e6eb';
+    ctx.beginPath();
+    ctx.roundRect(-cw/2+4, -ch/2+44, cw*0.45, 14, 7);
+    ctx.fill();
+
+    // Red circle annotation
+    ctx.strokeStyle = '#d94f4f';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.ellipse(0, ch/4, cw*0.3, ch*0.15, 0, 0, Math.PI*2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.fillStyle = '#d94f4f';
+    ctx.font = `${Math.round(cw*0.05)}px system-ui`;
+    ctx.textAlign = 'center';
+    ctx.fillText('which order???', 0, ch/4 + ch*0.15 + 10);
+    ctx.textAlign = 'left';
+
+    // Date
+    ctx.fillStyle = '#aaa';
+    ctx.font = `${Math.round(cw*0.05)}px system-ui`;
+    ctx.textAlign = 'center';
+    ctx.fillText('Screenshot', 0, ch/2 - 6);
+    ctx.textAlign = 'left';
+  }
+
+  ctx.restore();
+}
+
+function drawCameraIcon(x, y, rot, alpha, scale) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.scale(scale || 1, scale || 1);
+  ctx.globalAlpha = clamp01(alpha);
+  drawShadow(8, 0, 2);
+  ctx.fillStyle = '#fff';
+  ctx.beginPath();
+  ctx.roundRect(-16, -12, 32, 24, 6);
+  ctx.fill();
+  clearShadow();
+  ctx.fillStyle = '#555';
+  ctx.beginPath();
+  ctx.arc(0, 0, 6, 0, Math.PI*2);
+  ctx.stroke();
+  ctx.fillStyle = '#ddd';
+  ctx.fillRect(-6, -12, 12, 4);
+  ctx.restore();
+}
+
+function drawScatteredIcon(x, y, rot, alpha, emoji, sz) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.globalAlpha = clamp01(alpha);
+  ctx.font = `${sz || 16}px system-ui`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(emoji, 0, 0);
+  ctx.textAlign = 'left';
+  ctx.restore();
+}
+
+function drawScene(t) {
+  ctx.clearRect(0, 0, W, H);
+
+  ctx.fillStyle = '#f3f3f5';
+  ctx.fillRect(0, 0, W, H);
+  ctx.fillStyle = 'rgba(200, 200, 215, 0.18)';
+  for (let gx = 12; gx < W; gx += 24) {
+    for (let gy = 12; gy < H; gy += 24) {
+      ctx.beginPath();
+      ctx.arc(gx, gy, 0.8, 0, Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  const cx = W/2, cy = H/2 + 5;
+
+  // === SCREENSHOTS flying in and stacking ===
+  const screenshots = [
+    { delay:0.04, sx:-90, sy:200, ex:115, ey:135, sr:0.4, er:0.12, w:85, h:110, type:'receipt' },
+    { delay:0.08, sx:W+80, sy:160, ex:285, ey:120, sr:-0.35, er:-0.08, w:80, h:105, type:'payment' },
+    { delay:0.12, sx:80, sy:-80, ex:155, ey:310, sr:0.5, er:0.18, w:78, h:100, type:'inventory' },
+    { delay:0.16, sx:W+60, sy:340, ex:260, ey:320, sr:-0.45, er:-0.14, w:82, h:108, type:'chat' },
+    { delay:0.20, sx:-60, sy:400, ex:195, ey:430, sr:0.35, er:0.06, w:75, h:98, type:'receipt' },
+    { delay:0.24, sx:W+50, sy:80, ex:330, ey:260, sr:-0.3, er:-0.2, w:70, h:92, type:'payment' },
+  ];
+
+  const breath = Math.sin(t * Math.PI * 2.5) * 1;
+  const shake = t > 0.45 ? smooth01(clamp01((t-0.45)/0.05)) * smooth01(clamp01((1-t)/0.3)) * Math.sin(t*180) * 2 : 0;
+
+  screenshots.forEach((s, i) => {
+    const st = clamp01((t - s.delay) / 0.18);
+    const se = springOut(st);
+    const sx = lerp(s.sx, s.ex, se) + shake;
+    const sy = lerp(s.sy, s.ey, se);
+    const sr = lerp(s.sr, s.er, se);
+    const bob = Math.sin(t*Math.PI*2.5 + i*1.3) * (1.2 + i*0.3);
+    const sway = Math.sin(t*Math.PI*2 + i*1.1) * 0.01;
+    drawScreenshot(sx, sy+bob, s.w, s.h, sr+sway, smooth01(st), { type: s.type });
+  });
+
+  // === CAMERA ICONS scattered around ===
+  const cameras = [
+    { x:55, y:100, rot:0.15, delay:0.28 },
+    { x:345, y:440, rot:-0.2, delay:0.32 },
+  ];
+  cameras.forEach(c => {
+    const ct = clamp01((t-c.delay)/0.1);
+    if (ct > 0.005) {
+      const sc = easeOutElastic(ct);
+      drawCameraIcon(c.x, c.y, c.rot, smooth01(ct)*0.8, sc);
+    }
+  });
+
+  // === SCATTERED EMOJIS ===
+  const emojis = [
+    { x:60, y:400, rot:0.1, emoji:'📸', sz:18, delay:0.30 },
+    { x:340, y:80, rot:-0.08, emoji:'🖼️', sz:16, delay:0.34 },
+    { x:45, y:250, rot:0.15, emoji:'📱', sz:14, delay:0.38 },
+  ];
+  emojis.forEach(e => {
+    const et = clamp01((t-e.delay)/0.1);
+    if (et > 0.005) {
+      const sc = easeOutElastic(et);
+      drawScatteredIcon(e.x, e.y, e.rot, smooth01(et)*0.7, e.emoji, e.sz);
+    }
+  });
+
+  // === CENTER BADGE ===
+  const badgeT = clamp01((t - 0.40) / 0.1);
+  if (badgeT > 0.005) {
+    const sc = easeOutElastic(badgeT);
+    ctx.save();
+    ctx.translate(cx, cy - 20);
+    ctx.scale(sc, sc);
+    ctx.globalAlpha = smooth01(badgeT) * 0.9;
+    drawShadow(8, 0, 2);
+    ctx.fillStyle = 'rgba(217, 79, 79, 0.1)';
+    ctx.strokeStyle = '#d94f4f';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.roundRect(-70, -12, 140, 24, 12);
+    ctx.fill();
+    ctx.stroke();
+    clearShadow();
+    ctx.fillStyle = '#d94f4f';
+    ctx.font = 'bold 9px system-ui';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('no system, just screenshots', 0, 1);
+    ctx.textAlign = 'left';
+    ctx.restore();
+  }
+}
+
+// Ping-pong loop
+function drawFrame(t) {
+  const pingPong = t < 0.5 ? t * 2 : 2 - t * 2;
+  drawScene(pingPong);
+}
+
+let startTime = null;
+let animFrameId;
+
+function animate(ts) {
+  if (!startTime) startTime = ts;
+  const elapsed = ((ts - startTime) / 1000) % LOOP;
+  const t = elapsed / LOOP;
+  drawFrame(t);
+  animFrameId = requestAnimationFrame(animate);
+}
+animFrameId = requestAnimationFrame(animate);
+
+// GIF Export
+const exportBtn = document.getElementById('export');
+const statusEl = document.getElementById('status');
+
+exportBtn.addEventListener('click', async () => {
+  cancelAnimationFrame(animFrameId);
+  exportBtn.disabled = true;
+  statusEl.textContent = 'Loading encoder...';
+
+  await new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = '/assets/gif.js/gif.js';
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+
+  const FPS = 20;
+  const FRAMES = FPS * LOOP;
+
+  const gif = new GIF({
+    workers: 2,
+    quality: 1,
+    width: W,
+    height: H,
+    workerScript: '/assets/gif.js/gif.worker.js',
+  });
+
+  statusEl.textContent = `Rendering ${FRAMES} frames...`;
+
+  for (let f = 0; f < FRAMES; f++) {
+    const t = f / FRAMES;
+    drawFrame(t);
+    gif.addFrame(ctx, {copy: true, delay: Math.round(1000/FPS)});
+    if (f % 15 === 0) statusEl.textContent = `Frame ${f+1}/${FRAMES}...`;
+  }
+
+  statusEl.textContent = 'Encoding GIF...';
+
+  gif.on('finished', blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'screenshots-records.gif';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    statusEl.textContent = `Done! ${(blob.size/1024).toFixed(0)}KB`;
+    exportBtn.disabled = false;
+    animFrameId = requestAnimationFrame(animate);
+    startTime = performance.now();
+  });
+
+  gif.render();
+});
+</script>
+</body>
+</html>
