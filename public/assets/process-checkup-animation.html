@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Process Step 1 - Business Checkup</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #f2f1f3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+    gap: 12px;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  canvas { display: block; }
+  #ui { display: flex; gap: 8px; align-items: center; }
+  button {
+    padding: 8px 20px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: inherit;
+  }
+  button:hover { background: #f0f0f0; }
+  #status { font: 12px system-ui; color: #999; }
+</style>
+</head>
+<body>
+<canvas id="c" width="340" height="425"></canvas>
+<div id="ui">
+  <button id="export">Export GIF</button>
+  <span id="status"></span>
+</div>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const W = 340, H = 425;
+const LOOP = 4;
+
+function clamp01(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
+function lerp(a, b, t) { return a + (b - a) * t; }
+function easeOutQuint(t) { return 1 - Math.pow(1 - t, 5); }
+function easeOutBack(t) { const c=1.8; return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2); }
+function easeOutElastic(t) {
+  if (t<=0) return 0; if (t>=1) return 1;
+  return Math.pow(2,-10*t)*Math.sin((t*10-0.75)*((2*Math.PI)/3))+1;
+}
+function springOut(t) { return 1 - Math.exp(-6*t) * Math.cos(t * Math.PI * 4); }
+function smooth01(t) { return t*t*(3-2*t); }
+
+const COLORS = {
+  bg: '#f2f1f3',
+  card: '#ffffff',
+  cardBorder: '#e8e8ec',
+  primary: '#1a1a2e',
+  accent: '#4f6df0',
+  accentLight: '#e8ecff',
+  green: '#22c55e',
+  greenLight: '#ecfdf5',
+  text: '#1a1a2e',
+  textMuted: '#8e8ea0',
+  line: '#e2e2e8',
+  warmGray: '#f7f7f9',
+};
+
+function drawCard(x, y, w, h, radius, alpha) {
+  ctx.save();
+  ctx.globalAlpha = clamp01(alpha);
+  ctx.fillStyle = COLORS.card;
+  ctx.strokeStyle = COLORS.cardBorder;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.roundRect(x, y, w, h, radius);
+  ctx.fill();
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawCircleIcon(x, y, r, bgColor, alpha) {
+  ctx.save();
+  ctx.globalAlpha = clamp01(alpha);
+  ctx.fillStyle = bgColor;
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawCheckmark(x, y, size, alpha, progress) {
+  ctx.save();
+  ctx.globalAlpha = clamp01(alpha);
+  ctx.strokeStyle = COLORS.green;
+  ctx.lineWidth = 2.5;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  const p = clamp01(progress);
+  ctx.beginPath();
+  if (p < 0.5) {
+    const pp = p / 0.5;
+    const ax = lerp(x - size*0.4, x - size*0.1, pp);
+    const ay = lerp(y + size*0.1, y + size*0.35, pp);
+    ctx.moveTo(x - size*0.4, y + size*0.1);
+    ctx.lineTo(ax, ay);
+  } else {
+    const pp = (p - 0.5) / 0.5;
+    const ex = lerp(x - size*0.1, x + size*0.45, pp);
+    const ey = lerp(y + size*0.35, y - size*0.25, pp);
+    ctx.moveTo(x - size*0.4, y + size*0.1);
+    ctx.lineTo(x - size*0.1, y + size*0.35);
+    ctx.lineTo(ex, ey);
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawText(text, x, y, opts = {}) {
+  ctx.save();
+  ctx.globalAlpha = clamp01(opts.alpha ?? 1);
+  ctx.fillStyle = opts.color || COLORS.text;
+  ctx.font = `${opts.bold ? '800' : '600'} ${opts.size || 13}px system-ui, -apple-system, sans-serif`;
+  ctx.textAlign = opts.align || 'left';
+  ctx.textBaseline = opts.baseline || 'alphabetic';
+  ctx.fillText(text, x, y);
+  ctx.restore();
+}
+
+function drawLine(x1, y1, x2, y2, alpha, color, width) {
+  ctx.save();
+  ctx.globalAlpha = clamp01(alpha);
+  ctx.strokeStyle = color || COLORS.line;
+  ctx.lineWidth = width || 1;
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawMagnifier(x, y, r, rot, alpha, scale) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rot);
+  ctx.scale(scale || 1, scale || 1);
+  ctx.globalAlpha = clamp01(alpha);
+
+  ctx.strokeStyle = COLORS.primary;
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(0, 0, r, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.lineWidth = 3.5;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(r * 0.65, r * 0.65);
+  ctx.lineTo(r * 1.15, r * 1.15);
+  ctx.stroke();
+
+  ctx.strokeStyle = 'rgba(79, 109, 240, 0.15)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(0, 0, r * 0.6, -0.3, 0.8);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+function drawProgressBar(x, y, w, h, progress, alpha) {
+  ctx.save();
+  ctx.globalAlpha = clamp01(alpha);
+  ctx.fillStyle = COLORS.line;
+  ctx.beginPath();
+  ctx.roundRect(x, y, w, h, h/2);
+  ctx.fill();
+  ctx.fillStyle = COLORS.accent;
+  ctx.beginPath();
+  ctx.roundRect(x, y, w * clamp01(progress), h, h/2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawDocRow(x, y, w, opts = {}) {
+  ctx.save();
+  ctx.globalAlpha = clamp01(opts.alpha ?? 1);
+  const barW = w * (opts.widthPct || 0.6);
+  ctx.fillStyle = opts.color || COLORS.line;
+  ctx.beginPath();
+  ctx.roundRect(x, y, barW, 5, 2.5);
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawScene(t) {
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = COLORS.bg;
+  ctx.fillRect(0, 0, W, H);
+
+  const cx = W / 2;
+
+  // === MAIN DOCUMENT ===
+  const docW = 200, docH = 250;
+  const docX = cx - docW/2, docY = 45;
+  const docIn = smooth01(clamp01((t + 0.02) / 0.12));
+  const docScale = easeOutBack(docIn);
+  const docBob = Math.sin(t * Math.PI * 2.5) * 1.5;
+
+  ctx.save();
+  ctx.translate(cx, docY + docH/2 + docBob);
+  ctx.scale(docScale, docScale);
+  ctx.translate(-cx, -(docY + docH/2));
+
+  drawCard(docX, docY, docW, docH, 10, docIn);
+
+  // Header bar
+  ctx.fillStyle = COLORS.accent;
+  ctx.globalAlpha = docIn;
+  ctx.beginPath();
+  ctx.roundRect(docX, docY, docW, 32, [10, 10, 0, 0]);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+
+  drawText('PROCESS CHECKUP', cx, docY + 21, { alpha: docIn, color: '#fff', size: 12, bold: true, align: 'center' });
+
+  // Subtitle
+  drawText('Current Workflow Analysis', cx, docY + 50, { alpha: docIn * 0.8, color: COLORS.textMuted, size: 10, align: 'center' });
+
+  // Divider
+  drawLine(docX + 16, docY + 60, docX + docW - 16, docY + 60, docIn * 0.5);
+
+  // Process rows with checkmarks
+  const rows = [
+    { label: 'Order tracking', status: 'done', delay: 0.10 },
+    { label: 'Inventory count', status: 'done', delay: 0.16 },
+    { label: 'Customer records', status: 'analyzing', delay: 0.22 },
+    { label: 'Payment records', status: 'pending', delay: 0.28 },
+  ];
+
+  rows.forEach((row, i) => {
+    const ry = docY + 72 + i * 38;
+    const rt = clamp01((t - row.delay) / 0.14);
+    const re = springOut(rt);
+
+    // Row background
+    ctx.save();
+    ctx.globalAlpha = smooth01(rt) * 0.6;
+    ctx.fillStyle = row.status === 'done' ? COLORS.greenLight : row.status === 'analyzing' ? COLORS.accentLight : COLORS.warmGray;
+    ctx.beginPath();
+    ctx.roundRect(docX + 12, ry - 4, docW - 24, 30, 6);
+    ctx.fill();
+    ctx.restore();
+
+    // Label
+    drawText(row.label, docX + 42, ry + 13, { alpha: smooth01(rt), size: 10, bold: true, color: COLORS.text });
+
+    // Status indicator
+    if (row.status === 'done') {
+      const sc = easeOutElastic(clamp01((t - row.delay - 0.05) / 0.1));
+      drawCircleIcon(docX + 26, ry + 11, 8, COLORS.green, smooth01(rt));
+      drawCheckmark(docX + 26, ry + 11, 7, smooth01(rt), clamp01((t - row.delay - 0.03) / 0.12));
+    } else if (row.status === 'analyzing') {
+      const pulse = 0.5 + Math.sin(t * Math.PI * 6) * 0.3;
+      drawCircleIcon(docX + 26, ry + 11, 8, COLORS.accent, smooth01(rt));
+      drawText('...', docX + 26, ry + 14, { alpha: pulse, color: '#fff', size: 11, bold: true, align: 'center' });
+    } else {
+      drawCircleIcon(docX + 26, ry + 11, 8, COLORS.line, smooth01(rt));
+    }
+  });
+
+  // Progress bar at bottom of doc
+  const progT = clamp01((t - 0.15) / 0.35);
+  drawProgressBar(docX + 16, docY + docH - 24, docW - 32, 6, progT, docIn);
+  drawText(`${Math.round(progT * 60)}%`, docX + docW - 40, docY + docH - 11, { alpha: docIn * 0.8, size: 9, bold: true, color: COLORS.textMuted });
+
+  ctx.restore();
+
+  // === MAGNIFIER ===
+  const magT = clamp01((t - 0.08) / 0.14);
+  const magE = springOut(magT);
+  const magX = lerp(cx + 80, cx + 60, magE);
+  const magY = lerp(30, 75, magE);
+  const magRot = lerp(-0.3, -0.15, magE);
+  const magBob = Math.sin(t * Math.PI * 3) * 2;
+  drawMagnifier(magX, magY + magBob, 22, magRot, smooth01(magT), magE);
+
+  // === FLOATING INSIGHT CARDS ===
+  const insights = [
+    { text: 'bottleneck found', icon: '⚠️', delay: 0.30, sx: -60, sy: 330, ex: 55, ey: 320, color: '#fff3e0', borderColor: '#ff9800' },
+    { text: '3 manual steps', icon: '📝', delay: 0.34, sx: W+50, sy: 340, ex: 260, ey: 310, color: COLORS.accentLight, borderColor: COLORS.accent },
+    { text: 'automatable ✓', icon: '⚡', delay: 0.38, sx: 40, sy: H+30, ex: 155, ey: 370, color: COLORS.greenLight, borderColor: COLORS.green },
+  ];
+
+  insights.forEach((ins, i) => {
+    const it = clamp01((t - ins.delay) / 0.16);
+    const ie = springOut(it);
+    const ix = lerp(ins.sx, ins.ex, ie);
+    const iy = lerp(ins.sy, ins.ey, ie);
+    const bob = Math.sin(t * Math.PI * 2.2 + i * 1.5) * 1.5;
+
+    ctx.save();
+    ctx.globalAlpha = smooth01(it);
+    ctx.fillStyle = ins.color;
+    ctx.strokeStyle = ins.borderColor;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.roundRect(ix - 58, iy + bob - 14, 116, 28, 14);
+    ctx.fill();
+    ctx.stroke();
+
+    drawText(`${ins.icon} ${ins.text}`, ix, iy + bob + 4, { alpha: 1, size: 10, bold: true, align: 'center', color: COLORS.text });
+    ctx.restore();
+  });
+}
+
+function drawFrame(t) {
+  const pingPong = t < 0.5 ? t * 2 : 2 - t * 2;
+  drawScene(pingPong);
+}
+
+let startTime = null;
+let animFrameId;
+
+function animate(ts) {
+  if (!startTime) startTime = ts;
+  const elapsed = ((ts - startTime) / 1000) % LOOP;
+  const t = elapsed / LOOP;
+  drawFrame(t);
+  animFrameId = requestAnimationFrame(animate);
+}
+animFrameId = requestAnimationFrame(animate);
+
+const exportBtn = document.getElementById('export');
+const statusEl = document.getElementById('status');
+
+exportBtn.addEventListener('click', async () => {
+  cancelAnimationFrame(animFrameId);
+  exportBtn.disabled = true;
+  statusEl.textContent = 'Loading encoder...';
+
+  await new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = '/assets/gif.js/gif.js';
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+
+  const FPS = 20;
+  const FRAMES = FPS * LOOP;
+
+  const gif = new GIF({
+    workers: 2,
+    quality: 1,
+    width: W,
+    height: H,
+    workerScript: '/assets/gif.js/gif.worker.js',
+  });
+
+  statusEl.textContent = `Rendering ${FRAMES} frames...`;
+
+  for (let f = 0; f < FRAMES; f++) {
+    const t = f / FRAMES;
+    drawFrame(t);
+    gif.addFrame(ctx, {copy: true, delay: Math.round(1000/FPS)});
+    if (f % 15 === 0) statusEl.textContent = `Frame ${f+1}/${FRAMES}...`;
+  }
+
+  statusEl.textContent = 'Encoding GIF...';
+
+  gif.on('finished', blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'process-checkup.gif';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    statusEl.textContent = `Done! ${(blob.size/1024).toFixed(0)}KB`;
+    exportBtn.disabled = false;
+    animFrameId = requestAnimationFrame(animate);
+    startTime = performance.now();
+  });
+
+  gif.render();
+});
+</script>
+</body>
+</html>

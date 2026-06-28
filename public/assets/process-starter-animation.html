@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Process Step 3 - 14-Day Starter System</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f2f1f3; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; gap: 12px; font-family: system-ui, sans-serif; }
+  canvas { display: block; }
+  button { padding: 8px 20px; border-radius: 6px; border: 1px solid #ddd; background: #fff; cursor: pointer; font-size: 13px; }
+  #status { font: 12px system-ui; color: #999; }
+</style>
+</head>
+<body>
+<canvas id="c" width="340" height="425"></canvas>
+<div style="display:flex;gap:8px;align-items:center"><button id="export">Export GIF</button><span id="status"></span></div>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const W = 340, H = 425;
+const LOOP = 4;
+function clamp01(v){return v<0?0:v>1?1:v}
+function lerp(a,b,t){return a+(b-a)*t}
+function easeOutBack(t){const c=1.8;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2)}
+function easeOutElastic(t){if(t<=0)return 0;if(t>=1)return 1;return Math.pow(2,-10*t)*Math.sin((t*10-0.75)*((2*Math.PI)/3))+1}
+function springOut(t){return 1-Math.exp(-6*t)*Math.cos(t*Math.PI*4)}
+function smooth01(t){return t*t*(3-2*t)}
+const C={bg:'#f2f1f3',card:'#fff',border:'#e8e8ec',primary:'#1a1a2e',accent:'#4f6df0',accentLight:'#e8ecff',green:'#22c55e',greenLight:'#ecfdf5',text:'#1a1a2e',muted:'#8e8ea0',line:'#e2e2e8',warm:'#f7f7f9',orange:'#f59e0b',orangeLight:'#fef3c7'};
+
+function drawText(text,x,y,o={}){
+  ctx.save();ctx.globalAlpha=clamp01(o.alpha??1);ctx.fillStyle=o.color||C.text;
+  ctx.font=`${o.bold?'800':'600'} ${o.size||13}px system-ui,sans-serif`;
+  ctx.textAlign=o.align||'left';ctx.textBaseline=o.baseline||'alphabetic';ctx.fillText(text,x,y);ctx.restore();
+}
+
+function drawScene(t){
+  ctx.clearRect(0,0,W,H);ctx.fillStyle=C.bg;ctx.fillRect(0,0,W,H);
+  const cx=W/2;
+
+  // Title card
+  const titleIn=smooth01(clamp01((t+0.02)/0.1));
+  ctx.save();ctx.globalAlpha=titleIn;
+  ctx.fillStyle=C.card;ctx.strokeStyle=C.border;ctx.lineWidth=1;
+  ctx.beginPath();ctx.roundRect(cx-85,15,170,36,8);ctx.fill();ctx.stroke();
+  ctx.fillStyle=C.green;ctx.beginPath();ctx.roundRect(cx-85,15,170,36,[8,8,0,0]);ctx.fill();
+  drawText('14-DAY DELIVERY',cx,37,{alpha:titleIn,color:'#fff',size:11,bold:true,align:'center'});
+  ctx.restore();
+
+  // Calendar grid (2 weeks)
+  const calX=cx-80, calY=65, cellW=22, cellH=22, gap=2;
+  const totalDays=14;
+  const dayLabels=['M','T','W','T','F','S','S','M','T','W','T','F','S','S'];
+
+  for(let d=0;d<totalDays;d++){
+    const row=Math.floor(d/7), col=d%7;
+    const dx=calX+col*(cellW+gap);
+    const dy=calY+row*(cellH+gap+4);
+    const dt=clamp01((t-0.06-d*0.025)/0.08);
+    const done=dt>0.5;
+    const active=!done && dt>0.01;
+    const scale=dt>0.01?springOut(clamp01((t-0.06-d*0.025)/0.12)):0;
+
+    ctx.save();ctx.translate(dx+cellW/2,dy+cellH/2);ctx.scale(scale,scale);ctx.translate(-dx-cellW/2,-dy-cellH/2);
+    ctx.globalAlpha=smooth01(dt);
+    ctx.fillStyle=done?C.green:active?C.accentLight:C.warm;
+    ctx.strokeStyle=done?C.green:active?C.accent:C.border;
+    ctx.lineWidth=done?0:1;
+    ctx.beginPath();ctx.roundRect(dx,dy,cellW,cellH,5);ctx.fill();ctx.stroke();
+
+    if(done){
+      ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.lineCap='round';ctx.lineJoin='round';
+      ctx.beginPath();ctx.moveTo(dx+6,dy+cellH/2);ctx.lineTo(dx+cellW/2-1,dy+cellH/2+4);ctx.lineTo(dx+cellW-5,dy+cellH/2-4);ctx.stroke();
+    } else {
+      drawText(String(d+1),dx+cellW/2,dy+cellH/2+4,{alpha:1,size:8,bold:true,align:'center',color:active?C.accent:C.muted});
+    }
+    ctx.restore();
+  }
+
+  // Week labels
+  const weekIn=smooth01(clamp01((t-0.04)/0.1));
+  drawText('1–2 Weeks',calX,calY-6,{alpha:weekIn,size:9,bold:true,color:C.text});
+
+  // Progress bar
+  const progT=clamp01((t-0.1)/0.35);
+  const barY=calY+2*(cellH+gap+4)+16;
+  ctx.save();ctx.globalAlpha=smooth01(clamp01((t-0.08)/0.1));
+  ctx.fillStyle=C.line;ctx.beginPath();ctx.roundRect(cx-90,barY,180,8,4);ctx.fill();
+  ctx.fillStyle=C.green;ctx.beginPath();ctx.roundRect(cx-90,barY,180*clamp01(progT),8,4);ctx.fill();
+  drawText(`${Math.round(progT*100)}% built`,cx,barY+18,{alpha:1,size:9,bold:true,align:'center',color:C.green});
+  ctx.restore();
+
+  // System preview card (appears mid-animation)
+  const cardT=clamp01((t-0.25)/0.15);
+  const cardE=springOut(cardT);
+  const cardBob=Math.sin(t*Math.PI*2.5)*1.5;
+  if(cardT>0.005){
+    ctx.save();ctx.globalAlpha=smooth01(cardT);
+    const cw=180,ch=120,cx2=cx-cw/2,cy2=barY+40+cardBob;
+    ctx.fillStyle=C.card;ctx.strokeStyle=C.border;ctx.lineWidth=1;
+    ctx.beginPath();ctx.roundRect(cx2,cy2,cw,ch,10);ctx.fill();ctx.stroke();
+
+    // Mockup inside card
+    ctx.fillStyle=C.accentLight;
+    ctx.beginPath();ctx.roundRect(cx2+8,cy2+8,cw-16,24,6);ctx.fill();
+    drawText('Your System',cx,cy2+23,{alpha:1,size:8,bold:true,align:'center',color:C.accent});
+
+    // Mock UI rows
+    for(let r=0;r<3;r++){
+      ctx.fillStyle=r===0?C.greenLight:C.warm;
+      ctx.beginPath();ctx.roundRect(cx2+12,cy2+40+r*20,cw-24,14,4);ctx.fill();
+      ctx.fillStyle=r===0?C.green:C.line;
+      ctx.beginPath();ctx.roundRect(cx2+16,cy2+44+r*20,(cw-32)*(0.5+r*0.15),6,3);ctx.fill();
+    }
+
+    // "LIVE" badge
+    const livePulse=0.6+Math.sin(t*Math.PI*4)*0.4;
+    ctx.fillStyle=C.green;ctx.beginPath();ctx.roundRect(cx2+cw-36,cy2+10,28,16,8);ctx.fill();
+    drawText('LIVE',cx2+cw-22,cy2+21,{alpha:livePulse,size:7,bold:true,align:'center',color:'#fff'});
+    ctx.restore();
+  }
+
+  // "No endless waiting" badge
+  const badgeT=clamp01((t-0.38)/0.1);
+  if(badgeT>0.005){
+    const sc=easeOutElastic(badgeT);
+    ctx.save();ctx.translate(cx,H-22);ctx.scale(sc,sc);ctx.globalAlpha=smooth01(badgeT)*0.9;
+    ctx.fillStyle='rgba(34,197,94,0.1)';ctx.strokeStyle=C.green;ctx.lineWidth=1.2;
+    ctx.beginPath();ctx.roundRect(-70,-12,140,24,12);ctx.fill();ctx.stroke();
+    drawText('shipped in 14 days',0,3,{alpha:1,size:9,bold:true,align:'center',color:C.green});
+    ctx.restore();
+  }
+}
+
+function drawFrame(t){const pp=t<0.5?t*2:2-t*2;drawScene(pp)}
+let startTime=null;let animFrameId;
+function animate(ts){if(!startTime)startTime=ts;const elapsed=((ts-startTime)/1000)%LOOP;drawFrame(elapsed/LOOP);animFrameId=requestAnimationFrame(animate)}
+animFrameId=requestAnimationFrame(animate);
+
+document.getElementById('export').addEventListener('click',async()=>{
+  cancelAnimationFrame(animFrameId);const btn=document.getElementById('export');const st=document.getElementById('status');btn.disabled=true;st.textContent='Loading...';
+  await new Promise((r,j)=>{const s=document.createElement('script');s.src='/assets/gif.js/gif.js';s.onload=r;s.onerror=j;document.head.appendChild(s)});
+  const FPS=20,FRAMES=FPS*LOOP;
+  const gif=new GIF({workers:2,quality:1,width:W,height:H,workerScript:'/assets/gif.js/gif.worker.js'});
+  for(let f=0;f<FRAMES;f++){drawFrame(f/FRAMES);gif.addFrame(ctx,{copy:true,delay:Math.round(1000/FPS)});if(f%15===0)st.textContent=`Frame ${f+1}/${FRAMES}...`}
+  st.textContent='Encoding...';
+  gif.on('finished',blob=>{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='process-starter.gif';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+    st.textContent=`Done! ${(blob.size/1024).toFixed(0)}KB`;btn.disabled=false;animFrameId=requestAnimationFrame(animate);startTime=performance.now()});
+  gif.render();
+});
+</script>
+</body>
+</html>

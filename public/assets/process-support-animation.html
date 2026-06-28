@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Process Step 4 - Monthly Support</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f2f1f3; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; overflow: hidden; gap: 12px; font-family: system-ui, sans-serif; }
+  canvas { display: block; }
+  button { padding: 8px 20px; border-radius: 6px; border: 1px solid #ddd; background: #fff; cursor: pointer; font-size: 13px; }
+  #status { font: 12px system-ui; color: #999; }
+</style>
+</head>
+<body>
+<canvas id="c" width="340" height="425"></canvas>
+<div style="display:flex;gap:8px;align-items:center"><button id="export">Export GIF</button><span id="status"></span></div>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const W = 340, H = 425;
+const LOOP = 4;
+function clamp01(v){return v<0?0:v>1?1:v}
+function lerp(a,b,t){return a+(b-a)*t}
+function easeOutBack(t){const c=1.8;return 1+(c+1)*Math.pow(t-1,3)+c*Math.pow(t-1,2)}
+function easeOutElastic(t){if(t<=0)return 0;if(t>=1)return 1;return Math.pow(2,-10*t)*Math.sin((t*10-0.75)*((2*Math.PI)/3))+1}
+function springOut(t){return 1-Math.exp(-6*t)*Math.cos(t*Math.PI*4)}
+function smooth01(t){return t*t*(3-2*t)}
+const C={bg:'#f2f1f3',card:'#fff',border:'#e8e8ec',primary:'#1a1a2e',accent:'#4f6df0',accentLight:'#e8ecff',green:'#22c55e',greenLight:'#ecfdf5',text:'#1a1a2e',muted:'#8e8ea0',line:'#e2e2e8',warm:'#f7f7f9',purple:'#8b5cf6',purpleLight:'#f3f0ff'};
+
+function drawText(text,x,y,o={}){
+  ctx.save();ctx.globalAlpha=clamp01(o.alpha??1);ctx.fillStyle=o.color||C.text;
+  ctx.font=`${o.bold?'800':'600'} ${o.size||13}px system-ui,sans-serif`;
+  ctx.textAlign=o.align||'left';ctx.textBaseline=o.baseline||'alphabetic';ctx.fillText(text,x,y);ctx.restore();
+}
+
+function drawMiniChart(x,y,w,h,data,alpha,color){
+  ctx.save();ctx.globalAlpha=clamp01(alpha);
+  ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.beginPath();
+  data.forEach((v,i)=>{
+    const px=x+(i/(data.length-1))*w;
+    const py=y+h-v*h;
+    i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+  });
+  ctx.stroke();
+
+  // Fill under
+  ctx.globalAlpha*=0.1;ctx.fillStyle=color;
+  ctx.lineTo(x+w,y+h);ctx.lineTo(x,y+h);ctx.closePath();ctx.fill();
+  ctx.restore();
+}
+
+function drawScene(t){
+  ctx.clearRect(0,0,W,H);ctx.fillStyle=C.bg;ctx.fillRect(0,0,W,H);
+  const cx=W/2;
+
+  // Title
+  const titleIn=smooth01(clamp01((t+0.02)/0.1));
+  ctx.save();ctx.globalAlpha=titleIn;
+  ctx.fillStyle=C.card;ctx.strokeStyle=C.border;ctx.lineWidth=1;
+  ctx.beginPath();ctx.roundRect(cx-80,15,160,36,8);ctx.fill();ctx.stroke();
+  ctx.fillStyle=C.purple;ctx.beginPath();ctx.roundRect(cx-80,15,160,36,[8,8,0,0]);ctx.fill();
+  drawText('MONTHLY SUPPORT',cx,37,{alpha:titleIn,color:'#fff',size:11,bold:true,align:'center'});
+  ctx.restore();
+
+  // Dashboard card
+  const dashT=smooth01(clamp01((t-0.04)/0.12));
+  const dashBob=Math.sin(t*Math.PI*2.5)*1.5;
+  const dashW=260,dashH=180,dashX=cx-dashW/2,dashY=65+dashBob;
+
+  ctx.save();ctx.globalAlpha=dashT;
+  ctx.fillStyle=C.card;ctx.strokeStyle=C.border;ctx.lineWidth=1;
+  ctx.beginPath();ctx.roundRect(dashX,dashY,dashW,dashH,10);ctx.fill();ctx.stroke();
+
+  // Dashboard header
+  ctx.fillStyle=C.purpleLight;
+  ctx.beginPath();ctx.roundRect(dashX,dashY,dashW,28,[10,10,0,0]);ctx.fill();
+  drawText('System Health',cx,dashY+18,{alpha:dashT,size:9,bold:true,align:'center',color:C.purple});
+  ctx.restore();
+
+  // Uptime indicator
+  const upT=clamp01((t-0.10)/0.1);
+  if(upT>0.005){
+    const bob=Math.sin(t*Math.PI*3)*1;
+    ctx.save();ctx.globalAlpha=smooth01(upT);
+    ctx.fillStyle=C.greenLight;ctx.beginPath();ctx.roundRect(dashX+10,dashY+36,75,50,6);ctx.fill();
+    const pulse=0.7+Math.sin(t*Math.PI*4)*0.3;
+    drawText('99.9%',dashX+47,dashY+55+bob,{alpha:pulse,size:16,bold:true,align:'center',color:C.green});
+    drawText('uptime',dashX+47,dashY+72+bob,{alpha:1,size:8,bold:true,align:'center',color:C.muted});
+    ctx.restore();
+  }
+
+  // Chart
+  const chartT=clamp01((t-0.14)/0.15);
+  if(chartT>0.005){
+    const chartData=[0.3,0.5,0.4,0.7,0.6,0.8,0.75,0.9,0.85,0.95];
+    drawMiniChart(dashX+95,dashY+38,155,42,chartData.map(v=>v*smooth01(chartT)),smooth01(chartT),C.accent);
+    drawText('performance',dashX+172,dashY+90,{alpha:smooth01(chartT)*0.7,size:7,bold:true,align:'center',color:C.muted});
+  }
+
+  // Stats row
+  const stats=[
+    {label:'Backups',value:'30/30',icon:'💾',delay:0.20,color:C.green},
+    {label:'Bugs Fixed',value:'12',icon:'🐛',delay:0.24,color:C.accent},
+    {label:'Updates',value:'4',icon:'⬆️',delay:0.28,color:C.purple},
+  ];
+  stats.forEach((s,i)=>{
+    const st=clamp01((t-s.delay)/0.1);
+    if(st>0.005){
+      const sx=dashX+10+i*84;
+      const sy=dashY+100;
+      ctx.save();ctx.globalAlpha=smooth01(st);
+      ctx.fillStyle=C.warm;ctx.beginPath();ctx.roundRect(sx,sy,76,36,6);ctx.fill();
+      drawText(s.icon,sx+12,sy+16,{alpha:1,size:11,baseline:'middle'});
+      drawText(s.value,sx+28,sy+14,{alpha:1,size:11,bold:true,color:s.color});
+      drawText(s.label,sx+28,sy+28,{alpha:0.7,size:7,color:C.muted});
+      ctx.restore();
+    }
+  });
+
+  // Shield icon
+  const shieldT=clamp01((t-0.12)/0.1);
+  const shieldE=springOut(shieldT);
+  if(shieldT>0.005){
+    const sx=cx,sy=dashY+dashH+20;
+    ctx.save();ctx.translate(sx,sy);ctx.scale(shieldE,shieldE);ctx.globalAlpha=smooth01(shieldT);
+    ctx.fillStyle=C.greenLight;ctx.beginPath();ctx.arc(0,0,18,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle=C.green;ctx.font='18px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🛡️',0,1);
+    ctx.restore();
+  }
+
+  // Support benefit cards
+  const benefits=[
+    {text:'Hosting & backups',icon:'☁️',delay:0.30,sx:-60,ex:65,sy:355},
+    {text:'Bug fixes & patches',icon:'🔧',delay:0.34,sx:W+50,ex:240,sy:355},
+  ];
+  benefits.forEach((b,i)=>{
+    const bt=clamp01((t-b.delay)/0.16);
+    const be=springOut(bt);
+    const bx=lerp(b.sx,b.ex,be);
+    const by=b.sy+Math.sin(t*Math.PI*2.2+i*1.5)*1.5;
+    ctx.save();ctx.globalAlpha=smooth01(bt);
+    ctx.fillStyle=C.purpleLight;ctx.strokeStyle='rgba(139,92,246,0.3)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.roundRect(bx-55,by-13,110,26,13);ctx.fill();ctx.stroke();
+    drawText(`${b.icon} ${b.text}`,bx,by+3,{alpha:1,size:9,bold:true,align:'center',color:C.text});
+    ctx.restore();
+  });
+
+  // "Always running" badge
+  const badgeT=clamp01((t-0.40)/0.1);
+  if(badgeT>0.005){
+    const sc=easeOutElastic(badgeT);
+    ctx.save();ctx.translate(cx,H-22);ctx.scale(sc,sc);ctx.globalAlpha=smooth01(badgeT)*0.9;
+    ctx.fillStyle='rgba(139,92,246,0.1)';ctx.strokeStyle=C.purple;ctx.lineWidth=1.2;
+    ctx.beginPath();ctx.roundRect(-65,-12,130,24,12);ctx.fill();ctx.stroke();
+    drawText('always running, always safe',0,3,{alpha:1,size:9,bold:true,align:'center',color:C.purple});
+    ctx.restore();
+  }
+}
+
+function drawFrame(t){const pp=t<0.5?t*2:2-t*2;drawScene(pp)}
+let startTime=null;let animFrameId;
+function animate(ts){if(!startTime)startTime=ts;const elapsed=((ts-startTime)/1000)%LOOP;drawFrame(elapsed/LOOP);animFrameId=requestAnimationFrame(animate)}
+animFrameId=requestAnimationFrame(animate);
+
+document.getElementById('export').addEventListener('click',async()=>{
+  cancelAnimationFrame(animFrameId);const btn=document.getElementById('export');const st=document.getElementById('status');btn.disabled=true;st.textContent='Loading...';
+  await new Promise((r,j)=>{const s=document.createElement('script');s.src='/assets/gif.js/gif.js';s.onload=r;s.onerror=j;document.head.appendChild(s)});
+  const FPS=20,FRAMES=FPS*LOOP;
+  const gif=new GIF({workers:2,quality:1,width:W,height:H,workerScript:'/assets/gif.js/gif.worker.js'});
+  for(let f=0;f<FRAMES;f++){drawFrame(f/FRAMES);gif.addFrame(ctx,{copy:true,delay:Math.round(1000/FPS)});if(f%15===0)st.textContent=`Frame ${f+1}/${FRAMES}...`}
+  st.textContent='Encoding...';
+  gif.on('finished',blob=>{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='process-support.gif';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+    st.textContent=`Done! ${(blob.size/1024).toFixed(0)}KB`;btn.disabled=false;animFrameId=requestAnimationFrame(animate);startTime=performance.now()});
+  gif.render();
+});
+</script>
+</body>
+</html>

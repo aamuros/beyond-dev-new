@@ -3,26 +3,31 @@ import Container from "@/components/ui/container";
 const steps: {
   title: string;
   description: string;
+  image: string;
 }[] = [
   {
     title: "Free Business Process Checkup",
     description:
       "We talk to you, understand how your business currently works, and identify the one messy process causing the most pain.",
+    image: "/assets/process-checkup.gif",
   },
   {
     title: "System Blueprint",
     description:
       "We create a clear workflow plan showing exactly what the system will do, how it fits your process, and what you'll get.",
+    image: "/assets/process-blueprint.gif",
   },
   {
     title: "14-Day Starter System",
     description:
       "We build and deliver your working system in 14 days after requirements are approved. No endless waiting.",
+    image: "/assets/process-starter.gif",
   },
   {
     title: "Monthly Support",
     description:
       "Optional ongoing support including maintenance, hosting, backups, bug fixes, and improvements as your business grows.",
+    image: "/assets/process-support.gif",
   },
 ];
 
@@ -47,7 +52,13 @@ export default function Process() {
               return (
                 <div key={step.title} className="flex flex-col w-full lg:w-auto lg:flex-[1_0_0px] lg:h-full">
                   <div className="relative overflow-hidden aspect-[340/425] bg-[#f2f1f3] rounded-2xl">
-                    <div className="block w-full h-full object-cover object-center" />
+                    <img
+                      src={step.image}
+                      alt={step.title}
+                      className="block w-full h-full object-cover object-center"
+                      loading="eager"
+                      decoding="async"
+                    />
                   </div>
                   <div className="flex flex-col items-center gap-2 pt-6 pb-2 px-4 flex-1">
                     <h4 className="text-base font-semibold text-[#141414] text-center leading-snug">
