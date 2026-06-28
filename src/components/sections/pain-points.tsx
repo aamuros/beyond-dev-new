@@ -1,6 +1,4 @@
-"use client";
-
-import { Fragment, useState, useEffect, useRef } from "react";
+import { Fragment } from "react";
 import Container from "@/components/ui/container";
 import SectionHeading from "@/components/ui/section-heading";
 
@@ -39,7 +37,6 @@ const CARD_TOP_BASE = 203.5;
 const CARD_TOP_INCREMENT = 25;
 const CARD_GAP = 50;
 const SPACER_GAP = 30;
-const STAGGER_MS = 500;
 
 function PainPointCard({
   point,
@@ -52,39 +49,9 @@ function PainPointCard({
   const isLast = index === painPoints.length - 1;
   const isSecondToLast = index === painPoints.length - 2;
 
-  const [src, setSrc] = useState<string | null>(null);
-  const [visible, setVisible] = useState(false);
-  const ref = useRef<HTMLLIElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          if (!src) {
-            setTimeout(() => {
-              setSrc(point.image);
-              setVisible(true);
-            }, index * STAGGER_MS);
-          } else {
-            setTimeout(() => setVisible(true), index * STAGGER_MS);
-          }
-        } else {
-          setVisible(false);
-        }
-      },
-      { threshold: 0.1 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [point.image, index, src]);
-
   return (
     <>
       <li
-        ref={ref}
         className="pain-point-card"
         style={{
           top: `${top}px`,
@@ -92,15 +59,12 @@ function PainPointCard({
         }}
       >
         <div className="pain-point-card__header">
-          {src && (
-            <img
-              src={src}
-              alt={point.title}
-              className="pain-point-card__video transition-opacity duration-500"
-              style={{ opacity: visible ? 1 : 0 }}
-              decoding="async"
-            />
-          )}
+          <img
+            src={point.image}
+            alt={point.title}
+            className="pain-point-card__video"
+            decoding="async"
+          />
         </div>
         <div className="pain-point-card__content">
           <h3 className="pain-point-card__title">{point.title}</h3>
